@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eventos Privados — AMALAY Coffee & Market</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family:'Jost',sans-serif;
+  min-height:100vh;
+  background:#f0ede8;
+  display:flex; align-items:flex-start; justify-content:center;
+  padding:40px 20px 60px;
+}
+
+.page { width:100%; max-width:480px; }
+
+/* HEADER */
+.header { text-align:center; margin-bottom:32px; }
+
+.avatar {
+  width:96px; height:96px; border-radius:50%;
+  background:linear-gradient(135deg,#3d4a2f,#6b7a5a);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 16px;
+  box-shadow:0 4px 24px rgba(0,0,0,.15);
+  overflow:hidden;
+  border:3px solid rgba(255,255,255,.6);
+}
+.avatar-text {
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px; font-weight:500; color:#fff; letter-spacing:.05em;
+}
+
+.handle {
+  font-size:17px; font-weight:600; color:#1a1a14; margin-bottom:4px;
+}
+.bio {
+  font-size:13px; color:#888; font-weight:400; line-height:1.5;
+}
+
+/* LINKS */
+.links { display:flex; flex-direction:column; gap:10px; margin-bottom:28px; }
+
+.link-btn {
+  background:#fff;
+  border:none; border-radius:14px;
+  padding:0; cursor:pointer;
+  text-decoration:none;
+  display:flex; align-items:center;
+  box-shadow:0 2px 12px rgba(0,0,0,.06);
+  transition:all .2s; overflow:hidden;
+  position:relative;
+}
+.link-btn:hover {
+  transform:translateY(-2px);
+  box-shadow:0 6px 24px rgba(0,0,0,.1);
+}
+.link-btn:active { transform:translateY(0); }
+
+.link-img {
+  width:52px; height:52px; flex-shrink:0;
+  background:#f5f0e8;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px;
+}
+.link-img img { width:100%; height:100%; object-fit:cover; }
+
+.link-text {
+  flex:1; padding:14px 16px;
+  text-align:center;
+  font-size:14px; font-weight:500; color:#1a1a14;
+  letter-spacing:.01em;
+}
+
+.link-more {
+  width:40px; display:flex; align-items:center; justify-content:center;
+  color:#ccc; font-size:18px; padding-right:4px;
+}
+
+/* FEATURED — el botón principal */
+.link-btn.featured { background:linear-gradient(135deg,#3d4a2f,#5a6b45); }
+.link-btn.featured .link-text { color:#fff; font-weight:600; }
+.link-btn.featured .link-img { background:rgba(255,255,255,.1); }
+.link-btn.featured .link-more { color:rgba(255,255,255,.4); }
+
+/* HIGHLIGHT verde suave */
+.link-btn.highlight { background:#f5fbf0; border:1.5px solid #d4e8c0; }
+.link-btn.highlight .link-text { color:#3d4a2f; }
+
+/* DIVIDER */
+.section-label {
+  font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+  color:#bbb; text-align:center; margin:8px 0 4px;
+}
+
+/* SOCIALS */
+.socials {
+  display:flex; align-items:center; justify-content:center;
+  gap:16px; margin-bottom:24px;
+}
+.social-icon {
+  width:40px; height:40px; border-radius:50%;
+  background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.08);
+  display:flex; align-items:center; justify-content:center;
+  text-decoration:none; font-size:18px;
+  transition:all .2s;
+}
+.social-icon:hover { transform:scale(1.1); box-shadow:0 4px 16px rgba(0,0,0,.12); }
+
+/* SVG ICONS */
+.icon-svg { width:20px; height:20px; }
+
+/* POWERED BY */
+.powered {
+  text-align:center;
+  font-size:11px; color:#bbb;
+  margin-top:8px;
+}
+.powered a { color:#3d4a2f; text-decoration:none; font-weight:600; }
+
+/* MODAL OVERLAY */
+.modal-overlay {
+  display:none; position:fixed; inset:0;
+  background:rgba(0,0,0,.5); z-index:100;
+  align-items:flex-end; justify-content:center;
+}
+.modal-overlay.open { display:flex; }
+.modal-sheet {
+  width:100%; max-width:500px;
+  background:#fff; border-radius:20px 20px 0 0;
+  max-height:90vh; overflow-y:auto;
+  animation:up .3s ease;
+}
+@keyframes up { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.modal-handle {
+  width:36px; height:4px; background:#e0e0e0;
+  border-radius:2px; margin:12px auto;
+}
+.modal-inner { padding:8px 24px 40px; }
+.modal-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px; font-weight:400; margin-bottom:4px; color:#1a1a14;
+}
+.modal-sub { font-size:13px; color:#aaa; margin-bottom:24px; }
+
+/* ESPACIOS cards */
+.espacio-card {
+  border:1.5px solid #efefef; border-radius:12px;
+  padding:16px; margin-bottom:10px;
+}
+.espacio-name {
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px; font-weight:400; color:#1a1a14; margin-bottom:4px;
+}
+.espacio-detail { font-size:12px; color:#aaa; line-height:1.8; }
+.espacio-tag {
+  display:inline-block; background:#f0f5ea; color:#3d4a2f;
+  font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+  padding:3px 10px; border-radius:20px; margin-bottom:8px;
+}
+
+/* PAQUETES */
+.pkg-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 0; border-bottom:1px solid #f5f5f5;
+}
+.pkg-row:last-child { border-bottom:none; }
+.pkg-name { font-size:14px; font-weight:500; color:#222; }
+.pkg-price { font-size:13px; font-weight:600; color:#3d4a2f; }
+.pkg-desc { font-size:11px; color:#aaa; margin-top:2px; }
+
+.modal-cta {
+  width:100%; padding:14px; background:#3d4a2f; color:#fff;
+  border:none; border-radius:12px; font-family:'Jost',sans-serif;
+  font-size:14px; font-weight:600; cursor:pointer; margin-top:20px;
+  transition:all .2s;
+}
+.modal-cta:hover { background:#4d5c3c; }
+.modal-close-btn {
+  width:100%; padding:11px; background:transparent;
+  border:1.5px solid #e0e0e0; border-radius:12px;
+  font-family:'Jost',sans-serif; font-size:13px; color:#888;
+  cursor:pointer; margin-top:8px;
+}
+
+/* ANTICIPO BOX */
+.anticipo-box {
+  background:#fdf8f0; border:1px solid #e8d5b0;
+  border-radius:12px; padding:14px; margin-top:16px;
+  text-align:center;
+}
+.anticipo-amount {
+  font-family:'Cormorant Garamond',serif;
+  font-size:32px; font-weight:300; color:#6a4a18;
+}
+.anticipo-label { font-size:10px; color:#b09060; letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; }
+.anticipo-note { font-size:11px; color:#a08050; margin-top:6px; line-height:1.6; }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="avatar">
+      <span class="avatar-text">A</span>
+    </div>
+    <div class="handle">@amalaycoffee</div>
+    <div class="bio">Eventos privados · Plaza Duendes, San Pedro Garza García<br>Baby showers · Despedidas · Bodas · Cumpleaños</div>
+  </div>
+
+  <!-- LINKS -->
+  <div class="links">
+
+    <!-- PRINCIPAL -->
+    <a href="#" class="link-btn featured" onclick="openModal('reservar'); return false;">
+      <div class="link-img">🌿</div>
+      <div class="link-text">Reservar evento privado</div>
+      <div class="link-more">›</div>
+    </a>
+
+    <!-- ESPACIOS -->
+    <a href="#" class="link-btn highlight" onclick="openModal('espacios'); return false;">
+      <div class="link-img">🏡</div>
+      <div class="link-text">Nuestros espacios</div>
+      <div class="link-more">›</div>
+    </a>
+
+    <!-- PAQUETES -->
+    <a href="#" class="link-btn" onclick="openModal('paquetes'); return false;">
+      <div class="link-img">🍽️</div>
+      <div class="link-text">Paquetes y precios</div>
+      <div class="link-more">›</div>
+    </a>
+
+    <!-- MENU PDF -->
+    <a href="https://cafeamalay.com" class="link-btn" target="_blank">
+      <div class="link-img">📋</div>
+      <div class="link-text">Ver menú completo</div>
+      <div class="link-more">›</div>
+    </a>
+
+    <!-- SITIO WEB -->
+    <a href="https://cafeamalay.com" class="link-btn" target="_blank">
+      <div class="link-img">🌐</div>
+      <div class="link-text">cafeamalay.com</div>
+      <div class="link-more">›</div>
+    </a>
+
+  </div>
+
+  <!-- SOCIALS -->
+  <div class="socials">
+    <a href="https://instagram.com/amalaycoffee" class="social-icon" target="_blank">
+      <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#c13584" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="#c13584" stroke="none"/>
+      </svg>
+    </a>
+    <a href="https://facebook.com/cafeamalay1" class="social-icon" target="_blank">
+      <svg class="icon-svg" viewBox="0 0 24 24" fill="#1877f2">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+    </a>
+    <a href="https://wa.me/528131190757" class="social-icon" target="_blank">
+      <svg class="icon-svg" viewBox="0 0 24 24" fill="#25d366">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+    </a>
+
+    <a href="mailto:monigp75@gmail.com" class="social-icon">
+      <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="powered">Sistema de reservaciones por <a href="https://fullsite.mx" target="_blank">Fullsite</a></div>
+</div>
+
+<!-- ── MODAL: RESERVAR ── -->
+<div class="modal-overlay" id="modal-reservar" onclick="closeIfBg(event,'modal-reservar')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title">Reservar evento privado</div>
+      <div class="modal-sub">Elige tu espacio y fecha ideal</div>
+
+      <div class="espacio-card">
+        <div class="espacio-tag">Interior</div>
+        <div class="espacio-name">Salón Interior</div>
+        <div class="espacio-detail">15 – 50 personas · Desde 2:30 pm<br>Comidas, meriendas y cenas</div>
+      </div>
+      <div class="espacio-card">
+        <div class="espacio-tag">Jardín</div>
+        <div class="espacio-name">Jardín Interior Privado</div>
+        <div class="espacio-detail">25 – 44 personas · Desde 2:30 pm<br>Comidas, meriendas y cenas</div>
+      </div>
+      <div class="espacio-card">
+        <div class="espacio-tag">Terraza</div>
+        <div class="espacio-name">Terraza Privada</div>
+        <div class="espacio-detail">10 – 24 personas · 2do piso<br>Sujeto a disponibilidad</div>
+      </div>
+
+      <div class="anticipo-box">
+        <div class="anticipo-label">Anticipo para confirmar</div>
+        <div class="anticipo-amount">$1,000 MXN</div>
+        <div class="anticipo-note">Se bonifica en tu cuenta final · No reembolsable en cancelación</div>
+      </div>
+
+      <button class="modal-cta" onclick="window.open('https://cafeamalay.com/eventos','_blank')">
+        Ver disponibilidad y reservar →
+      </button>
+      <button class="modal-close-btn" onclick="closeModal('modal-reservar')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: ESPACIOS ── -->
+<div class="modal-overlay" id="modal-espacios" onclick="closeIfBg(event,'modal-espacios')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title">Nuestros espacios</div>
+      <div class="modal-sub">Tres ambientes únicos para tu evento</div>
+
+      <div class="espacio-card">
+        <div class="espacio-tag">Interior · Hasta 50 personas</div>
+        <div class="espacio-name">Salón Interior</div>
+        <div class="espacio-detail">El espacio más amplio. Ambiente elegante con iluminación cálida. Ideal para eventos de mayor escala.<br><br>✦ 15 – 50 personas · Desde 2:30 pm</div>
+      </div>
+      <div class="espacio-card">
+        <div class="espacio-tag">Jardín · Hasta 44 personas</div>
+        <div class="espacio-name">Jardín Interior Privado</div>
+        <div class="espacio-detail">Un oasis verde en el corazón del restaurante. Atmósfera íntima con luz natural y vegetación.<br><br>✦ 25 – 44 personas · Desde 2:30 pm</div>
+      </div>
+      <div class="espacio-card">
+        <div class="espacio-tag">Terraza · Hasta 24 personas</div>
+        <div class="espacio-name">Terraza Privada</div>
+        <div class="espacio-detail">Segundo piso. Vista única y ambiente exclusivo al aire libre. Ideal para grupos íntimos.<br><br>✦ 10 – 24 personas · Sujeto a disponibilidad</div>
+      </div>
+
+      <button class="modal-cta" onclick="closeModal('modal-espacios'); openModal('reservar')">
+        Reservar ahora →
+      </button>
+      <button class="modal-close-btn" onclick="closeModal('modal-espacios')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MODAL: PAQUETES ── -->
+<div class="modal-overlay" id="modal-paquetes" onclick="closeIfBg(event,'modal-paquetes')">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <div class="modal-title">Paquetes y precios</div>
+      <div class="modal-sub">Todos incluyen bebidas refill · $480 por persona</div>
+
+      <div class="pkg-row">
+        <div><div class="pkg-name">Brunch</div><div class="pkg-desc">Fruta + plato fuerte + bebidas refill</div></div>
+        <div class="pkg-price">$480/p</div>
+      </div>
+      <div class="pkg-row">
+        <div><div class="pkg-name">Merienda / Cena</div><div class="pkg-desc">Plato fuerte + postre + bebidas refill</div></div>
+        <div class="pkg-price">$480–500/p</div>
+      </div>
+      <div class="pkg-row">
+        <div><div class="pkg-name">Pizza & Pasta</div><div class="pkg-desc">Pizza compartida + pasta + postre</div></div>
+        <div class="pkg-price">$480/p</div>
+      </div>
+      <div class="pkg-row">
+        <div><div class="pkg-name">A la Carta</div><div class="pkg-desc">Consumo mínimo · Menos de 20 personas</div></div>
+        <div class="pkg-price">Mín $480/p</div>
+      </div>
+      <div class="pkg-row">
+        <div><div class="pkg-name">Postre extra</div><div class="pkg-desc">Pay · Brownie · Cheesecake · Carrot Cake</div></div>
+        <div class="pkg-price">+$80/p</div>
+      </div>
+
+      <div style="margin-top:16px;padding:12px 14px;background:#f8faf6;border-radius:10px;font-size:11px;color:#666;line-height:1.8">
+        🌸 <strong>Decoración básica incluida</strong> en todos los paquetes<br>
+        ✦ Especial +$300 · Upgrade +$500 · Upgrade Amalay +$650<br>
+        🎂 Pastel personalizado $800 · Descorche externo $350<br>
+        🥂 Mimosas $100 c/u · Cócteles desde $160
+      </div>
+
+      <button class="modal-cta" onclick="closeModal('modal-paquetes'); openModal('reservar')">
+        Reservar con este paquete →
+      </button>
+      <button class="modal-close-btn" onclick="closeModal('modal-paquetes')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function openModal(id) {
+  document.getElementById('modal-'+id).classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  document.getElementById('modal-'+id).classList.remove('open');
+  document.body.style.overflow = '';
+}
+function closeIfBg(e, id) {
+  if(e.target === document.getElementById(id)) closeModal(id);
+}
+</script>
+</body>
+</html>
