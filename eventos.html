@@ -1,412 +1,426 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Eventos Privados — AMALAY Coffee & Market</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta name="description" content="Organiza tu evento privado en AMALAY Coffee & Market. Baby showers, despedidas, bodas, cumpleaños en Plaza Duendes, San Pedro Garza García."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-* { margin:0; padding:0; box-sizing:border-box; }
-
-body {
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:#eee9e1;
   font-family:'Jost',sans-serif;
+  font-weight:300;
   min-height:100vh;
-  background:#f0ede8;
-  display:flex; align-items:flex-start; justify-content:center;
-  padding:40px 20px 60px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:48px 20px 64px;
+  color:#2a2a1e;
 }
 
-.page { width:100%; max-width:480px; }
+/* AVATAR / LOGO */
+.avatar{
+  width:88px;height:88px;
+  border-radius:50%;
+  background:#4a5e3a;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+  overflow:hidden;
+}
+.avatar img{width:100%;height:100%;object-fit:cover;filter:brightness(1.1)}
 
 /* HEADER */
-.header { text-align:center; margin-bottom:32px; }
+.handle{font-size:15px;font-weight:400;color:#2a2a1e;margin-bottom:6px}
+.tagline{font-size:13px;color:#666;text-align:center;line-height:1.6;max-width:320px;margin-bottom:6px}
 
-.avatar {
-  width:96px; height:96px; border-radius:50%;
-  background:linear-gradient(135deg,#3d4a2f,#6b7a5a);
-  display:flex; align-items:center; justify-content:center;
-  margin:0 auto 16px;
-  box-shadow:0 4px 24px rgba(0,0,0,.15);
-  overflow:hidden;
-  border:3px solid rgba(255,255,255,.6);
-}
-.avatar-text {
-  font-family:'Cormorant Garamond',serif;
-  font-size:32px; font-weight:500; color:#fff; letter-spacing:.05em;
+/* MAIN CONTAINER */
+.card{
+  width:100%;max-width:480px;
+  margin-top:24px;
+  display:flex;flex-direction:column;gap:10px;
 }
 
-.handle {
-  font-size:17px; font-weight:600; color:#1a1a14; margin-bottom:4px;
-}
-.bio {
-  font-size:13px; color:#888; font-weight:400; line-height:1.5;
-}
-
-/* LINKS */
-.links { display:flex; flex-direction:column; gap:10px; margin-bottom:28px; }
-
-.link-btn {
+/* BOTÓN PRINCIPAL */
+.btn{
+  display:flex;align-items:center;
   background:#fff;
-  border:none; border-radius:14px;
-  padding:0; cursor:pointer;
+  border-radius:12px;
+  padding:16px 20px;
   text-decoration:none;
-  display:flex; align-items:center;
-  box-shadow:0 2px 12px rgba(0,0,0,.06);
-  transition:all .2s; overflow:hidden;
+  color:#2a2a1e;
+  font-size:14px;
+  font-weight:400;
+  letter-spacing:0.01em;
+  transition:transform 0.15s,box-shadow 0.15s;
+  cursor:pointer;
+  border:none;
+  width:100%;
+  text-align:left;
   position:relative;
 }
-.link-btn:hover {
-  transform:translateY(-2px);
-  box-shadow:0 6px 24px rgba(0,0,0,.1);
+.btn:hover{transform:scale(1.01);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+.btn.primary{background:#4a5e3a;color:#fff;font-weight:500;letter-spacing:0.03em;justify-content:center;text-align:center;font-size:15px}
+.btn.primary:hover{background:#3a4e2e}
+.btn-icon{font-size:20px;margin-right:14px;width:28px;text-align:center;flex-shrink:0}
+.btn-chevron{margin-left:auto;color:#bbb;font-size:18px;flex-shrink:0}
+.btn.primary .btn-chevron{color:rgba(255,255,255,0.5)}
+
+/* SECCIÓN EXPANDIBLE */
+.section-btn{
+  display:flex;align-items:center;
+  background:#fff;
+  border-radius:12px;
+  padding:16px 20px;
+  cursor:pointer;
+  border:none;width:100%;text-align:left;
+  font-family:'Jost',sans-serif;font-size:14px;font-weight:400;
+  color:#2a2a1e;
+  transition:transform 0.15s,box-shadow 0.15s;
 }
-.link-btn:active { transform:translateY(0); }
-
-.link-img {
-  width:52px; height:52px; flex-shrink:0;
-  background:#f5f0e8;
-  display:flex; align-items:center; justify-content:center;
-  font-size:22px;
+.section-btn:hover{transform:scale(1.01);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+.section-content{
+  background:#fff;
+  border-radius:0 0 12px 12px;
+  margin-top:-8px;
+  padding:0 20px 20px;
+  display:none;
 }
-.link-img img { width:100%; height:100%; object-fit:cover; }
-
-.link-text {
-  flex:1; padding:14px 16px;
-  text-align:center;
-  font-size:14px; font-weight:500; color:#1a1a14;
-  letter-spacing:.01em;
-}
-
-.link-more {
-  width:40px; display:flex; align-items:center; justify-content:center;
-  color:#ccc; font-size:18px; padding-right:4px;
-}
-
-/* FEATURED — el botón principal */
-.link-btn.featured { background:linear-gradient(135deg,#3d4a2f,#5a6b45); }
-.link-btn.featured .link-text { color:#fff; font-weight:600; }
-.link-btn.featured .link-img { background:rgba(255,255,255,.1); }
-.link-btn.featured .link-more { color:rgba(255,255,255,.4); }
-
-/* HIGHLIGHT verde suave */
-.link-btn.highlight { background:#f5fbf0; border:1.5px solid #d4e8c0; }
-.link-btn.highlight .link-text { color:#3d4a2f; }
+.section-content.open{display:block}
+.section-wrap{display:flex;flex-direction:column;gap:0}
+.section-wrap .section-btn{border-radius:12px 12px 0 0}
+.section-wrap.closed .section-btn{border-radius:12px}
 
 /* DIVIDER */
-.section-label {
-  font-size:10px; letter-spacing:.2em; text-transform:uppercase;
-  color:#bbb; text-align:center; margin:8px 0 4px;
+.divider-label{
+  font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
+  color:#999;text-align:center;margin:8px 0 2px;
 }
 
-/* SOCIALS */
-.socials {
-  display:flex; align-items:center; justify-content:center;
-  gap:16px; margin-bottom:24px;
-}
-.social-icon {
-  width:40px; height:40px; border-radius:50%;
-  background:#fff; box-shadow:0 2px 8px rgba(0,0,0,.08);
-  display:flex; align-items:center; justify-content:center;
-  text-decoration:none; font-size:18px;
-  transition:all .2s;
-}
-.social-icon:hover { transform:scale(1.1); box-shadow:0 4px 16px rgba(0,0,0,.12); }
-
-/* SVG ICONS */
-.icon-svg { width:20px; height:20px; }
-
-/* POWERED BY */
-.powered {
-  text-align:center;
-  font-size:11px; color:#bbb;
-  margin-top:8px;
-}
-.powered a { color:#3d4a2f; text-decoration:none; font-weight:600; }
-
-/* MODAL OVERLAY */
-.modal-overlay {
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,.5); z-index:100;
-  align-items:flex-end; justify-content:center;
-}
-.modal-overlay.open { display:flex; }
-.modal-sheet {
-  width:100%; max-width:500px;
-  background:#fff; border-radius:20px 20px 0 0;
-  max-height:90vh; overflow-y:auto;
-  animation:up .3s ease;
-}
-@keyframes up { from{transform:translateY(100%)} to{transform:translateY(0)} }
-.modal-handle {
-  width:36px; height:4px; background:#e0e0e0;
-  border-radius:2px; margin:12px auto;
-}
-.modal-inner { padding:8px 24px 40px; }
-.modal-title {
-  font-family:'Cormorant Garamond',serif;
-  font-size:28px; font-weight:400; margin-bottom:4px; color:#1a1a14;
-}
-.modal-sub { font-size:13px; color:#aaa; margin-bottom:24px; }
-
-/* ESPACIOS cards */
-.espacio-card {
-  border:1.5px solid #efefef; border-radius:12px;
-  padding:16px; margin-bottom:10px;
-}
-.espacio-name {
-  font-family:'Cormorant Garamond',serif;
-  font-size:20px; font-weight:400; color:#1a1a14; margin-bottom:4px;
-}
-.espacio-detail { font-size:12px; color:#aaa; line-height:1.8; }
-.espacio-tag {
-  display:inline-block; background:#f0f5ea; color:#3d4a2f;
-  font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
-  padding:3px 10px; border-radius:20px; margin-bottom:8px;
-}
+/* ESPACIOS */
+.espacio{padding:14px 0;border-bottom:1px solid #f0ece6;}
+.espacio:last-child{border-bottom:none}
+.espacio-nombre{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:#2d3d22;margin-bottom:4px}
+.espacio-detalle{font-size:12px;color:#777;line-height:1.6}
+.espacio-tag{display:inline-block;background:#f0ece6;color:#4a5e3a;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:6px}
 
 /* PAQUETES */
-.pkg-row {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:12px 0; border-bottom:1px solid #f5f5f5;
-}
-.pkg-row:last-child { border-bottom:none; }
-.pkg-name { font-size:14px; font-weight:500; color:#222; }
-.pkg-price { font-size:13px; font-weight:600; color:#3d4a2f; }
-.pkg-desc { font-size:11px; color:#aaa; margin-top:2px; }
+.paq{padding:14px 0;border-bottom:1px solid #f0ece6}
+.paq:last-child{border-bottom:none}
+.paq-nombre{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:#2d3d22;margin-bottom:4px}
+.paq-precio{font-size:13px;font-weight:500;color:#4a5e3a;margin-bottom:6px}
+.paq-desc{font-size:12px;color:#777;line-height:1.7}
+.paq-items{margin-top:6px;font-size:12px;color:#555}
+.paq-item::before{content:'· ';color:#b8a882}
 
-.modal-cta {
-  width:100%; padding:14px; background:#3d4a2f; color:#fff;
-  border:none; border-radius:12px; font-family:'Jost',sans-serif;
-  font-size:14px; font-weight:600; cursor:pointer; margin-top:20px;
-  transition:all .2s;
-}
-.modal-cta:hover { background:#4d5c3c; }
-.modal-close-btn {
-  width:100%; padding:11px; background:transparent;
-  border:1.5px solid #e0e0e0; border-radius:12px;
-  font-family:'Jost',sans-serif; font-size:13px; color:#888;
-  cursor:pointer; margin-top:8px;
-}
+/* ADICIONALES */
+.adic{padding:12px 0;border-bottom:1px solid #f0ece6}
+.adic:last-child{border-bottom:none}
+.adic-titulo{font-size:13px;font-weight:500;color:#2d3d22;margin-bottom:4px}
+.adic-desc{font-size:12px;color:#777;line-height:1.6}
 
-/* ANTICIPO BOX */
-.anticipo-box {
-  background:#fdf8f0; border:1px solid #e8d5b0;
-  border-radius:12px; padding:14px; margin-top:16px;
-  text-align:center;
+/* CALENDARIO */
+.cal-wrap{margin-top:4px}
+.cal-wrap iframe{border-radius:8px;width:100%;border:none;display:block}
+.cal-info{background:#f8f5f0;border-radius:8px;padding:14px;margin-top:10px;font-size:12px;color:#666;line-height:1.7;text-align:center}
+
+/* POLITICAS */
+.politica{font-size:12px;color:#666;line-height:1.8;padding:8px 0;border-bottom:1px solid #f0ece6}
+.politica:last-child{border-bottom:none}
+.politica::before{content:'✓  ';color:#4a5e3a;font-weight:500}
+
+/* PAGO */
+.pago-num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:#4a5e3a;text-align:center;line-height:1;margin:8px 0 4px}
+.pago-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#999;text-align:center;margin-bottom:16px}
+.pago-dato{background:#f8f5f0;border-radius:8px;padding:14px;font-size:12px;color:#555;line-height:1.8;text-align:center}
+.pago-dato strong{display:block;font-weight:500;color:#2d3d22;font-size:13px;margin-bottom:2px}
+
+/* SOCIALS */
+.socials{display:flex;gap:14px;margin-top:16px;justify-content:center}
+.social-btn{
+  width:44px;height:44px;border-radius:50%;
+  background:#fff;display:flex;align-items:center;justify-content:center;
+  text-decoration:none;color:#555;font-size:18px;
+  transition:transform 0.15s;
 }
-.anticipo-amount {
-  font-family:'Cormorant Garamond',serif;
-  font-size:32px; font-weight:300; color:#6a4a18;
-}
-.anticipo-label { font-size:10px; color:#b09060; letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px; }
-.anticipo-note { font-size:11px; color:#a08050; margin-top:6px; line-height:1.6; }
+.social-btn:hover{transform:scale(1.1)}
+
+/* FOOTER */
+.footer{margin-top:28px;font-size:11px;color:#bbb;text-align:center}
+.footer a{color:#bbb;text-decoration:none}
+
+/* TABS PAQUETES */
+.tabs-mini{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;margin-top:4px}
+.tab-mini{background:#f0ece6;border:none;border-radius:20px;padding:6px 14px;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.05em;color:#555;cursor:pointer;transition:all 0.15s}
+.tab-mini.active{background:#4a5e3a;color:#fff}
+.tab-paq{display:none}
+.tab-paq.active{display:block}
 </style>
 </head>
 <body>
 
-<div class="page">
-
-  <!-- HEADER -->
-  <div class="header">
-    <div class="avatar">
-      <span class="avatar-text">A</span>
-    </div>
-    <div class="handle">@amalaycoffee</div>
-    <div class="bio">Eventos privados · Plaza Duendes, San Pedro Garza García<br>Baby showers · Despedidas · Bodas · Cumpleaños</div>
-  </div>
-
-  <!-- LINKS -->
-  <div class="links">
-
-    <!-- PRINCIPAL -->
-    <a href="#" class="link-btn featured" onclick="openModal('reservar'); return false;">
-      <div class="link-img">🌿</div>
-      <div class="link-text">Reservar evento privado</div>
-      <div class="link-more">›</div>
-    </a>
-
-    <!-- ESPACIOS -->
-    <a href="#" class="link-btn highlight" onclick="openModal('espacios'); return false;">
-      <div class="link-img">🏡</div>
-      <div class="link-text">Nuestros espacios</div>
-      <div class="link-more">›</div>
-    </a>
-
-    <!-- PAQUETES -->
-    <a href="#" class="link-btn" onclick="openModal('paquetes'); return false;">
-      <div class="link-img">🍽️</div>
-      <div class="link-text">Paquetes y precios</div>
-      <div class="link-more">›</div>
-    </a>
-
-    <!-- MENU PDF -->
-    <a href="https://cafeamalay.com" class="link-btn" target="_blank">
-      <div class="link-img">📋</div>
-      <div class="link-text">Ver menú completo</div>
-      <div class="link-more">›</div>
-    </a>
-
-    <!-- SITIO WEB -->
-    <a href="https://cafeamalay.com" class="link-btn" target="_blank">
-      <div class="link-img">🌐</div>
-      <div class="link-text">cafeamalay.com</div>
-      <div class="link-more">›</div>
-    </a>
-
-  </div>
-
-  <!-- SOCIALS -->
-  <div class="socials">
-    <a href="https://instagram.com/amalaycoffee" class="social-icon" target="_blank">
-      <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#c13584" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="#c13584" stroke="none"/>
-      </svg>
-    </a>
-    <a href="https://facebook.com/cafeamalay1" class="social-icon" target="_blank">
-      <svg class="icon-svg" viewBox="0 0 24 24" fill="#1877f2">
-        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-      </svg>
-    </a>
-    <a href="https://wa.me/528131190757" class="social-icon" target="_blank">
-      <svg class="icon-svg" viewBox="0 0 24 24" fill="#25d366">
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-      </svg>
-    </a>
-
-    <a href="mailto:monigp75@gmail.com" class="social-icon">
-      <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/>
-      </svg>
-    </a>
-  </div>
-
-  <div class="powered">Sistema de reservaciones por <a href="https://fullsite.mx" target="_blank">Fullsite</a></div>
+<!-- AVATAR -->
+<div class="avatar">
+  <img src="LOGOTIPO__2_.png" alt="AMALAY"/>
 </div>
 
-<!-- ── MODAL: RESERVAR ── -->
-<div class="modal-overlay" id="modal-reservar" onclick="closeIfBg(event,'modal-reservar')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-inner">
-      <div class="modal-title">Reservar evento privado</div>
-      <div class="modal-sub">Elige tu espacio y fecha ideal</div>
-
-      <div class="espacio-card">
-        <div class="espacio-tag">Interior</div>
-        <div class="espacio-name">Salón Interior</div>
-        <div class="espacio-detail">15 – 50 personas · Desde 2:30 pm<br>Comidas, meriendas y cenas</div>
-      </div>
-      <div class="espacio-card">
-        <div class="espacio-tag">Jardín</div>
-        <div class="espacio-name">Jardín Interior Privado</div>
-        <div class="espacio-detail">25 – 44 personas · Desde 2:30 pm<br>Comidas, meriendas y cenas</div>
-      </div>
-      <div class="espacio-card">
-        <div class="espacio-tag">Terraza</div>
-        <div class="espacio-name">Terraza Privada</div>
-        <div class="espacio-detail">10 – 24 personas · 2do piso<br>Sujeto a disponibilidad</div>
-      </div>
-
-      <div class="anticipo-box">
-        <div class="anticipo-label">Anticipo para confirmar</div>
-        <div class="anticipo-amount">$1,000 MXN</div>
-        <div class="anticipo-note">Se bonifica en tu cuenta final · No reembolsable en cancelación</div>
-      </div>
-
-      <button class="modal-cta" onclick="window.open('https://cafeamalay.com/eventos','_blank')">
-        Ver disponibilidad y reservar →
-      </button>
-      <button class="modal-close-btn" onclick="closeModal('modal-reservar')">Cerrar</button>
-    </div>
-  </div>
+<div class="handle">@amalaycoffee</div>
+<div class="tagline">
+  Eventos privados · Plaza Duendes, San Pedro Garza García<br/>
+  Baby showers · Despedidas · Bodas · Cumpleaños
 </div>
 
-<!-- ── MODAL: ESPACIOS ── -->
-<div class="modal-overlay" id="modal-espacios" onclick="closeIfBg(event,'modal-espacios')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-inner">
-      <div class="modal-title">Nuestros espacios</div>
-      <div class="modal-sub">Tres ambientes únicos para tu evento</div>
+<div class="card">
 
-      <div class="espacio-card">
-        <div class="espacio-tag">Interior · Hasta 50 personas</div>
-        <div class="espacio-name">Salón Interior</div>
-        <div class="espacio-detail">El espacio más amplio. Ambiente elegante con iluminación cálida. Ideal para eventos de mayor escala.<br><br>✦ 15 – 50 personas · Desde 2:30 pm</div>
-      </div>
-      <div class="espacio-card">
-        <div class="espacio-tag">Jardín · Hasta 44 personas</div>
-        <div class="espacio-name">Jardín Interior Privado</div>
-        <div class="espacio-detail">Un oasis verde en el corazón del restaurante. Atmósfera íntima con luz natural y vegetación.<br><br>✦ 25 – 44 personas · Desde 2:30 pm</div>
-      </div>
-      <div class="espacio-card">
-        <div class="espacio-tag">Terraza · Hasta 24 personas</div>
-        <div class="espacio-name">Terraza Privada</div>
-        <div class="espacio-detail">Segundo piso. Vista única y ambiente exclusivo al aire libre. Ideal para grupos íntimos.<br><br>✦ 10 – 24 personas · Sujeto a disponibilidad</div>
-      </div>
+  <!-- CTA PRINCIPAL -->
+  <a href="https://wa.me/528131190757?text=Hola,%20me%20gustaría%20reservar%20un%20evento%20privado%20en%20AMALAY" class="btn primary">
+    🌿&nbsp;&nbsp;Reservar evento privado &nbsp;›
+  </a>
 
-      <button class="modal-cta" onclick="closeModal('modal-espacios'); openModal('reservar')">
-        Reservar ahora →
-      </button>
-      <button class="modal-close-btn" onclick="closeModal('modal-espacios')">Cerrar</button>
+  <!-- NUESTROS ESPACIOS -->
+  <div class="section-wrap closed" id="wrap-espacios">
+    <button class="section-btn" onclick="toggle('espacios')">
+      <span class="btn-icon">🏡</span>
+      Nuestros espacios
+      <span class="btn-chevron" id="chev-espacios">›</span>
+    </button>
+    <div class="section-content" id="sec-espacios">
+      <div class="espacio">
+        <span class="espacio-tag">Interior</span>
+        <div class="espacio-nombre">Salón Principal</div>
+        <div class="espacio-detalle">15 – 50 personas · Disponible desde las 2:30 pm<br/>Comidas, meriendas y cenas.</div>
+      </div>
+      <div class="espacio">
+        <span class="espacio-tag">Jardín Interior</span>
+        <div class="espacio-nombre">Jardín Privado</div>
+        <div class="espacio-detalle">25 – 44 personas · Disponible desde las 2:30 pm<br/>Rodeado de vegetación, íntimo y exclusivo.</div>
+      </div>
+      <div class="espacio">
+        <span class="espacio-tag">Terraza</span>
+        <div class="espacio-nombre">Terraza 2° Piso</div>
+        <div class="espacio-detalle">10 – 24 personas · Cualquier horario<br/>Vista desde el segundo piso, ambiente especial.</div>
+      </div>
+      <div style="font-size:11px;color:#aaa;margin-top:10px;text-align:center">*Sujeto a disponibilidad del restaurante</div>
     </div>
   </div>
-</div>
 
-<!-- ── MODAL: PAQUETES ── -->
-<div class="modal-overlay" id="modal-paquetes" onclick="closeIfBg(event,'modal-paquetes')">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-inner">
-      <div class="modal-title">Paquetes y precios</div>
-      <div class="modal-sub">Todos incluyen bebidas refill · $480 por persona</div>
-
-      <div class="pkg-row">
-        <div><div class="pkg-name">Brunch</div><div class="pkg-desc">Fruta + plato fuerte + bebidas refill</div></div>
-        <div class="pkg-price">$480/p</div>
-      </div>
-      <div class="pkg-row">
-        <div><div class="pkg-name">Merienda / Cena</div><div class="pkg-desc">Plato fuerte + postre + bebidas refill</div></div>
-        <div class="pkg-price">$480–500/p</div>
-      </div>
-      <div class="pkg-row">
-        <div><div class="pkg-name">Pizza & Pasta</div><div class="pkg-desc">Pizza compartida + pasta + postre</div></div>
-        <div class="pkg-price">$480/p</div>
-      </div>
-      <div class="pkg-row">
-        <div><div class="pkg-name">A la Carta</div><div class="pkg-desc">Consumo mínimo · Menos de 20 personas</div></div>
-        <div class="pkg-price">Mín $480/p</div>
-      </div>
-      <div class="pkg-row">
-        <div><div class="pkg-name">Postre extra</div><div class="pkg-desc">Pay · Brownie · Cheesecake · Carrot Cake</div></div>
-        <div class="pkg-price">+$80/p</div>
+  <!-- PAQUETES Y PRECIOS -->
+  <div class="section-wrap closed" id="wrap-paquetes">
+    <button class="section-btn" onclick="toggle('paquetes')">
+      <span class="btn-icon">🍽️</span>
+      Paquetes y precios
+      <span class="btn-chevron" id="chev-paquetes">›</span>
+    </button>
+    <div class="section-content" id="sec-paquetes">
+      <div class="tabs-mini">
+        <button class="tab-mini active" onclick="showPaq('brunch',this)">Brunch</button>
+        <button class="tab-mini" onclick="showPaq('cena',this)">Merienda/Cena</button>
+        <button class="tab-mini" onclick="showPaq('pizza',this)">Pizza & Pasta</button>
+        <button class="tab-mini" onclick="showPaq('carta',this)">A la Carta</button>
       </div>
 
-      <div style="margin-top:16px;padding:12px 14px;background:#f8faf6;border-radius:10px;font-size:11px;color:#666;line-height:1.8">
-        🌸 <strong>Decoración básica incluida</strong> en todos los paquetes<br>
-        ✦ Especial +$300 · Upgrade +$500 · Upgrade Amalay +$650<br>
-        🎂 Pastel personalizado $800 · Descorche externo $350<br>
-        🥂 Mimosas $100 c/u · Cócteles desde $160
+      <div class="tab-paq active" id="paq-brunch">
+        <div class="paq">
+          <div class="paq-nombre">Brunch</div>
+          <div class="paq-precio">$480 por persona</div>
+          <div class="paq-desc">Incluye: plato de fruta mixta + plato fuerte + bebidas refill (café, té, limonada, pepino, frutos rojos, mineral o jamaica)</div>
+          <div class="paq-items">
+            <div class="paq-item">Avo Toast con huevo pochado</div>
+            <div class="paq-item">Chilaquiles verdes con pollo</div>
+            <div class="paq-item">Enchiladas suizas</div>
+            <div class="paq-item" style="color:#999;margin-top:4px">+ Postre: Pay manzana, Brownie, Blueberry Cheesecake o Carrot Cake (+$80 p/p)</div>
+          </div>
+        </div>
       </div>
 
-      <button class="modal-cta" onclick="closeModal('modal-paquetes'); openModal('reservar')">
-        Reservar con este paquete →
-      </button>
-      <button class="modal-close-btn" onclick="closeModal('modal-paquetes')">Cerrar</button>
+      <div class="tab-paq" id="paq-cena">
+        <div class="paq">
+          <div class="paq-nombre">Merienda / Cena</div>
+          <div class="paq-precio">$480 por persona</div>
+          <div class="paq-desc">Incluye: plato fuerte + postre incluido + bebidas refill</div>
+          <div class="paq-items">
+            <div class="paq-item">½ Ensalada + ½ Panini + ½ Sopa tomate — $480</div>
+            <div class="paq-item">4 Enchiladas suizas — $480</div>
+            <div class="paq-item">3 Taquitos Amalay de RibEye — $500</div>
+            <div class="paq-item">Pizza + Pasta Mamarosa — $480</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-paq" id="paq-pizza">
+        <div class="paq">
+          <div class="paq-nombre">Pizza & Pasta</div>
+          <div class="paq-precio">$480 por persona</div>
+          <div class="paq-desc">1 pizza c/2 personas (compartir) + pasta + postre + bebidas suaves refill</div>
+          <div class="paq-items">
+            <div class="paq-item">Pizza Prosciutto / Margarita / Pepperoni</div>
+            <div class="paq-item">Pasta Mamarosa o Bolognesa</div>
+            <div class="paq-item">Postre: Pay, Brownie, Cheesecake o Carrot Cake</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-paq" id="paq-carta">
+        <div class="paq">
+          <div class="paq-nombre">A la Carta</div>
+          <div class="paq-precio">Consumo mínimo $480 p/p</div>
+          <div class="paq-desc">Elige libremente del menú. Solo para grupos menores a 20 personas.<br/>+$80 p/p: refill de limonadas, café y té.<br/>Bebidas especiales y postres aparte.</div>
+        </div>
+      </div>
+
+      <div style="font-size:11px;color:#aaa;margin-top:8px;text-align:center">Se permiten hasta 2 opciones de plato fuerte por evento. Precios pueden variar según inflación.</div>
     </div>
   </div>
+
+  <!-- VER MENÚ COMPLETO -->
+  <a href="https://cafeamalay.com/#menu" class="btn">
+    <span class="btn-icon">📋</span>
+    Ver menú completo
+    <span class="btn-chevron">›</span>
+  </a>
+
+  <!-- CALENDARIO -->
+  <div class="section-wrap closed" id="wrap-calendario">
+    <button class="section-btn" onclick="toggle('calendario')">
+      <span class="btn-icon">📅</span>
+      Fechas disponibles
+      <span class="btn-chevron" id="chev-calendario">›</span>
+    </button>
+    <div class="section-content" id="sec-calendario">
+      <div class="cal-wrap">
+        <iframe
+          src="https://calendar.google.com/calendar/embed?src=d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c507ff2c3bd56534fe642c%40group.calendar.google.com&ctz=America%2FMonterrey&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=MONTH&bgcolor=%23f8f5f0&color=%234a5e3a"
+          height="380"
+          frameborder="0"
+          scrolling="no">
+        </iframe>
+        <div class="cal-info">
+          Los eventos marcados en el calendario están reservados.<br/>
+          Fechas sin evento = <strong style="color:#4a5e3a">disponibles</strong> para tu celebración 🌿
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICIOS ADICIONALES -->
+  <div class="section-wrap closed" id="wrap-adicionales">
+    <button class="section-btn" onclick="toggle('adicionales')">
+      <span class="btn-icon">✨</span>
+      Servicios adicionales
+      <span class="btn-chevron" id="chev-adicionales">›</span>
+    </button>
+    <div class="section-content" id="sec-adicionales">
+      <div class="adic">
+        <div class="adic-titulo">🌿 Entradas para compartir</div>
+        <div class="adic-desc">Guacamole $160 · Torre mini toasts $350 · Canasta pan dulce $170 · Crunchy Mix $170 · Crudités $170 · Hummus $170 · Papitas $92</div>
+      </div>
+      <div class="adic">
+        <div class="adic-titulo">💐 Decoración de mesa</div>
+        <div class="adic-desc">Básica (incluida) · Especial +$300 · Upgrade +$500 · Upgrade Amalay $650<br/><span style="color:#aaa;font-size:11px">*Imágenes de referencia, elementos pueden variar</span></div>
+      </div>
+      <div class="adic">
+        <div class="adic-titulo">🎂 Pastel personalizado</div>
+        <div class="adic-desc">8-10 personas $800 (Vainilla, Chocolate, Zanahoria) · Descorche externo $350<br/>Reservar con mínimo 5 días de anticipación.</div>
+      </div>
+      <div class="adic">
+        <div class="adic-titulo">🎁 Detalles & regalitos</div>
+        <div class="adic-desc">Libreta $150 · Velita $90 · Sobre pedido. Pregunta por opciones para tu evento.</div>
+      </div>
+      <div class="adic">
+        <div class="adic-titulo">🍹 Cócteles</div>
+        <div class="adic-desc">Mimosas $100 · Mezcalina Jamaica $240 · My Crush Margarita $240 · Aperol Spritz $240 · y más...</div>
+      </div>
+      <div class="adic">
+        <div class="adic-titulo">🍷 Vinos, cervezas & licores</div>
+        <div class="adic-desc">Blancos, rosados y tintos españoles y mexicanos · Cerveza $60 · Tequila, Mezcal, Baileys y más.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGO DE ANTICIPO -->
+  <div class="section-wrap closed" id="wrap-pago">
+    <button class="section-btn" onclick="toggle('pago')">
+      <span class="btn-icon">💳</span>
+      Pago de anticipo
+      <span class="btn-chevron" id="chev-pago">›</span>
+    </button>
+    <div class="section-content" id="sec-pago">
+      <div class="pago-num">$1,000</div>
+      <div class="pago-label">Anticipo para reservar · Se descuenta del total</div>
+      <div class="pago-dato">
+        <strong>Transferencia bancaria</strong>
+        Amalay Foods · Santander<br/>
+        <strong style="font-size:14px;letter-spacing:0.05em">014580655083036033</strong><br/>
+        Envía tu comprobante por WhatsApp para bloquear la fecha
+      </div>
+      <div style="font-size:11px;color:#aaa;margin-top:10px;text-align:center">El 50% del total se liquida 3 días antes del evento.<br/>Anticipo no reembolsable en caso de cancelación.</div>
+    </div>
+  </div>
+
+  <!-- POLITICAS -->
+  <div class="section-wrap closed" id="wrap-politicas">
+    <button class="section-btn" onclick="toggle('politicas')">
+      <span class="btn-icon">📄</span>
+      Políticas del evento
+      <span class="btn-chevron" id="chev-politicas">›</span>
+    </button>
+    <div class="section-content" id="sec-politicas">
+      <div class="politica">Cotización basada en número de invitados, confirmar 1 semana antes.</div>
+      <div class="politica">50% del total liquidado 3 días antes para confirmar producción.</div>
+      <div class="politica">Sin renta de espacio — solo consumo + 18% de servicio.</div>
+      <div class="politica">Invitados ausentes: alimentos entregados para llevar, sin reembolso.</div>
+      <div class="politica">Decoración externa requiere fotos y autorización previa.</div>
+      <div class="politica">No se permiten materiales que dañen instalaciones.</div>
+      <div class="politica">Daños son responsabilidad del contratista.</div>
+      <div class="politica">Retirar decoración y objetos al finalizar el evento.</div>
+    </div>
+  </div>
+
+  <!-- SITIO WEB -->
+  <a href="https://cafeamalay.com" class="btn">
+    <span class="btn-icon">🌐</span>
+    cafeamalay.com
+    <span class="btn-chevron">›</span>
+  </a>
+
 </div>
+
+<!-- SOCIALS -->
+<div class="socials">
+  <a href="https://instagram.com/amalaycoffee" target="_blank" class="social-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+  </a>
+  <a href="https://facebook.com/cafeamalay1" target="_blank" class="social-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+  </a>
+  <a href="https://wa.me/528131190757" target="_blank" class="social-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </a>
+  <a href="mailto:monigp75@gmail.com" class="social-btn">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+  </a>
+</div>
+
+<div class="footer">Sistema de reservaciones por <a href="https://cafeamalay.com">cafeamalay.com</a></div>
 
 <script>
-function openModal(id) {
-  document.getElementById('modal-'+id).classList.add('open');
-  document.body.style.overflow = 'hidden';
+function toggle(id){
+  const wrap=document.getElementById('wrap-'+id);
+  const sec=document.getElementById('sec-'+id);
+  const chev=document.getElementById('chev-'+id);
+  const isOpen=sec.classList.contains('open');
+  sec.classList.toggle('open');
+  wrap.classList.toggle('closed',isOpen);
+  chev.textContent=isOpen?'›':'˅';
 }
-function closeModal(id) {
-  document.getElementById('modal-'+id).classList.remove('open');
-  document.body.style.overflow = '';
-}
-function closeIfBg(e, id) {
-  if(e.target === document.getElementById(id)) closeModal(id);
+function showPaq(id,btn){
+  document.querySelectorAll('.tab-paq').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-mini').forEach(b=>b.classList.remove('active'));
+  document.getElementById('paq-'+id).classList.add('active');
+  btn.classList.add('active');
 }
 </script>
 </body>
