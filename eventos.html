@@ -26,12 +26,12 @@ body{
 .avatar{
   width:88px;height:88px;
   border-radius:50%;
-  background:#4a5e3a;
+  background:#7a9e7e;
   display:flex;align-items:center;justify-content:center;
   margin-bottom:16px;
   overflow:hidden;
 }
-.avatar img{width:100%;height:100%;object-fit:cover;filter:brightness(1.1)}
+.avatar img{width:100%;height:100%;object-fit:cover;}
 
 /* HEADER */
 .handle{font-size:15px;font-weight:400;color:#2a2a1e;margin-bottom:6px}
@@ -164,7 +164,7 @@ body{
 
 <!-- AVATAR -->
 <div class="avatar">
-  <img src="LOGOTIPO__2_.png" alt="AMALAY"/>
+  <img src="LOGO_AMALAY_WEBSITE.png" alt="AMALAY"/>
 </div>
 
 <div class="handle">@amalaycoffee</div>
@@ -175,9 +175,16 @@ body{
 
 <div class="card">
 
-  <!-- CTA PRINCIPAL -->
-  <a href="https://wa.me/528131190757?text=Hola,%20me%20gustaría%20reservar%20un%20evento%20privado%20en%20AMALAY" class="btn primary">
-    🌿&nbsp;&nbsp;Reservar evento privado &nbsp;›
+  <!-- CTA PRINCIPAL - RESERVAR CON CALENDAR -->
+  <a href="https://calendar.app.google/REEMPLAZA_CON_TU_LINK" class="btn primary" id="btn-reservar" target="_blank">
+    📅&nbsp;&nbsp;Reservar fecha en calendario &nbsp;›
+  </a>
+
+  <!-- FALLBACK WHATSAPP -->
+  <a href="https://wa.me/528131190757?text=Hola,%20me%20gustaría%20reservar%20un%20evento%20privado%20en%20AMALAY" class="btn" style="background:#25D366;color:#fff;justify-content:center;text-align:center;font-weight:500" target="_blank">
+    <span class="btn-icon">💬</span>
+    Reservar por WhatsApp
+    <span class="btn-chevron" style="color:rgba(255,255,255,0.5)">›</span>
   </a>
 
   <!-- NUESTROS ESPACIOS -->
