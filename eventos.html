@@ -418,7 +418,7 @@ body{
   </div>
 
   <!-- VER MENÚ COMPLETO -->
-  <a href="https://cafeamalay.com/#menu" class="btn">
+  <a href="https://drive.google.com/file/d/1NB6vlta9a348J7U2HGDt5XH7-Nf8iEFy/view" target="_blank" class="btn">
     <span class="btn-icon">📋</span>
     Ver menú completo
     <span class="btn-chevron">›</span>
@@ -526,7 +526,7 @@ body{
   </div>
 
   <!-- VER MENÚ COMPLETO -->
-  <a href="https://cafeamalay.com/#menu" class="btn">
+  <a href="https://drive.google.com/file/d/1NB6vlta9a348J7U2HGDt5XH7-Nf8iEFy/view" target="_blank" class="btn">
     <span class="btn-icon">📋</span>
     Ver menú completo
     <span class="btn-chevron">›</span>
@@ -676,10 +676,16 @@ function showPaq(id,btn){
   btn.classList.add('active');
 }
 function seleccionar(label){
+  // Marcar botón seleccionado
+  document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('selected'));
+  event.target.classList.add('selected');
+  // Actualizar label
   document.getElementById('seleccion-label').textContent=label;
-  const msg=encodeURIComponent('Hola, me gustaría reservar un evento privado en AMALAY.\n\nEspacio y horario: '+label+'\n\nAdjunto mi comprobante de anticipo ($1,000 MXN) para confirmar la fecha.');
+  // Construir mensaje WhatsApp
+  const msg=encodeURIComponent('Hola! Me gustaría reservar un evento privado en AMALAY.\n\nEspacio y horario seleccionado: '+label+'\n\nEn cuanto confirmen disponibilidad les envío el comprobante del anticipo ($1,000 MXN).');
   document.getElementById('btn-whats-anticipo').href='https://wa.me/528131190757?text='+msg;
+  // Mostrar paso 2
   const paso2=document.getElementById('paso2');
   paso2.style.display='block';
-  paso2.scrollIntoView({behavior:'smooth',block:'nearest'});
+  setTimeout(()=>paso2.scrollIntoView({behavior:'smooth',block:'start'}),100););
   docu
