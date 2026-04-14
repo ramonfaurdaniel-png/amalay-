@@ -143,9 +143,10 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 
 /* CAPACITY WARNING */
 .cap-warn{background:#fff3f3;border:1px solid #ffcdd2;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--danger);margin-top:-6px;margin-bottom:10px;}
+
 .availability-wrap{padding-bottom:0;overflow:hidden}
 .avail-head{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;border-bottom:1px solid var(--border);background:#fcfaf6;}
-.avail-month{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--green);}
+.avail-month{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--green);text-transform:capitalize;}
 .cal-nav-btn{width:34px;height:34px;border:1px solid var(--border);border-radius:50%;background:var(--white);color:var(--green);font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
 .cal-nav-btn:hover{background:var(--green-pale);border-color:var(--green);}
 .avail-weekdays,.avail-grid{display:grid;grid-template-columns:repeat(7,1fr);}
@@ -177,9 +178,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 .date-status{font-size:11px;line-height:1.5;color:var(--muted);margin-top:8px;min-height:18px;}
 .date-status.ok{color:var(--green);}
 .date-status.error{color:var(--danger);}
-
-
-.booking-shell{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:14px;align-items:start}
+.booking-shell{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(260px,.9fr);gap:14px;align-items:start}
 .times-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;min-height:100%;}
 .times-head{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--green);margin-bottom:4px;}
 .times-sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px;}
@@ -190,13 +189,14 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 .time-btn{width:100%;border:1px solid var(--border);background:#fff;border-radius:999px;padding:11px 12px;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);cursor:pointer;transition:all .15s;}
 .time-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-pale);}
 .time-btn.sel{background:var(--green);border-color:var(--green);color:#fff;}
+.time-btn.disabled,.time-btn:disabled{background:#f7f4ef;color:#b5aa9d;border-color:#ece5db;cursor:not-allowed;}
+.time-btn.disabled:hover,.time-btn:disabled:hover{background:#f7f4ef;color:#b5aa9d;border-color:#ece5db;}
 .time-empty{font-size:12px;color:var(--muted);line-height:1.6;padding:10px 0;}
 .time-note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px;}
 .space-selected-bar{background:#fcfaf6;border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.5;}
 .space-selected-bar strong{color:var(--green);font-weight:500;}
 @media (max-width: 760px){.booking-shell{grid-template-columns:1fr;}.time-grid{grid-template-columns:1fr 1fr;}.times-card{padding:14px;}}
 @media (max-width: 440px){.time-grid{grid-template-columns:1fr;}}
-
 
 </style>
 </head>
@@ -229,7 +229,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 <!-- STEP 1: Personas & Fecha -->
 <div class="step active" id="step1">
   <div class="step-title">¿Para cuántas personas?</div>
-  <div class="step-sub">Selecciona el número de invitados y elige una fecha disponible en el calendario.</div>
+  <div class="step-sub">Selecciona el número de invitados, la fecha y el horario disponible para tu evento.</div>
 
   <div class="field">
     <label>Número de personas</label>
@@ -245,10 +245,10 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 
   <div class="field">
     <label>Elige tu fecha y horario</label>
-    <div class="warn">📌 Aquí solo mostramos <strong>días y horas disponibles</strong>. Las fechas ocupadas no se pueden seleccionar. Tu evento queda <strong>apartado únicamente al enviar el anticipo y recibir confirmación por WhatsApp</strong>.</div>
+    <div class="warn">📌 Aquí solo mostramos <strong>disponibilidad</strong>. No mostramos los eventos. Si un horario ya está ocupado, aparecerá como <strong>no disponible</strong>. Tu fecha queda apartada únicamente al enviar anticipo y recibir confirmación por WhatsApp.</div>
     <div class="avail-legend">
       <span><i class="dot dot-avail"></i>Disponible</span>
-      <span><i class="dot dot-busy"></i>Ocupada</span>
+      <span><i class="dot dot-busy"></i>Sin horarios</span>
       <span><i class="dot dot-past"></i>No disponible</span>
     </div>
     <div class="booking-shell">
@@ -271,7 +271,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
         <div id="time-groups" class="time-groups">
           <div class="time-empty">Selecciona un día disponible en el calendario para mostrar las horas.</div>
         </div>
-        <div class="time-note">Lun–Mié último evento 8pm · Jue–Sáb último evento 11pm · Dom brunch/comida.</div>
+        <div class="time-note">Los horarios ocupados aparecen deshabilitados según el calendario de eventos de Amalay.</div>
       </div>
     </div>
     <input class="input" type="date" id="fecha-input" min="" placeholder="dd/mm/aaaa"/>
@@ -435,67 +435,252 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
   <div class="summary-card">
     <div class="sum-title">💰 Estimado de costos</div>
     <div class="sum-row"><span class="sum-label">Consumo mínimo</span><span class="sum-val" id="sum-consumo">—</span></div>
-    <div class="sum-row"><span class="sum-label">18% servicio</span><span class="sum-val" id="sum-servicio">—</span></div>
-    <div class="sum-row sum-total"><span>Total estimado</span><span id="sum-total">—</span></div>
-    <div class="sum-note">*Los precios pueden variar. El total final depende del consumo real del evento. El anticipo se descuenta del total.</div>
-  </div>
+    <div class="sum-row"><span class="sum-label">18% servicio</span><span// ── NAVIGATION ──
+function goStep(n) {
+  if(n === 2) {
+    if(!state.fecha) { alert('Por favor selecciona una fecha'); return; }
+    if(!state.horario) { alert('Por favor selecciona una hora'); return; }
+  }
+  if(n === 3) {
+    if(!state.espacio) { alert('Por favor selecciona un espacio'); return; }
+  }
+  if(n === 4) {
+    if(!state.paquete) { alert('Por favor selecciona un paquete'); return; }
+    if(state.paquete === 'carta' && state.guests >= 20) { alert('A la Carta solo aplica para grupos menores a 20 personas'); return; }
+  }
+  if(n === 5) buildSummary();
 
-  <div class="anticipo-box">
-    <div class="antic-amount">$1,000</div>
-    <div class="antic-label">Anticipo para reservar · Se descuenta del total</div>
-    <div class="antic-bank">
-      <strong>Amalay Foods · Santander</strong><br/>
-      <div class="antic-clabe">014580655083036033</div>
-      Envía tu comprobante por WhatsApp para bloquear la fecha
-    </div>
-  </div>
+  for(let i=1;i<=5;i++) {
+    document.getElementById('step'+i).classList.toggle('active', i===n);
+    const ps = document.getElementById('ps'+i);
+    ps.classList.remove('active','done');
+    if(i===n) ps.classList.add('active');
+    else if(i<n) ps.classList.add('done');
+    if(i<5){
+      const pl = document.getElementById('pl'+i);
+      pl.classList.toggle('done', i<n);
+    }
+  }
+  state.currentStep = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(n===2) renderSpaces();
+  if(n===3) renderPackages();
+}
 
-  <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;line-height:1.8;">
-    El 50% del total se liquida 3 días antes del evento.<br/>
-    Anticipo no reembolsable en caso de cancelación.
-  </div>
+// ── GUESTS ──
+function changeGuests(delta) {
+  state.guests = Math.max(10, Math.min(50, state.guests + delta));
+  document.getElementById('guests-num').textContent = state.guests;
+}
 
-  <a id="btn-whatsapp" href="#" target="_blank" class="btn-primary btn-whats" style="margin-bottom:10px;">
-    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    1. Enviar comprobante por WhatsApp
-  </a>
+// ── DATE & TIME ──
+const today = new Date();
+today.setHours(0,0,0,0);
+const todayStr = today.toISOString().split('T')[0];
+let calendarCursor = new Date(today.getFullYear(), today.getMonth(), 1);
+const TIME_GROUPS = [
+  { key:'brunch', label:'Brunch', slots:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'] },
+  { key:'comida', label:'Comida / Merienda', slots:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'] },
+  { key:'cena', label:'Cena', slots:['7:30 – 10:30pm','8:00 – 11:00pm'] }
+];
+const OCCUPIED_EVENTS = {"2026-04-25":[{"start":"11:30","end":"12:30"},{"start":"14:45","end":"15:45"},{"start":"16:00","end":"17:00"},{"start":"18:00","end":"19:00"}],"2025-11-21":[{"start":"14:00","end":"15:00"},{"start":"17:00","end":"18:00"},{"start":"20:45","end":"21:45"}],"2025-04-06":[{"start":"14:30","end":"15:30"}],"2025-04-19":[{"start":"11:00","end":"12:00"}],"2025-11-22":[{"start":"20:00","end":"21:00"}],"2024-12-24":[{"start":"13:00","end":"14:00"},{"start":"14:00","end":"15:00"}],"2025-09-20":[{"start":"10:00","end":"11:00"},{"start":"14:30","end":"15:30"},{"start":"15:30","end":"16:30"}],"2025-06-07":[{"start":"10:30","end":"11:30"},{"start":"13:30","end":"14:30"}],"2025-07-19":[{"start":"10:30","end":"11:30"}],"2025-05-15":[{"start":"09:30","end":"10:30"},{"start":"20:00","end":"21:00"}],"2025-12-04":[{"start":"19:15","end":"23:15"}],"2024-12-13":[{"start":"09:30","end":"10:30"},{"start":"11:00","end":"12:00"}],"2025-12-12":[{"start":"19:00","end":"20:00"}],"2026-03-14":[{"start":"10:30","end":"11:30"}],"2025-02-08":[{"start":"09:00","end":"10:00"},{"start":"11:00","end":"12:00"}],"2025-06-21":[{"start":"11:30","end":"12:30"}],"2025-11-01":[{"start":"11:00","end":"12:00"},{"start":"20:00","end":"01:00"}],"2025-06-13":[{"start":"17:00","end":"18:00"},{"start":"19:30","end":"20:30"}],"2025-12-14":[{"start":"10:00","end":"11:00"}],"2025-09-04":[{"start":"17:30","end":"18:30"}],"2025-11-14":[{"start":"16:00","end":"17:00"}],"2025-08-31":[{"start":"11:00","end":"12:00"}],"2025-11-28":[{"start":"19:30","end":"20:30"}],"2025-03-15":[{"start":"10:30","end":"11:30"},{"start":"14:30","end":"15:30"},{"start":"17:00","end":"18:00"},{"start":"20:30","end":"21:30"}],"2024-12-09":[{"start":"19:30","end":"23:00"}],"2024-01-08":[{"start":"09:55","end":"15:05"}],"2026-04-11":[{"start":"10:00","end":"11:00"},{"start":"14:30","end":"15:30"},{"start":"18:00","end":"19:00"},{"start":"19:30","end":"20:30"}],"2026-03-21":[{"start":"11:00","end":"12:00"},{"start":"14:30","end":"15:30"}],"2025-06-16":[{"start":"18:00","end":"19:00"}],"2025-05-03":[{"start":"10:00","end":"11:00"},{"start":"14:00","end":"15:00"},{"start":"14:00","end":"15:00"},{"start":"19:00","end":"20:00"}],"2024-03-31":[{"start":"13:50","end":"16:25"},{"start":"19:03","end":"20:36"}],"2024-12-21":[{"start":"10:00","end":"14:00"},{"start":"15:00","end":"19:00"},{"start":"19:30","end":"22:30"}],"2025-04-26":[{"start":"10:30","end":"11:30"},{"start":"14:30","end":"15:30"},{"start":"14:30","end":"15:30"},{"start":"18:00","end":"19:00"}],"2025-04-11":[{"start":"14:30","end":"15:30"},{"start":"19:30","end":"20:30"},{"start":"21:00","end":"22:00"}],"2025-05-28":[{"start":"17:30","end":"18:30"}],"2025-03-07":[{"start":"20:30","end":"21:30"}],"2026-05-23":[{"start":"16:00","end":"17:00"},{"start":"19:30","end":"20:30"}],"2025-11-23":[{"start":"10:00","end":"11:00"},{"start":"13:30","end":"14:30"}],"2025-03-30":[{"start":"09:30","end":"10:30"},{"start":"13:30","end":"14:30"}],"2026-04-26":[{"start":"13:00","end":"14:00"}],"2025-08-29":[{"start":"19:00","end":"20:00"}],"2025-11-03":[{"start":"17:00","end":"18:00"}],"2022-09-08":[{"start":"09:15","end":"10:15"},{"start":"10:30","end":"11:30"},{"start":"10:30","end":"11:30"}],"2025-03-20":[{"start":"19:30","end":"20:30"}],"2024-12-06":[{"start":"10:00","end":"11:00"},{"start":"18:00","end":"19:00"}],"2025-08-24":[{"start":"11:00","end":"12:00"}],"2022-09-07":[{"start":"07:45","end":"08:45"},{"start":"10:00","end":"11:00"},{"start":"10:30","end":"11:30"},{"start":"13:45","end":"14:45"},{"start":"15:30","end":"15:30"}],"2022-09-09":[{"start":"10:30","end":"11:30"}],"2025-08-30":[{"start":"10:00","end":"11:00"},{"start":"15:00","end":"16:00"},{"start":"19:00","end":"20:00"}],"2025-08-16":[{"start":"12:00","end":"13:00"}],"2024-12-07":[{"start":"13:00","end":"14:00"},{"start":"13:30","end":"14:30"},{"start":"17:00","end":"18:00"}],"2025-03-22":[{"start":"10:00","end":"11:00"},{"start":"14:30","end":"15:30"},{"start":"17:30","end":"18:30"}],"2025-09-12":[{"start":"19:30","end":"20:30"}],"2025-04-12":[{"start":"10:00","end":"11:00"},{"start":"14:00","end":"15:00"},{"start":"18:00","end":"19:00"},{"start":"19:00","end":"20:00"}],"2025-11-08":[{"start":"09:30","end":"10:30"},{"start":"10:30","end":"11:30"},{"start":"14:00","end":"15:00"},{"start":"17:45","end":"18:45"}],"2025-04-17":[{"start":"09:00","end":"10:00"},{"start":"16:30","end":"17:30"}],"2025-10-04":[{"start":"08:30","end":"09:30"},{"start":"11:45","end":"12:45"}],"2026-04-18":[{"start":"10:15","end":"11:15"},{"start":"14:30","end":"15:30"},{"start":"17:30","end":"19:30"},{"start":"19:30","end":"20:30"}],"2024-12-14":[{"start":"10:00","end":"13:00"},{"start":"14:30","end":"17:00"}],"2025-03-29":[{"start":"10:30","end":"11:30"},{"start":"16:00","end":"17:00"},{"start":"16:00","end":"17:00"},{"start":"19:30","end":"20:30"}],"2025-11-15":[{"start":"10:00","end":"11:00"},{"start":"16:45","end":"17:45"}],"2025-05-24":[{"start":"17:30","end":"18:30"}],"2023-10-26":[{"start":"06:10","end":"09:05"},{"start":"10:28","end":"13:28"}],"2025-10-18":[{"start":"18:30","end":"19:30"}],"2013-10-29":[{"start":"08:00","end":"09:00"}],"2024-12-20":[{"start":"11:00","end":"12:00"}],"2025-11-16":[{"start":"13:00","end":"14:00"}],"2024-12-04":[{"start":"08:00","end":"09:00"}],"2025-03-12":[{"start":"11:00","end":"12:00"}],"2026-05-09":[{"start":"16:00","end":"17:00"}],"2026-02-07":[{"start":"19:30","end":"20:30"}],"2025-07-20":[{"start":"10:30","end":"11:30"}],"2025-05-17":[{"start":"14:30","end":"15:30"},{"start":"14:30","end":"15:30"}],"2025-12-21":[{"start":"14:00","end":"15:00"}],"2025-02-28":[{"start":"16:00","end":"17:00"},{"start":"19:45","end":"20:45"}],"2011-12-13":[{"start":"09:00","end":"10:00"}],"2025-11-30":[{"start":"10:30","end":"13:30"},{"start":"14:00","end":"17:00"}],"2025-05-18":[{"start":"14:30","end":"15:30"}],"2022-09-05":[{"start":"11:00","end":"12:00"}],"2025-09-13":[{"start":"13:30","end":"14:30"}],"2025-07-04":[{"start":"19:00","end":"20:00"}],"2026-03-27":[{"start":"09:00","end":"10:00"}],"2025-12-11":[{"start":"17:15","end":"20:00"}],"2025-04-04":[{"start":"10:00","end":"11:00"}],"2025-04-05":[{"start":"14:30","end":"15:30"},{"start":"14:30","end":"15:30"}],"2024-12-12":[{"start":"13:00","end":"14:00"},{"start":"16:00","end":"17:00"},{"start":"17:00","end":"18:00"}],"2025-01-02":[{"start":"20:00","end":"21:00"}],"2025-09-25":[{"start":"20:00","end":"21:00"}],"2025-04-03":[{"start":"19:30","end":"20:30"}],"2024-12-19":[{"start":"11:00","end":"12:00"},{"start":"20:00","end":"21:00"}],"2025-11-19":[{"start":"08:30","end":"09:30"}],"2025-07-21":[{"start":"16:00","end":"17:00"}],"2024-12-05":[{"start":"10:20","end":"11:20"},{"start":"16:00","end":"17:00"}],"2026-01-29":[{"start":"19:30","end":"20:30"}],"2025-08-09":[{"start":"10:30","end":"11:30"},{"start":"13:50","end":"14:50"}],"2025-03-18":[{"start":"17:00","end":"18:00"}],"2023-10-17":[{"start":"12:53","end":"15:36"}],"2025-11-29":[{"start":"11:00","end":"12:00"},{"start":"16:00","end":"17:00"}],"2026-04-19":[{"start":"14:15","end":"15:15"}],"2026-04-12":[{"start":"13:00","end":"14:00"}],"2025-04-27":[{"start":"14:00","end":"15:00"}],"2025-03-08":[{"start":"10:00","end":"11:00"},{"start":"10:00","end":"11:00"},{"start":"14:30","end":"15:30"},{"start":"14:30","end":"15:30"},{"start":"14:30","end":"15:30"},{"start":"19:30","end":"20:30"}],"2024-12-16":[{"start":"18:00","end":"19:00"}],"2025-12-06":[{"start":"10:00","end":"13:00"},{"start":"16:00","end":"17:00"}],"2024-12-10":[{"start":"16:00","end":"20:00"}],"2025-12-03":[{"start":"10:00","end":"13:00"}],"2025-03-25":[{"start":"10:30","end":"13:00"}],"2026-06-19":[{"start":"17:00","end":"18:00"}],"2025-06-28":[{"start":"20:15","end":"21:15"}],"2025-03-01":[{"start":"10:30","end":"11:30"},{"start":"14:30","end":"15:30"}],"2025-12-07":[{"start":"10:00","end":"11:00"}],"2026-03-07":[{"start":"19:10","end":"20:10"}],"2025-03-27":[{"start":"20:00","end":"21:00"}],"2025-09-18":[{"start":"09:00","end":"10:00"}],"2025-08-21":[{"start":"17:30","end":"18:30"}],"2025-07-25":[{"start":"13:00","end":"14:00"}],"2025-05-02":[{"start":"20:00","end":"21:00"},{"start":"20:00","end":"21:00"},{"start":"20:30","end":"21:30"}],"2024-12-31":[{"start":"20:15","end":"21:15"}],"2024-11-30":[{"start":"09:00","end":"10:00"},{"start":"11:00","end":"12:00"}],"2025-03-14":[{"start":"19:00","end":"20:00"}],"2026-03-19":[{"start":"09:00","end":"10:00"}],"2025-11-17":[{"start":"10:30","end":"11:30"}],"2025-08-08":[{"start":"20:00","end":"21:00"}],"2026-04-17":[{"start":"09:30","end":"10:30"},{"start":"19:30","end":"20:30"}],"2025-06-14":[{"start":"14:30","end":"15:30"}],"2024-12-26":[{"start":"10:00","end":"11:00"},{"start":"19:00","end":"20:00"}],"2025-03-09":[{"start":"11:00","end":"12:00"}],"2025-12-09":[{"start":"17:00","end":"18:00"}],"2025-09-27":[{"start":"10:00","end":"11:00"},{"start":"14:30","end":"15:30"}],"2025-03-17":[{"start":"14:15","end":"15:15"}],"2025-04-30":[{"start":"20:00","end":"21:00"}],"2025-12-10":[{"start":"14:00","end":"15:00"}],"2022-09-14":[{"start":"10:00","end":"11:00"}],"2025-04-10":[{"start":"09:30","end":"10:30"}],"2025-05-01":[{"start":"14:30","end":"15:30"}],"2025-11-26":[{"start":"18:00","end":"19:00"}],"2026-04-23":[{"start":"11:00","end":"12:00"}],"2023-10-06":[{"start":"06:00","end":"07:30"}],"2026-04-10":[{"start":"10:00","end":"11:00"}],"2025-08-23":[{"start":"10:00","end":"11:00"},{"start":"15:30","end":"16:30"}],"2025-03-13":[{"start":"19:30","end":"20:30"}],"2025-07-12":[{"start":"12:00","end":"13:00"}],"2024-12-01":[{"start":"10:00","end":"11:00"},{"start":"13:30","end":"14:30"}],"2026-03-15":[{"start":"14:00","end":"15:00"}],"2025-01-25":[{"start":"14:30","end":"15:30"}],"2026-04-13":[{"start":"09:30","end":"10:30"}],"2025-11-12":[{"start":"10:00","end":"11:00"}],"2025-04-25":[{"start":"10:30","end":"11:30"}],"2026-05-16":[{"start":"14:00","end":"15:00"}],"2025-08-03":[{"start":"12:00","end":"13:00"}],"2025-05-09":[{"start":"19:00","end":"20:00"}],"2022-09-06":[{"start":"10:00","end":"11:00"}],"2025-09-26":[{"start":"17:00","end":"18:00"}],"2024-12-17":[{"start":"13:00","end":"14:00"}],"2025-05-29":[{"start":"15:30","end":"16:30"}],"2026-04-16":[{"start":"13:30","end":"14:30"}],"2025-09-06":[{"start":"19:00","end":"20:00"}],"2025-03-28":[{"start":"21:30","end":"22:30"}],"2025-09-19":[{"start":"19:00","end":"20:00"}]};
 
-  <a id="btn-gcal" href="#" target="_blank" class="btn-primary" style="margin-bottom:10px;background:#4285f4;display:flex;align-items:center;justify-content:center;gap:8px;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-    2. Agregar al Google Calendar de Amalay
-  </a>
+document.getElementById('fecha-input').addEventListener('change', function(){
+  setSelectedDate(this.value, false);
+});
+document.getElementById('fecha-input').min = todayStr;
 
-  <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.8;background:#f8f5f0;padding:10px;border-radius:8px;">
-    📌 Primero envía tu comprobante por WhatsApp.<br/>
-    Luego Monica confirmará y agregará la fecha al calendario.
-  </div>
-
-  <button class="btn-back" onclick="goStep(4)">← Modificar</button>
-</div>
-
-</div><!-- /main -->
-
-<script>
-// ── STATE ──
-const state = {
-  guests: 20,
-  fecha: '',
-  espacio: '',
-  horario: '',
-  paquete: '',
-  paqueteNombre: '',
-  pastel: 'no',
-  pastelFlavor: '',
-  entradas: [],
-  deco: 'Básica (incluida)',
-  currentStep: 1
-};
+function monthLabel(date){
+  return date.toLocaleDateString('es-MX', { month:'long', year:'numeric' });
+}
+function isoDate(date){
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,'0');
+  const d = String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+function isPastDate(iso){ return iso < todayStr; }
+function formatSelectedDate(iso){
+  return new Date(iso+'T12:00:00').toLocaleDateString('es-MX', { weekday:'short', day:'numeric', month:'short' });
+}
+function parseHourMinute(raw, fallbackPeriod=''){
+  const cleaned = raw.replace(/\s+/g,'').toLowerCase();
+  const m = cleaned.match(/(\d{1,2}):(\d{2})(am|pm)?/);
+  if(!m) return null;
+  let h = parseInt(m[1],10), min = parseInt(m[2],10);
+  const period = m[3] || fallbackPeriod || '';
+  if(period === 'pm' && h < 12) h += 12;
+  if(period === 'am' && h === 12) h = 0;
+  return h*60 + min;
+}
+function parseSlotRange(slot){
+  const parts = slot.split('–').map(s => s.trim());
+  if(parts.length !== 2) return null;
+  const endPeriodMatch = parts[1].toLowerCase().match(/(am|pm)/);
+  const fallback = endPeriodMatch ? endPeriodMatch[1] : '';
+  const start = parseHourMinute(parts[0], fallback);
+  const end = parseHourMinute(parts[1], fallback);
+  return (start == null || end == null) ? null : {start, end};
+}
+function getBlockedIntervals(iso){
+  return OCCUPIED_EVENTS[iso] || [];
+}
+function overlaps(aStart, aEnd, bStart, bEnd){
+  return aStart < bEnd && bStart < aEnd;
+}
+function isSlotBlocked(iso, slot){
+  const range = parseSlotRange(slot);
+  if(!range) return false;
+  return getBlockedIntervals(iso).some(ev => {
+    const evStart = parseHourMinute(ev.start);
+    const evEnd = parseHourMinute(ev.end);
+    return overlaps(range.start, range.end, evStart, evEnd);
+  });
+}
+function hasAnyAvailableSlot(iso){
+  return TIME_GROUPS.some(group => group.slots.some(slot => !isSlotBlocked(iso, slot)));
+}
+function setSelectedDate(value, fromCalendar=true){
+  const status = document.getElementById('fecha-status');
+  if(!value){
+    state.fecha = '';
+    state.horario = '';
+    document.getElementById('fecha-input').value = '';
+    status.textContent = '';
+    status.className = 'date-status';
+    renderAvailabilityCalendar();
+    renderTimeOptions();
+    return;
+  }
+  if(isPastDate(value)){
+    status.textContent = 'Esa fecha ya no está disponible.';
+    status.className = 'date-status error';
+    if(fromCalendar) alert('Esa fecha ya no está disponible.');
+    return;
+  }
+  if(!hasAnyAvailableSlot(value)){
+    status.textContent = 'Esa fecha ya no tiene horarios disponibles.';
+    status.className = 'date-status error';
+    if(fromCalendar) alert('Esa fecha ya no tiene horarios disponibles.');
+    return;
+  }
+  state.fecha = value;
+  state.horario = '';
+  document.getElementById('fecha-input').value = value;
+  const nice = new Date(value+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  status.textContent = `Fecha seleccionada: ${nice}. Ahora elige una hora disponible.`;
+  status.className = 'date-status ok';
+  calendarCursor = new Date(value+'T12:00:00');
+  calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth(), 1);
+  renderAvailabilityCalendar();
+  renderTimeOptions();
+}
+function renderTimeOptions(){
+  const wrap = document.getElementById('time-groups');
+  const sub = document.getElementById('times-sub');
+  const pillWrap = document.getElementById('selected-date-pill-wrap');
+  if(!state.fecha){
+    sub.textContent = 'Selecciona una fecha para ver las horas disponibles.';
+    pillWrap.innerHTML = '';
+    wrap.innerHTML = '<div class="time-empty">Selecciona un día disponible en el calendario para mostrar las horas.</div>';
+    return;
+  }
+  sub.textContent = 'Elige la hora que más te convenga para continuar.';
+  pillWrap.innerHTML = `<div class="selected-date-pill">📅 ${formatSelectedDate(state.fecha)}</div>`;
+  let html = '';
+  TIME_GROUPS.forEach(group => {
+    html += `<div><div class="time-group-title">${group.label}</div><div class="time-grid">`;
+    html += group.slots.map(slot => {
+      const full = `${group.label} · ${slot}`;
+      const sel = state.horario === full ? ' sel' : '';
+      const disabled = isSlotBlocked(state.fecha, slot);
+      return `<button type="button" class="time-btn${sel}${disabled?' disabled':''}" ${disabled?'disabled':''} onclick="selectTime(this,'${slot}','${group.label}',${disabled})">${disabled ? 'No disp. · ' + slot : slot}</button>`;
+    }).join('');
+    html += '</div></div>';
+  });
+  wrap.innerHTML = html;
+}
+function selectTime(btn, slot, label, disabled){
+  if(disabled) return;
+  document.querySelectorAll('#time-groups .time-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.horario = `${label} · ${slot}`;
+  const status = document.getElementById('fecha-status');
+  const nice = new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  status.textContent = `Fecha y hora seleccionadas: ${nice} · ${state.horario}.`;
+  status.className = 'date-status ok';
+}
+function changeCalendarMonth(delta){
+  calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth()+delta, 1);
+  renderAvailabilityCalendar();
+}
+function renderAvailabilityCalendar(){
+  const grid = document.getElementById('availability-grid');
+  const label = document.getElementById('avail-month-label');
+  label.textContent = monthLabel(calendarCursor);
+  const year = calendarCursor.getFullYear();
+  const month = calendarCursor.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const startWeekday = firstDay.getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  let html = '';
+  for(let i=0;i<startWeekday;i++) html += '<div class="avail-day empty"></div>';
+  for(let day=1; day<=daysInMonth; day++) {
+    const date = new Date(year, month, day);
+    const iso = isoDate(date);
+    const isPast = isPastDate(iso);
+    const available = !isPast && hasAnyAvailableSlot(iso);
+    const isSelected = state.fecha === iso;
+    let cls = 'avail-day';
+    let meta = 'Disponible';
+    if(isPast) { cls += ' past'; meta = 'No disp.'; }
+    else if(!available) { cls += ' busy'; meta = 'Sin horario'; }
+    else { cls += ' available'; }
+    if(isSelected) cls += ' selected';
+    const click = available ? `onclick="setSelectedDate('${iso}')"` : '';
+    html += `<button type="button" class="${cls}" ${click}><span class="avail-num">${day}</span><span class="avail-meta">${meta}</span></button>`;
+  }
+  grid.innerHTML = html;
+}
+renderAvailabilityCalendar();
+renderTimeOptions();
 
 // ── SPACES ──
-const SPACES = [
-  { id:'terraza', name:'🌿 Terraza privada con balcón', cap:[10,24], desc:'Segundo piso · Sin renta · Solo consumo + 18% servicio · Disponible todo el día desde las 8am', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
-  { id:'jardin', name:'🌳 Jardín interior privado', cap:[25,44], desc:'Rodeado de vegetación · Íntimo y exclusivo · Disponible desde las 2:30pm', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
-  { id:'salon', name:'🏛️ Salón interior', cap:[15,50], desc:'Desde 2:30pm · Comidas, meriendas y cenas', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}}
+function renderSpaces() {
+  const g = state.guests;
+  document.getElementById('step2-sub').textContent = `Espacios disponibles para ${g} personas y el horario ${state.horario || 'seleccionado'}.`;
+  document.getElementById('space-selected-bar').innerHTML = `<strong>Fecha:</strong> ${new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})} <br><strong>Horario:</strong> ${state.horario || '—'}`;
+  const html = SPACES.map(sp => {
+    const fits = g >= sp.cap[0] && g <= sp.cap[1];
+    const capText = `${sp.cap[0]}–${sp.cap[1]} personas`;
+    let disabled = !fits;
+    let warn = '';
+    if(g < sp.cap[0]) warn = `<div class="cap-warn">Tu grupo de ${g} personas está por debajo del mínimo de ${sp.cap[0]}.</div>`;
+    if(g > sp.cap[1]) warn = `<div class="cap-warn">Tu grupo de ${g} personas excede el máximo de ${sp.cap[1]}.</div>`;
+    return `<div>
+      <div class="space-card ${disabled?'disabled':''}" id="sc-${sp.id}" onclick="selectSpace('${sp.id}')">
+        <div class="sc-check">✓</div>
+        <div class="sc-header">
+          <div class="sc-name">${sp.name}</div>
+          <div class="sc-cap">${capText}</div>
+        </div>
+        <div class="sc-desc">${sp.desc}</div>
+      </div>
+      ${warn}
+    </div>`;
+  }).join('');
+  document.getElementById('spaces-grid').innerHTML = html;
+  document.getElementById('btn-step2').disabled = true;
+  state.espacio = '';
+}
+function selectSpace(id) {
+  state.espacio = id;
+  document.querySelectorAll('.space-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('sc-'+id)?.classList.add('selected');
+  document.getElementById('btn-step2').disabled = false;
+}
+
+n', name:'🏛️ Salón interior', cap:[15,50], desc:'Desde 2:30pm · Comidas, meriendas y cenas', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}}
 ];
 
 // ── PACKAGES ──
@@ -548,164 +733,26 @@ function changeGuests(delta) {
 }
 
 // ── DATE ──
-const today = new Date();
-today.setHours(0,0,0,0);
-const todayStr = today.toISOString().split('T')[0];
-const OCCUPIED_DATES = new Set(["2026-04-16", "2026-04-17", "2026-04-18", "2026-04-19", "2026-04-23", "2026-04-25", "2026-04-26", "2026-05-09", "2026-05-16", "2026-05-23", "2026-06-19"]);
-let calendarCursor = new Date(today.getFullYear(), today.getMonth(), 1);
-const TIME_GROUPS = [
-  { key:'brunch', label:'Brunch', slots:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'] },
-  { key:'comida', label:'Comida / Merienda', slots:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'] },
-  { key:'cena', label:'Cena', slots:['7:30 – 10:30pm','8:00 – 11:00pm'] }
-];
-
 document.getElementById('fecha-input').addEventListener('change', function(){
-  setSelectedDate(this.value, false);
+  state.fecha = this.value;
 });
-document.getElementById('fecha-input').min = todayStr;
-
-function monthLabel(date){
-  return date.toLocaleDateString('es-MX', { month:'long', year:'numeric' });
-}
-
-function isoDate(date){
-  const y = date.getFullYear();
-  const m = String(date.getMonth()+1).padStart(2,'0');
-  const d = String(date.getDate()).padStart(2,'0');
-  return `${y}-${m}-${d}`;
-}
-
-function isPastDate(iso){
-  return iso < todayStr;
-}
-
-function setSelectedDate(value, fromCalendar=true){
-  const status = document.getElementById('fecha-status');
-  if(!value){
-    state.fecha = '';
-    state.horario = '';
-    document.getElementById('fecha-input').value = '';
-    status.textContent = '';
-    status.className = 'date-status';
-    renderAvailabilityCalendar();
-    renderTimeOptions();
-    return;
-  }
-  if(isPastDate(value)){
-    status.textContent = 'Esa fecha ya no está disponible.';
-    status.className = 'date-status error';
-    if(fromCalendar) alert('Esa fecha ya no está disponible.');
-    return;
-  }
-  if(OCCUPIED_DATES.has(value)){
-    status.textContent = 'Esa fecha ya está ocupada. Elige una fecha disponible.';
-    status.className = 'date-status error';
-    if(fromCalendar) alert('Esa fecha ya está ocupada. Elige una fecha disponible.');
-    document.getElementById('fecha-input').value = state.fecha || '';
-    renderAvailabilityCalendar();
-    renderTimeOptions();
-    return;
-  }
-  state.fecha = value;
-  state.horario = '';
-  document.getElementById('fecha-input').value = value;
-  const nice = new Date(value+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-  status.textContent = `Fecha seleccionada: ${nice}. Ahora elige una hora disponible.`;
-  status.className = 'date-status ok';
-  calendarCursor = new Date(value+'T12:00:00');
-  calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth(), 1);
-  renderAvailabilityCalendar();
-  renderTimeOptions();
-}
-
-function formatSelectedDate(iso){
-  return new Date(iso+'T12:00:00').toLocaleDateString('es-MX', { weekday:'short', day:'numeric', month:'short' });
-}
-
-function renderTimeOptions(){
-  const wrap = document.getElementById('time-groups');
-  const sub = document.getElementById('times-sub');
-  const pillWrap = document.getElementById('selected-date-pill-wrap');
-  if(!state.fecha){
-    sub.textContent = 'Selecciona una fecha para ver las horas disponibles.';
-    pillWrap.innerHTML = '';
-    wrap.innerHTML = '<div class="time-empty">Selecciona un día disponible en el calendario para mostrar las horas.</div>';
-    return;
-  }
-  sub.textContent = 'Elige la hora que más te convenga para continuar.';
-  pillWrap.innerHTML = `<div class="selected-date-pill">📅 ${formatSelectedDate(state.fecha)}</div>`;
-  let html = '';
-  TIME_GROUPS.forEach(group => {
-    html += `<div><div class="time-group-title">${group.label}</div><div class="time-grid">`;
-    html += group.slots.map(slot => {
-      const full = `${group.label} · ${slot}`;
-      const sel = state.horario === full ? ' sel' : '';
-      return `<button type="button" class="time-btn${sel}" onclick="selectTime(this,'${slot}','${group.label}')">${slot}</button>`;
-    }).join('');
-    html += '</div></div>';
-  });
-  wrap.innerHTML = html;
-}
-
-function selectTime(btn, slot, label){
-  document.querySelectorAll('#time-groups .time-btn').forEach(b => b.classList.remove('sel'));
-  btn.classList.add('sel');
-  state.horario = `${label} · ${slot}`;
-  const status = document.getElementById('fecha-status');
-  const nice = new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-  status.textContent = `Fecha y hora seleccionadas: ${nice} · ${state.horario}.`;
-  status.className = 'date-status ok';
-}
-
-function changeCalendarMonth(delta){
-  calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth()+delta, 1);
-  renderAvailabilityCalendar();
-}
-
-function renderAvailabilityCalendar(){
-  const grid = document.getElementById('availability-grid');
-  const label = document.getElementById('avail-month-label');
-  label.textContent = monthLabel(calendarCursor);
-  const year = calendarCursor.getFullYear();
-  const month = calendarCursor.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const startWeekday = firstDay.getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  let html = '';
-  for(let i=0;i<startWeekday;i++) html += '<div class="avail-day empty"></div>';
-  for(let day=1; day<=daysInMonth; day++){
-    const date = new Date(year, month, day);
-    const iso = isoDate(date);
-    const isBusy = OCCUPIED_DATES.has(iso);
-    const isPast = isPastDate(iso);
-    const isSelected = state.fecha === iso;
-    let cls = 'avail-day';
-    let meta = 'Disponible';
-    if(isPast) { cls += ' past'; meta = 'No disp.'; }
-    else if(isBusy) { cls += ' busy'; meta = 'Ocupada'; }
-    else { cls += ' available'; }
-    if(isSelected) cls += ' selected';
-    const click = (!isPast && !isBusy) ? `onclick="setSelectedDate('${iso}')"` : '';
-    html += `<button type="button" class="${cls}" ${click}><span class="avail-num">${day}</span><span class="avail-meta">${meta}</span></button>`;
-  }
-  grid.innerHTML = html;
-}
-
-renderAvailabilityCalendar();
-renderTimeOptions();
+// Set min date to today
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('fecha-input').min = today;
 
 // ── SPACES ──
 function renderSpaces() {
   const g = state.guests;
-  document.getElementById('step2-sub').textContent = `Espacios disponibles para ${g} personas y el horario ${state.horario || 'seleccionado'}.`;
-  document.getElementById('space-selected-bar').innerHTML = `<strong>Fecha:</strong> ${new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})} <br><strong>Horario:</strong> ${state.horario || '—'}`;
+  document.getElementById('step2-sub').textContent = `Espacios disponibles para ${g} personas.`;
   const html = SPACES.map(sp => {
     const fits = g >= sp.cap[0] && g <= sp.cap[1];
+    const tooFew = g < sp.cap[0];
+    const tooMany = g > sp.cap[1];
+    const disabled = !fits;
     const capText = `${sp.cap[0]}–${sp.cap[1]} personas`;
-    let disabled = !fits;
     let warn = '';
-    if(g < sp.cap[0]) warn = `<div class="cap-warn">Tu grupo de ${g} personas está por debajo del mínimo de ${sp.cap[0]}.</div>`;
-    if(g > sp.cap[1]) warn = `<div class="cap-warn">Tu grupo de ${g} personas excede el máximo de ${sp.cap[1]}.</div>`;
+    if(tooFew) warn = `<div class="cap-warn">Tu grupo de ${g} personas está por debajo del mínimo de ${sp.cap[0]}.</div>`;
+    if(tooMany) warn = `<div class="cap-warn">Tu grupo de ${g} personas excede el máximo de ${sp.cap[1]}.</div>`;
     return `<div>
       <div class="space-card ${disabled?'disabled':''}" id="sc-${sp.id}" onclick="selectSpace('${sp.id}')">
         <div class="sc-check">✓</div>
@@ -719,14 +766,43 @@ function renderSpaces() {
     </div>`;
   }).join('');
   document.getElementById('spaces-grid').innerHTML = html;
+  document.getElementById('slots-wrap').style.display = 'none';
   document.getElementById('btn-step2').disabled = true;
   state.espacio = '';
+  state.horario = '';
 }
 
 function selectSpace(id) {
   state.espacio = id;
+  state.horario = '';
   document.querySelectorAll('.space-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('sc-'+id)?.classList.add('selected');
+  renderSlots(id);
+  document.getElementById('btn-step2').disabled = true;
+}
+
+function renderSlots(id) {
+  const sp = SPACES.find(s=>s.id===id);
+  if(!sp) return;
+  let html = '';
+  const sections = [{key:'brunch',icon:'🌅',label:'Brunch'},{key:'comida',icon:'🍽️',label:'Comida / Merienda'},{key:'cena',icon:'🌙',label:'Cena'}];
+  sections.forEach(sec => {
+    html += `<div class="slot-section">
+      <div class="slot-section-title">${sec.icon} ${sec.label}</div>
+      <div class="slot-grid">
+        ${sp.slots[sec.key].map(s=>`<button class="slot-btn" onclick="selectSlot(this,'${s}','${sec.label}')">${s}</button>`).join('')}
+      </div>
+    </div>`;
+  });
+  html += `<div class="slot-note">Lun–Mié máx 8pm · Jue–Sáb máx 11pm</div>`;
+  document.getElementById('slots-container').innerHTML = html;
+  document.getElementById('slots-wrap').style.display = 'block';
+}
+
+function selectSlot(btn, slot, tipo) {
+  document.querySelectorAll('#slots-container .slot-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.horario = `${tipo} · ${slot}`;
   document.getElementById('btn-step2').disabled = false;
 }
 
