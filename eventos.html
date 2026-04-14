@@ -553,6 +553,12 @@ function renderPackages() {
     </div>`;
   }).join('');
   document.getElementById('pkg-grid').innerHTML = html;
+  document.getElementById('pkg-grid').onclick = function(e) {
+    const card = e.target.closest('.pkg-card');
+    if(!card) return;
+    if(card.dataset.disabled === 'true') { cartaWarning(); return; }
+    selectPkg(card.dataset.pkgid, card.dataset.pkgname);
+  };
   document.getElementById('btn-step3').disabled = true;
 }
 
