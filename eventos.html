@@ -143,6 +143,42 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 
 /* CAPACITY WARNING */
 .cap-warn{background:#fff3f3;border:1px solid #ffcdd2;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--danger);margin-top:-6px;margin-bottom:10px;}
+
+.availability-wrap{padding-bottom:0;overflow:hidden}
+.avail-head{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;border-bottom:1px solid var(--border);background:#fcfaf6;}
+.avail-month{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--green);}
+.cal-nav-btn{width:34px;height:34px;border:1px solid var(--border);border-radius:50%;background:var(--white);color:var(--green);font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.cal-nav-btn:hover{background:var(--green-pale);border-color:var(--green);}
+.avail-weekdays,.avail-grid{display:grid;grid-template-columns:repeat(7,1fr);}
+.avail-weekdays{padding:10px 10px 0;background:var(--white);}
+.avail-weekdays div{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;padding-bottom:8px;}
+.avail-grid{gap:6px;padding:0 10px 10px;background:var(--white);}
+.avail-day{min-height:66px;border:1px solid var(--border);border-radius:12px;background:#fff;padding:8px 6px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;cursor:pointer;transition:all .15s;}
+.avail-day:hover{border-color:var(--green-light);transform:translateY(-1px);}
+.avail-day.empty{background:transparent;border:none;cursor:default;min-height:66px;}
+.avail-day.empty:hover{transform:none;}
+.avail-day.past,.avail-day.busy{cursor:not-allowed;}
+.avail-day.past{background:#f7f4ef;color:#b5aa9d;border-color:#ece5db;}
+.avail-day.busy{background:#fcf2ef;border-color:#ecd3ca;}
+.avail-day.available{background:#fbfdf8;}
+.avail-day.selected{border-color:var(--green);background:var(--green-pale);box-shadow:0 0 0 1px rgba(61,90,46,.08) inset;}
+.avail-num{font-size:14px;font-weight:500;color:var(--text);}
+.avail-day.past .avail-num{color:#b5aa9d;}
+.avail-day.busy .avail-num{color:#8c5d4c;}
+.avail-meta{font-size:10px;line-height:1.2;color:var(--muted);}
+.avail-day.busy .avail-meta{color:#a36c58;}
+.avail-day.available .avail-meta{color:var(--green);}
+.avail-day.selected .avail-meta,.avail-day.selected .avail-num{color:var(--green);font-weight:500;}
+.avail-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:-4px 0 10px;align-items:center;}
+.avail-legend span{display:inline-flex;align-items:center;gap:6px;}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
+.dot-avail{background:#d9e9cf;border:1px solid #a9c08c;}
+.dot-busy{background:#f0d5cc;border:1px solid #d5a394;}
+.dot-past{background:#ece5db;border:1px solid #d7ccbc;}
+.date-status{font-size:11px;line-height:1.5;color:var(--muted);margin-top:8px;min-height:18px;}
+.date-status.ok{color:var(--green);}
+.date-status.error{color:var(--danger);}
+
 </style>
 </head>
 <body>
@@ -190,12 +226,26 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 
   <div class="field">
     <label>Elige tu fecha</label>
-    <div class="warn">📌 Las fechas <strong>con eventos marcados</strong> están OCUPADAS. Las fechas vacías están disponibles.</div>
-    <div class="cal-wrap">
-      <iframe src="https://calendar.google.com/calendar/embed?src=d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c507ff2c3bd56534fe642c%40group.calendar.google.com&ctz=America%2FMonterrey&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=MONTH&bgcolor=%23ffffff&color=%234a5e3a" height="300"></iframe>
-      <div class="cal-note">¿Encontraste tu fecha? Escríbela abajo 👇</div>
+    <div class="warn">📌 Aquí solo mostramos <strong>disponibilidad</strong>. Las fechas marcadas como <strong>ocupadas</strong> no se pueden seleccionar. Tu evento queda <strong>apartado únicamente al enviar el anticipo y recibir confirmación por WhatsApp</strong>.</div>
+    <div class="avail-legend">
+      <span><i class="dot dot-avail"></i>Disponible</span>
+      <span><i class="dot dot-busy"></i>Ocupada</span>
+      <span><i class="dot dot-past"></i>No disponible</span>
+    </div>
+    <div class="cal-wrap availability-wrap">
+      <div class="avail-head">
+        <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(-1)" aria-label="Mes anterior">‹</button>
+        <div class="avail-month" id="avail-month-label">—</div>
+        <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(1)" aria-label="Mes siguiente">›</button>
+      </div>
+      <div class="avail-weekdays">
+        <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+      </div>
+      <div class="avail-grid" id="availability-grid"></div>
+      <div class="cal-note">Selecciona una fecha disponible para continuar.</div>
     </div>
     <input class="input" type="date" id="fecha-input" min="" placeholder="dd/mm/aaaa"/>
+    <div id="fecha-status" class="date-status"></div>
   </div>
 
   <button class="btn-primary" onclick="goStep(2)">Siguiente →</button>
@@ -344,7 +394,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 <!-- STEP 5: Confirmar -->
 <div class="step" id="step5">
   <div class="step-title">Resumen de tu evento</div>
-  <div class="step-sub">Revisa los detalles y paga el anticipo para confirmar tu fecha.</div>
+  <div class="step-sub">Esta es una solicitud de reserva. Tu fecha se confirma únicamente cuando recibimos el anticipo y te mandamos confirmación por WhatsApp.</div>
 
   <div class="summary-card">
     <div class="sum-title">📋 Detalles del evento</div>
@@ -372,7 +422,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
     <div class="antic-bank">
       <strong>Amalay Foods · Santander</strong><br/>
       <div class="antic-clabe">014580655083036033</div>
-      Envía tu comprobante por WhatsApp para bloquear la fecha
+      Envía tu comprobante por WhatsApp para solicitar el bloqueo de tu fecha
     </div>
   </div>
 
@@ -386,14 +436,9 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
     1. Enviar comprobante por WhatsApp
   </a>
 
-  <a id="btn-gcal" href="#" target="_blank" class="btn-primary" style="margin-bottom:10px;background:#4285f4;display:flex;align-items:center;justify-content:center;gap:8px;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-    2. Agregar al Google Calendar de Amalay
-  </a>
-
   <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.8;background:#f8f5f0;padding:10px;border-radius:8px;">
-    📌 Primero envía tu comprobante por WhatsApp.<br/>
-    Luego Monica confirmará y agregará la fecha al calendario.
+    📌 Esta solicitud no bloquea la fecha automáticamente.<br/>
+    Una vez recibido el anticipo, Monica confirmará por WhatsApp y después agregará el evento al calendario de Amalay.
   </div>
 
   <button class="btn-back" onclick="goStep(4)">← Modificar</button>
@@ -416,6 +461,8 @@ const state = {
   deco: 'Básica (incluida)',
   currentStep: 1
 };
+
+renderAvailabilityCalendar();
 
 // ── SPACES ──
 const SPACES = [
@@ -474,12 +521,101 @@ function changeGuests(delta) {
 }
 
 // ── DATE ──
+const today = new Date();
+today.setHours(0,0,0,0);
+const todayStr = today.toISOString().split('T')[0];
+const OCCUPIED_DATES = new Set(["2026-04-16", "2026-04-17", "2026-04-18", "2026-04-19", "2026-04-23", "2026-04-25", "2026-04-26", "2026-05-09", "2026-05-16", "2026-05-23", "2026-06-19"]);
+let calendarCursor = new Date(today.getFullYear(), today.getMonth(), 1);
+
 document.getElementById('fecha-input').addEventListener('change', function(){
-  state.fecha = this.value;
+  setSelectedDate(this.value, false);
 });
-// Set min date to today
-const today = new Date().toISOString().split('T')[0];
-document.getElementById('fecha-input').min = today;
+document.getElementById('fecha-input').min = todayStr;
+
+function monthLabel(date){
+  return date.toLocaleDateString('es-MX', { month:'long', year:'numeric' });
+}
+
+function isoDate(date){
+  const y = date.getFullYear();
+  const m = String(date.getMonth()+1).padStart(2,'0');
+  const d = String(date.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+
+function isPastDate(iso){
+  return iso < todayStr;
+}
+
+function setSelectedDate(value, fromCalendar=true){
+  const status = document.getElementById('fecha-status');
+  if(!value){
+    state.fecha = '';
+    document.getElementById('fecha-input').value = '';
+    status.textContent = '';
+    status.className = 'date-status';
+    renderAvailabilityCalendar();
+    return;
+  }
+  if(isPastDate(value)){
+    status.textContent = 'Esa fecha ya no está disponible.';
+    status.className = 'date-status error';
+    if(fromCalendar) alert('Esa fecha ya no está disponible.');
+    return;
+  }
+  if(OCCUPIED_DATES.has(value)){
+    status.textContent = 'Esa fecha ya está ocupada. Elige una fecha disponible.';
+    status.className = 'date-status error';
+    if(fromCalendar) alert('Esa fecha ya está ocupada. Elige una fecha disponible.');
+    document.getElementById('fecha-input').value = state.fecha || '';
+    renderAvailabilityCalendar();
+    return;
+  }
+  state.fecha = value;
+  document.getElementById('fecha-input').value = value;
+  const nice = new Date(value+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  status.textContent = `Fecha seleccionada: ${nice}. La reservación se confirma únicamente con anticipo y confirmación por WhatsApp.`;
+  status.className = 'date-status ok';
+  calendarCursor = new Date(value+'T12:00:00');
+  calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth(), 1);
+  renderAvailabilityCalendar();
+}
+
+function changeCalendarMonth(delta){
+  calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth()+delta, 1);
+  renderAvailabilityCalendar();
+}
+
+function renderAvailabilityCalendar(){
+  const grid = document.getElementById('availability-grid');
+  const label = document.getElementById('avail-month-label');
+  label.textContent = monthLabel(calendarCursor);
+  const year = calendarCursor.getFullYear();
+  const month = calendarCursor.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const startWeekday = firstDay.getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  let html = '';
+  for(let i=0;i<startWeekday;i++) html += '<div class="avail-day empty"></div>';
+  for(let day=1; day<=daysInMonth; day++){
+    const date = new Date(year, month, day);
+    const iso = isoDate(date);
+    const isBusy = OCCUPIED_DATES.has(iso);
+    const isPast = isPastDate(iso);
+    const isSelected = state.fecha === iso;
+    let cls = 'avail-day';
+    let meta = 'Disponible';
+    if(isPast) { cls += ' past'; meta = 'No disp.'; }
+    else if(isBusy) { cls += ' busy'; meta = 'Ocupada'; }
+    else { cls += ' available'; }
+    if(isSelected) cls += ' selected';
+    const click = (!isPast && !isBusy) ? `onclick="setSelectedDate('${iso}')"` : '';
+    html += `<button type="button" class="${cls}" ${click}><span class="avail-num">${day}</span><span class="avail-meta">${meta}</span></button>`;
+  }
+  grid.innerHTML = html;
+}
+
+renderAvailabilityCalendar();
 
 // ── SPACES ──
 function renderSpaces() {
@@ -675,45 +811,6 @@ function buildSummary() {
   // WhatsApp
   const msg = buildWhatsAppMsg(fechaFormatted, espacioObj?.name, total);
   document.getElementById('btn-whatsapp').href = 'https://wa.me/528182543303?text='+encodeURIComponent(msg);
-
-  // Google Calendar link
-  const gcal = buildGCalLink(fechaFormatted, espacioObj?.name);
-  const gcalBtn = document.getElementById('btn-gcal');
-  if(gcalBtn) gcalBtn.href = gcal;
-}
-
-
-function buildGCalLink(fechaText, espacio) {
-  // Build Google Calendar "add event" link
-  const d = new Date(state.fecha + 'T12:00:00');
-  const pad = n => String(n).padStart(2,'0');
-  const ymd = d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate());
-  
-  // Parse start/end from horario e.g. "Brunch · 8:00 – 11:00am"
-  let startH = '12', endH = '14';
-  const horario = state.horario;
-  const timeMatch = horario.match(/(\d+):?(\d*)\s*(am|pm)?.*?–.*?(\d+):?(\d*)\s*(am|pm)?/i);
-  if(timeMatch) {
-    let sh = parseInt(timeMatch[1]), sm = parseInt(timeMatch[2]||0);
-    let eh = parseInt(timeMatch[4]), em = parseInt(timeMatch[5]||0);
-    const endPeriod = (timeMatch[6]||'').toLowerCase();
-    const startPeriod = (timeMatch[3]||endPeriod).toLowerCase();
-    if(startPeriod === 'pm' && sh < 12) sh += 12;
-    if(endPeriod === 'pm' && eh < 12) eh += 12;
-    if(startPeriod === 'am' && sh === 12) sh = 0;
-    startH = pad(sh) + pad(sm) + '00';
-    endH = pad(eh) + pad(em) + '00';
-  }
-
-  const title = encodeURIComponent(`Evento AMALAY · ${espacio} · ${state.guests} personas`);
-  const details = encodeURIComponent(`Paquete: ${state.paqueteNombre}\nPersonas: ${state.guests}\nDecoración: ${state.deco}\nContacto: 81 8254 3303`);
-  const location = encodeURIComponent('AMALAY Coffee & Market, Calzada San Pedro 102, Plaza Duendes, San Pedro Garza García');
-  
-  const start = `${ymd}T${startH}`;
-  const end = `${ymd}T${endH}`;
-  
-  const guest = encodeURIComponent('monigp75@gmail.com');
-  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}&add=${guest}&crm=AVAILABLE`;
 }
 
 function buildWhatsAppMsg(fecha, espacio, total) {
@@ -727,7 +824,7 @@ function buildWhatsAppMsg(fecha, espacio, total) {
   if(state.entradas.length > 0) msg += `🌿 Entradas: ${state.entradas.join(', ')}\n`;
   msg += `💐 Decoración: ${state.deco}\n`;
   msg += `\n💰 Total estimado: $${total.toLocaleString()} MXN\n`;
-  msg += `\nAdjunto mi comprobante de anticipo ($1,000 MXN) para confirmar la fecha. ¡Gracias!`;
+  msg += `\nQuiero solicitar esta fecha. Entiendo que la reservación se confirma únicamente cuando ustedes reciban el anticipo de $1,000 MXN y me manden confirmación por WhatsApp.`;
   return msg;
 }
 </script>
