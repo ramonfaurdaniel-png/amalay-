@@ -143,7 +143,6 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 
 /* CAPACITY WARNING */
 .cap-warn{background:#fff3f3;border:1px solid #ffcdd2;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--danger);margin-top:-6px;margin-bottom:10px;}
-
 .availability-wrap{padding-bottom:0;overflow:hidden}
 .avail-head{display:flex;align-items:center;justify-content:space-between;padding:14px 14px 10px;border-bottom:1px solid var(--border);background:#fcfaf6;}
 .avail-month{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--green);}
@@ -197,6 +196,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 .space-selected-bar strong{color:var(--green);font-weight:500;}
 @media (max-width: 760px){.booking-shell{grid-template-columns:1fr;}.time-grid{grid-template-columns:1fr 1fr;}.times-card{padding:14px;}}
 @media (max-width: 440px){.time-grid{grid-template-columns:1fr;}}
+
 
 </style>
 </head>
@@ -418,7 +418,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 <!-- STEP 5: Confirmar -->
 <div class="step" id="step5">
   <div class="step-title">Resumen de tu evento</div>
-  <div class="step-sub">Esta es una solicitud de reserva. Tu fecha se confirma únicamente cuando recibimos el anticipo y te mandamos confirmación por WhatsApp.</div>
+  <div class="step-sub">Revisa los detalles y paga el anticipo para confirmar tu fecha.</div>
 
   <div class="summary-card">
     <div class="sum-title">📋 Detalles del evento</div>
@@ -446,7 +446,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
     <div class="antic-bank">
       <strong>Amalay Foods · Santander</strong><br/>
       <div class="antic-clabe">014580655083036033</div>
-      Envía tu comprobante por WhatsApp para solicitar el bloqueo de tu fecha
+      Envía tu comprobante por WhatsApp para bloquear la fecha
     </div>
   </div>
 
@@ -460,9 +460,14 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
     1. Enviar comprobante por WhatsApp
   </a>
 
+  <a id="btn-gcal" href="#" target="_blank" class="btn-primary" style="margin-bottom:10px;background:#4285f4;display:flex;align-items:center;justify-content:center;gap:8px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+    2. Agregar al Google Calendar de Amalay
+  </a>
+
   <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.8;background:#f8f5f0;padding:10px;border-radius:8px;">
-    📌 Esta solicitud no bloquea la fecha automáticamente.<br/>
-    Una vez recibido el anticipo, Monica confirmará por WhatsApp y después agregará el evento al calendario de Amalay.
+    📌 Primero envía tu comprobante por WhatsApp.<br/>
+    Luego Monica confirmará y agregará la fecha al calendario.
   </div>
 
   <button class="btn-back" onclick="goStep(4)">← Modificar</button>
@@ -486,9 +491,6 @@ const state = {
   currentStep: 1
 };
 
-renderAvailabilityCalendar();
-renderTimeOptions();
-
 // ── SPACES ──
 const SPACES = [
   { id:'terraza', name:'🌿 Terraza privada con balcón', cap:[10,24], desc:'Segundo piso · Sin renta · Solo consumo + 18% servicio · Disponible todo el día desde las 8am', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
@@ -509,10 +511,10 @@ function goStep(n) {
   // Validations
   if(n === 2) {
     if(!state.fecha) { alert('Por favor selecciona una fecha'); return; }
-    if(!state.horario) { alert('Por favor selecciona una hora'); return; }
   }
   if(n === 3) {
     if(!state.espacio) { alert('Por favor selecciona un espacio'); return; }
+    if(!state.horario) { alert('Por favor selecciona un horario'); return; }
   }
   if(n === 4) {
     if(!state.paquete) { alert('Por favor selecciona un paquete'); return; }
@@ -856,6 +858,45 @@ function buildSummary() {
   // WhatsApp
   const msg = buildWhatsAppMsg(fechaFormatted, espacioObj?.name, total);
   document.getElementById('btn-whatsapp').href = 'https://wa.me/528182543303?text='+encodeURIComponent(msg);
+
+  // Google Calendar link
+  const gcal = buildGCalLink(fechaFormatted, espacioObj?.name);
+  const gcalBtn = document.getElementById('btn-gcal');
+  if(gcalBtn) gcalBtn.href = gcal;
+}
+
+
+function buildGCalLink(fechaText, espacio) {
+  // Build Google Calendar "add event" link
+  const d = new Date(state.fecha + 'T12:00:00');
+  const pad = n => String(n).padStart(2,'0');
+  const ymd = d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate());
+  
+  // Parse start/end from horario e.g. "Brunch · 8:00 – 11:00am"
+  let startH = '12', endH = '14';
+  const horario = state.horario;
+  const timeMatch = horario.match(/(\d+):?(\d*)\s*(am|pm)?.*?–.*?(\d+):?(\d*)\s*(am|pm)?/i);
+  if(timeMatch) {
+    let sh = parseInt(timeMatch[1]), sm = parseInt(timeMatch[2]||0);
+    let eh = parseInt(timeMatch[4]), em = parseInt(timeMatch[5]||0);
+    const endPeriod = (timeMatch[6]||'').toLowerCase();
+    const startPeriod = (timeMatch[3]||endPeriod).toLowerCase();
+    if(startPeriod === 'pm' && sh < 12) sh += 12;
+    if(endPeriod === 'pm' && eh < 12) eh += 12;
+    if(startPeriod === 'am' && sh === 12) sh = 0;
+    startH = pad(sh) + pad(sm) + '00';
+    endH = pad(eh) + pad(em) + '00';
+  }
+
+  const title = encodeURIComponent(`Evento AMALAY · ${espacio} · ${state.guests} personas`);
+  const details = encodeURIComponent(`Paquete: ${state.paqueteNombre}\nPersonas: ${state.guests}\nDecoración: ${state.deco}\nContacto: 81 8254 3303`);
+  const location = encodeURIComponent('AMALAY Coffee & Market, Calzada San Pedro 102, Plaza Duendes, San Pedro Garza García');
+  
+  const start = `${ymd}T${startH}`;
+  const end = `${ymd}T${endH}`;
+  
+  const guest = encodeURIComponent('monigp75@gmail.com');
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}&add=${guest}&crm=AVAILABLE`;
 }
 
 function buildWhatsAppMsg(fecha, espacio, total) {
@@ -869,7 +910,7 @@ function buildWhatsAppMsg(fecha, espacio, total) {
   if(state.entradas.length > 0) msg += `🌿 Entradas: ${state.entradas.join(', ')}\n`;
   msg += `💐 Decoración: ${state.deco}\n`;
   msg += `\n💰 Total estimado: $${total.toLocaleString()} MXN\n`;
-  msg += `\nQuiero solicitar esta fecha. Entiendo que la reservación se confirma únicamente cuando ustedes reciban el anticipo de $1,000 MXN y me manden confirmación por WhatsApp.`;
+  msg += `\nAdjunto mi comprobante de anticipo ($1,000 MXN) para confirmar la fecha. ¡Gracias!`;
   return msg;
 }
 </script>
