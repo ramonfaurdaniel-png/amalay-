@@ -179,6 +179,25 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 .date-status.ok{color:var(--green);}
 .date-status.error{color:var(--danger);}
 
+
+.booking-shell{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(260px,.8fr);gap:14px;align-items:start}
+.times-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;min-height:100%;}
+.times-head{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--green);margin-bottom:4px;}
+.times-sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:14px;}
+.selected-date-pill{display:inline-flex;align-items:center;gap:8px;background:var(--green-pale);color:var(--green);border-radius:999px;padding:8px 12px;font-size:12px;font-weight:500;margin-bottom:12px;}
+.time-groups{display:flex;flex-direction:column;gap:12px;}
+.time-group-title{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--green);margin-bottom:7px;font-weight:500;}
+.time-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.time-btn{width:100%;border:1px solid var(--border);background:#fff;border-radius:999px;padding:11px 12px;font-family:'Jost',sans-serif;font-size:13px;color:var(--text);cursor:pointer;transition:all .15s;}
+.time-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-pale);}
+.time-btn.sel{background:var(--green);border-color:var(--green);color:#fff;}
+.time-empty{font-size:12px;color:var(--muted);line-height:1.6;padding:10px 0;}
+.time-note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:12px;}
+.space-selected-bar{background:#fcfaf6;border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:12px;color:var(--muted);line-height:1.5;}
+.space-selected-bar strong{color:var(--green);font-weight:500;}
+@media (max-width: 760px){.booking-shell{grid-template-columns:1fr;}.time-grid{grid-template-columns:1fr 1fr;}.times-card{padding:14px;}}
+@media (max-width: 440px){.time-grid{grid-template-columns:1fr;}}
+
 </style>
 </head>
 <body>
@@ -225,24 +244,35 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
   </div>
 
   <div class="field">
-    <label>Elige tu fecha</label>
-    <div class="warn">📌 Aquí solo mostramos <strong>disponibilidad</strong>. Las fechas marcadas como <strong>ocupadas</strong> no se pueden seleccionar. Tu evento queda <strong>apartado únicamente al enviar el anticipo y recibir confirmación por WhatsApp</strong>.</div>
+    <label>Elige tu fecha y horario</label>
+    <div class="warn">📌 Aquí solo mostramos <strong>días y horas disponibles</strong>. Las fechas ocupadas no se pueden seleccionar. Tu evento queda <strong>apartado únicamente al enviar el anticipo y recibir confirmación por WhatsApp</strong>.</div>
     <div class="avail-legend">
       <span><i class="dot dot-avail"></i>Disponible</span>
       <span><i class="dot dot-busy"></i>Ocupada</span>
       <span><i class="dot dot-past"></i>No disponible</span>
     </div>
-    <div class="cal-wrap availability-wrap">
-      <div class="avail-head">
-        <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(-1)" aria-label="Mes anterior">‹</button>
-        <div class="avail-month" id="avail-month-label">—</div>
-        <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(1)" aria-label="Mes siguiente">›</button>
+    <div class="booking-shell">
+      <div class="cal-wrap availability-wrap">
+        <div class="avail-head">
+          <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(-1)" aria-label="Mes anterior">‹</button>
+          <div class="avail-month" id="avail-month-label">—</div>
+          <button type="button" class="cal-nav-btn" onclick="changeCalendarMonth(1)" aria-label="Mes siguiente">›</button>
+        </div>
+        <div class="avail-weekdays">
+          <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+        </div>
+        <div class="avail-grid" id="availability-grid"></div>
+        <div class="cal-note">Primero elige un día disponible y luego una hora.</div>
       </div>
-      <div class="avail-weekdays">
-        <div>Dom</div><div>Lun</div><div>Mar</div><div>Mié</div><div>Jue</div><div>Vie</div><div>Sáb</div>
+      <div class="times-card">
+        <div class="times-head">Horarios</div>
+        <div class="times-sub" id="times-sub">Selecciona una fecha para ver las horas disponibles.</div>
+        <div id="selected-date-pill-wrap"></div>
+        <div id="time-groups" class="time-groups">
+          <div class="time-empty">Selecciona un día disponible en el calendario para mostrar las horas.</div>
+        </div>
+        <div class="time-note">Lun–Mié último evento 8pm · Jue–Sáb último evento 11pm · Dom brunch/comida.</div>
       </div>
-      <div class="avail-grid" id="availability-grid"></div>
-      <div class="cal-note">Selecciona una fecha disponible para continuar.</div>
     </div>
     <input class="input" type="date" id="fecha-input" min="" placeholder="dd/mm/aaaa"/>
     <div id="fecha-status" class="date-status"></div>
@@ -251,19 +281,13 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
   <button class="btn-primary" onclick="goStep(2)">Siguiente →</button>
 </div>
 
-<!-- STEP 2: Espacio & Horario -->
+<!-- STEP 2: Espacio -->
 <div class="step" id="step2">
-  <div class="step-title">Elige tu espacio y horario</div>
-  <div class="step-sub" id="step2-sub">Espacios disponibles para tu grupo.</div>
+  <div class="step-title">Elige tu espacio</div>
+  <div class="step-sub" id="step2-sub">Espacios disponibles para tu grupo y horario seleccionado.</div>
 
+  <div class="space-selected-bar" id="space-selected-bar"></div>
   <div class="space-grid" id="spaces-grid"></div>
-
-  <div id="slots-wrap" style="display:none;margin-top:16px;">
-    <div class="field">
-      <label>Horario disponible</label>
-      <div id="slots-container"></div>
-    </div>
-  </div>
 
   <div style="height:14px;"></div>
   <button class="btn-back" onclick="goStep(1)">← Atrás</button>
@@ -463,6 +487,7 @@ const state = {
 };
 
 renderAvailabilityCalendar();
+renderTimeOptions();
 
 // ── SPACES ──
 const SPACES = [
@@ -484,10 +509,10 @@ function goStep(n) {
   // Validations
   if(n === 2) {
     if(!state.fecha) { alert('Por favor selecciona una fecha'); return; }
+    if(!state.horario) { alert('Por favor selecciona una hora'); return; }
   }
   if(n === 3) {
     if(!state.espacio) { alert('Por favor selecciona un espacio'); return; }
-    if(!state.horario) { alert('Por favor selecciona un horario'); return; }
   }
   if(n === 4) {
     if(!state.paquete) { alert('Por favor selecciona un paquete'); return; }
@@ -526,6 +551,11 @@ today.setHours(0,0,0,0);
 const todayStr = today.toISOString().split('T')[0];
 const OCCUPIED_DATES = new Set(["2026-04-16", "2026-04-17", "2026-04-18", "2026-04-19", "2026-04-23", "2026-04-25", "2026-04-26", "2026-05-09", "2026-05-16", "2026-05-23", "2026-06-19"]);
 let calendarCursor = new Date(today.getFullYear(), today.getMonth(), 1);
+const TIME_GROUPS = [
+  { key:'brunch', label:'Brunch', slots:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'] },
+  { key:'comida', label:'Comida / Merienda', slots:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'] },
+  { key:'cena', label:'Cena', slots:['7:30 – 10:30pm','8:00 – 11:00pm'] }
+];
 
 document.getElementById('fecha-input').addEventListener('change', function(){
   setSelectedDate(this.value, false);
@@ -551,10 +581,12 @@ function setSelectedDate(value, fromCalendar=true){
   const status = document.getElementById('fecha-status');
   if(!value){
     state.fecha = '';
+    state.horario = '';
     document.getElementById('fecha-input').value = '';
     status.textContent = '';
     status.className = 'date-status';
     renderAvailabilityCalendar();
+    renderTimeOptions();
     return;
   }
   if(isPastDate(value)){
@@ -569,16 +601,58 @@ function setSelectedDate(value, fromCalendar=true){
     if(fromCalendar) alert('Esa fecha ya está ocupada. Elige una fecha disponible.');
     document.getElementById('fecha-input').value = state.fecha || '';
     renderAvailabilityCalendar();
+    renderTimeOptions();
     return;
   }
   state.fecha = value;
+  state.horario = '';
   document.getElementById('fecha-input').value = value;
   const nice = new Date(value+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-  status.textContent = `Fecha seleccionada: ${nice}. La reservación se confirma únicamente con anticipo y confirmación por WhatsApp.`;
+  status.textContent = `Fecha seleccionada: ${nice}. Ahora elige una hora disponible.`;
   status.className = 'date-status ok';
   calendarCursor = new Date(value+'T12:00:00');
   calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth(), 1);
   renderAvailabilityCalendar();
+  renderTimeOptions();
+}
+
+function formatSelectedDate(iso){
+  return new Date(iso+'T12:00:00').toLocaleDateString('es-MX', { weekday:'short', day:'numeric', month:'short' });
+}
+
+function renderTimeOptions(){
+  const wrap = document.getElementById('time-groups');
+  const sub = document.getElementById('times-sub');
+  const pillWrap = document.getElementById('selected-date-pill-wrap');
+  if(!state.fecha){
+    sub.textContent = 'Selecciona una fecha para ver las horas disponibles.';
+    pillWrap.innerHTML = '';
+    wrap.innerHTML = '<div class="time-empty">Selecciona un día disponible en el calendario para mostrar las horas.</div>';
+    return;
+  }
+  sub.textContent = 'Elige la hora que más te convenga para continuar.';
+  pillWrap.innerHTML = `<div class="selected-date-pill">📅 ${formatSelectedDate(state.fecha)}</div>`;
+  let html = '';
+  TIME_GROUPS.forEach(group => {
+    html += `<div><div class="time-group-title">${group.label}</div><div class="time-grid">`;
+    html += group.slots.map(slot => {
+      const full = `${group.label} · ${slot}`;
+      const sel = state.horario === full ? ' sel' : '';
+      return `<button type="button" class="time-btn${sel}" onclick="selectTime(this,'${slot}','${group.label}')">${slot}</button>`;
+    }).join('');
+    html += '</div></div>';
+  });
+  wrap.innerHTML = html;
+}
+
+function selectTime(btn, slot, label){
+  document.querySelectorAll('#time-groups .time-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.horario = `${label} · ${slot}`;
+  const status = document.getElementById('fecha-status');
+  const nice = new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  status.textContent = `Fecha y hora seleccionadas: ${nice} · ${state.horario}.`;
+  status.className = 'date-status ok';
 }
 
 function changeCalendarMonth(delta){
@@ -616,20 +690,20 @@ function renderAvailabilityCalendar(){
 }
 
 renderAvailabilityCalendar();
+renderTimeOptions();
 
 // ── SPACES ──
 function renderSpaces() {
   const g = state.guests;
-  document.getElementById('step2-sub').textContent = `Espacios disponibles para ${g} personas.`;
+  document.getElementById('step2-sub').textContent = `Espacios disponibles para ${g} personas y el horario ${state.horario || 'seleccionado'}.`;
+  document.getElementById('space-selected-bar').innerHTML = `<strong>Fecha:</strong> ${new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})} <br><strong>Horario:</strong> ${state.horario || '—'}`;
   const html = SPACES.map(sp => {
     const fits = g >= sp.cap[0] && g <= sp.cap[1];
-    const tooFew = g < sp.cap[0];
-    const tooMany = g > sp.cap[1];
-    const disabled = !fits;
     const capText = `${sp.cap[0]}–${sp.cap[1]} personas`;
+    let disabled = !fits;
     let warn = '';
-    if(tooFew) warn = `<div class="cap-warn">Tu grupo de ${g} personas está por debajo del mínimo de ${sp.cap[0]}.</div>`;
-    if(tooMany) warn = `<div class="cap-warn">Tu grupo de ${g} personas excede el máximo de ${sp.cap[1]}.</div>`;
+    if(g < sp.cap[0]) warn = `<div class="cap-warn">Tu grupo de ${g} personas está por debajo del mínimo de ${sp.cap[0]}.</div>`;
+    if(g > sp.cap[1]) warn = `<div class="cap-warn">Tu grupo de ${g} personas excede el máximo de ${sp.cap[1]}.</div>`;
     return `<div>
       <div class="space-card ${disabled?'disabled':''}" id="sc-${sp.id}" onclick="selectSpace('${sp.id}')">
         <div class="sc-check">✓</div>
@@ -643,43 +717,14 @@ function renderSpaces() {
     </div>`;
   }).join('');
   document.getElementById('spaces-grid').innerHTML = html;
-  document.getElementById('slots-wrap').style.display = 'none';
   document.getElementById('btn-step2').disabled = true;
   state.espacio = '';
-  state.horario = '';
 }
 
 function selectSpace(id) {
   state.espacio = id;
-  state.horario = '';
   document.querySelectorAll('.space-card').forEach(c => c.classList.remove('selected'));
   document.getElementById('sc-'+id)?.classList.add('selected');
-  renderSlots(id);
-  document.getElementById('btn-step2').disabled = true;
-}
-
-function renderSlots(id) {
-  const sp = SPACES.find(s=>s.id===id);
-  if(!sp) return;
-  let html = '';
-  const sections = [{key:'brunch',icon:'🌅',label:'Brunch'},{key:'comida',icon:'🍽️',label:'Comida / Merienda'},{key:'cena',icon:'🌙',label:'Cena'}];
-  sections.forEach(sec => {
-    html += `<div class="slot-section">
-      <div class="slot-section-title">${sec.icon} ${sec.label}</div>
-      <div class="slot-grid">
-        ${sp.slots[sec.key].map(s=>`<button class="slot-btn" onclick="selectSlot(this,'${s}','${sec.label}')">${s}</button>`).join('')}
-      </div>
-    </div>`;
-  });
-  html += `<div class="slot-note">Lun–Mié máx 8pm · Jue–Sáb máx 11pm</div>`;
-  document.getElementById('slots-container').innerHTML = html;
-  document.getElementById('slots-wrap').style.display = 'block';
-}
-
-function selectSlot(btn, slot, tipo) {
-  document.querySelectorAll('#slots-container .slot-btn').forEach(b=>b.classList.remove('sel'));
-  btn.classList.add('sel');
-  state.horario = `${tipo} · ${slot}`;
   document.getElementById('btn-step2').disabled = false;
 }
 
