@@ -540,26 +540,27 @@ function selectSlot(btn, slot, tipo) {
 
 // ── PACKAGES ──
 function renderPackages() {
-  const html = PACKAGES.map(p => {
-    const disabled = p.id === 'carta' && state.guests >= 20;
-    return `<div class="pkg-card ${disabled?'':''}${disabled?' disabled-pkg':''}" id="pc-${p.id}" onclick="${disabled?'alert(\"A la Carta solo aplica para grupos menores a 20 personas\")':'selectPkg(\\\"'+p.id+'\\\",\\\"'+p.name+'\\\")'}">
-      <div class="pkg-header">
-        <div class="pkg-name">${p.name}</div>
-        <div class="pkg-price">${p.price}</div>
-      </div>
-      <div class="pkg-desc">${p.desc}</div>
-      <div class="pkg-items">${p.items.map(i=>`<div class="pkg-item">${i}</div>`).join('')}</div>
-      ${disabled?'<div style="font-size:11px;color:#c0392b;margin-top:6px;">Solo para menos de 20 personas</div>':''}
-    </div>`;
-  }).join('');
-  document.getElementById('pkg-grid').innerHTML = html;
-  document.getElementById('pkg-grid').onclick = function(e) {
-    const card = e.target.closest('.pkg-card');
-    if(!card) return;
-    if(card.dataset.disabled === 'true') { cartaWarning(); return; }
-    selectPkg(card.dataset.pkgid, card.dataset.pkgname);
-  };
+  const grid = document.getElementById('pkg-grid');
+  grid.innerHTML = '';
   document.getElementById('btn-step3').disabled = true;
+  PACKAGES.forEach(p => {
+    const disabled = p.id === 'carta' && state.guests >= 20;
+    const div = document.createElement('div');
+    div.className = 'pkg-card';
+    div.id = 'pc-' + p.id;
+    if(disabled) div.style.cssText = 'opacity:.5;cursor:not-allowed';
+    const itemsHtml = p.items.map(i => '<div class="pkg-item">' + i + '</div>').join('');
+    const warnHtml = disabled ? '<div style="font-size:11px;color:#c0392b;margin-top:6px;">Solo para menos de 20 personas</div>' : '';
+    div.innerHTML = '<div class="pkg-header"><div class="pkg-name">' + p.name + '</div><div class="pkg-price">' + p.price + '</div></div>'
+      + '<div class="pkg-desc">' + p.desc + '</div>'
+      + '<div class="pkg-items">' + itemsHtml + '</div>'
+      + warnHtml;
+    div.addEventListener('click', function() {
+      if(disabled) { alert('A la Carta solo aplica para grupos menores a 20 personas.'); return; }
+      selectPkg(p.id, p.name);
+    });
+    grid.appendChild(div);
+  });
 }
 
 function cartaWarning() { alert("A la Carta solo aplica para grupos menores a 20 personas."); }
