@@ -542,51 +542,53 @@ function selectSlot(btn, slot, tipo) {
 function renderPackages() {
   const grid = document.getElementById('pkg-grid');
   grid.innerHTML = '';
-  document.getElementById('btn-step3').disabled = true;
-  PACKAGES.forEach(p => {
+  document.getElementById('btn-step3').disabled = !state.paquete;
+
+  PACKAGES.forEach(function(p) {
     const disabled = p.id === 'carta' && state.guests >= 20;
+
     const div = document.createElement('div');
     div.className = 'pkg-card';
     div.id = 'pc-' + p.id;
-    if(disabled) div.style.cssText = 'opacity:.5;cursor:not-allowed';
-    const itemsHtml = p.items.map(i => '<div class="pkg-item">' + i + '</div>').join('');
+    if (state.paquete === p.id) div.classList.add('selected');
+    if (disabled) { div.style.opacity = '0.5'; div.style.cursor = 'not-allowed'; }
+
+    const itemsHtml = p.items.map(function(i) { return '<div class="pkg-item">' + i + '</div>'; }).join('');
     const warnHtml = disabled ? '<div style="font-size:11px;color:#c0392b;margin-top:6px;">Solo para menos de 20 personas</div>' : '';
-    div.innerHTML = '<div class="pkg-header"><div class="pkg-name">' + p.name + '</div><div class="pkg-price">' + p.price + '</div></div>'
-      + '<div class="pkg-desc">' + p.desc + '</div>'
-      + '<div class="pkg-items">' + itemsHtml + '</div>'
-      + warnHtml;
+    const checkHtml = (state.paquete === p.id) ? '<div class="pkg-chk" style="margin-top:10px;padding:5px 12px;background:#3d5a2e;color:#fff;border-radius:20px;font-size:11px;font-weight:500;display:inline-block;">✓ Seleccionado</div>' : '';
+
+    div.innerHTML =
+      '<div class="pkg-header"><div class="pkg-name">' + p.name + '</div><div class="pkg-price">' + p.price + '</div></div>' +
+      '<div class="pkg-desc">' + p.desc + '</div>' +
+      '<div class="pkg-items">' + itemsHtml + '</div>' +
+      warnHtml + checkHtml;
+
     div.addEventListener('click', function() {
-      if(disabled) { alert('A la Carta solo aplica para grupos menores a 20 personas.'); return; }
+      if (disabled) { alert('A la Carta solo aplica para grupos menores a 20 personas.'); return; }
       selectPkg(p.id, p.name);
     });
+
     grid.appendChild(div);
   });
-}
-
-function cartaWarning() { alert("A la Carta solo aplica para grupos menores a 20 personas."); }
-
-function addCheckmark(card) {
-  card.querySelectorAll('.pkg-check').forEach(e=>e.remove());
-  const chk = document.createElement('div');
-  chk.className = 'pkg-check';
-  chk.innerHTML = '✓ Seleccionado';
-  chk.style.cssText = 'margin-top:10px;padding:6px 12px;background:var(--green);color:#fff;border-radius:20px;font-size:11px;font-weight:500;letter-spacing:.04em;display:inline-block;';
-  card.appendChild(chk);
 }
 
 function selectPkg(id, nombre) {
   state.paquete = id;
   state.paqueteNombre = nombre;
-  document.querySelectorAll('.pkg-card').forEach(c => {
+  // Visually update all cards
+  document.querySelectorAll('.pkg-card').forEach(function(c) {
     c.classList.remove('selected');
-    c.querySelectorAll('.pkg-check').forEach(e=>e.remove());
-    c.style.transform = '';
+    var chk = c.querySelector('.pkg-chk');
+    if (chk) chk.remove();
   });
-  const card = document.getElementById('pc-'+id);
-  if(card) {
+  var card = document.getElementById('pc-' + id);
+  if (card) {
     card.classList.add('selected');
-    card.style.transform = 'scale(1.01)';
-    addCheckmark(card);
+    var badge = document.createElement('div');
+    badge.className = 'pkg-chk';
+    badge.textContent = '✓ Seleccionado';
+    badge.style.cssText = 'margin-top:10px;padding:5px 12px;background:#3d5a2e;color:#fff;border-radius:20px;font-size:11px;font-weight:500;display:inline-block;';
+    card.appendChild(badge);
   }
   document.getElementById('btn-step3').disabled = false;
 }
