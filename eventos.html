@@ -4,576 +4,693 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Eventos Privados — AMALAY Coffee & Market</title>
-<meta name="description" content="Organiza tu evento privado en AMALAY Coffee & Market. Baby showers, despedidas, bodas, cumpleaños en Plaza Duendes, San Pedro Garza García."/>
+<meta name="description" content="Reserva tu evento privado en AMALAY. Baby showers, despedidas, bodas, cumpleaños en Plaza Duendes, San Pedro Garza García."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{
-  background:#eee9e1;
-  font-family:'Jost',sans-serif;
-  font-weight:300;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:48px 20px 64px;
-  color:#2a2a1e;
+:root{
+  --cream:#f5f0e8;--white:#fff;--green:#3d5a2e;--green-light:#4a6e38;
+  --green-pale:#e8f0e2;--gold:#b8935a;--text:#2a2a1e;--muted:#777;
+  --border:#e0d8cc;--danger:#c0392b;
 }
-
-/* AVATAR / LOGO */
-.avatar{
-  width:88px;height:88px;
-  border-radius:50%;
-  background:#7a9e7e;
-  display:flex;align-items:center;justify-content:center;
-  margin-bottom:16px;
-  overflow:hidden;
-}
-.avatar img{width:100%;height:100%;object-fit:cover;}
+body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color:var(--text);min-height:100vh;}
 
 /* HEADER */
-.handle{font-size:15px;font-weight:400;color:#2a2a1e;margin-bottom:6px}
-.tagline{font-size:13px;color:#666;text-align:center;line-height:1.6;max-width:320px;margin-bottom:6px}
+.header{background:var(--white);padding:20px;text-align:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
+.header-logo{width:60px;height:60px;border-radius:50%;background:#7a9e7e;margin:0 auto 8px;overflow:hidden;}
+.header-logo img{width:100%;height:100%;object-fit:cover;}
+.header h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--green);}
+.header p{font-size:11px;color:var(--muted);letter-spacing:.08em;}
 
-/* MAIN CONTAINER */
-.card{
-  width:100%;max-width:480px;
-  margin-top:24px;
-  display:flex;flex-direction:column;gap:10px;
-}
+/* PROGRESS */
+.progress-wrap{background:var(--white);padding:16px 20px;border-bottom:1px solid var(--border);}
+.progress-steps{display:flex;align-items:center;justify-content:center;gap:0;max-width:480px;margin:0 auto;}
+.ps{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;position:relative;}
+.ps-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--muted);transition:all .3s;z-index:1;}
+.ps.active .ps-dot{background:var(--green);border-color:var(--green);color:#fff;}
+.ps.done .ps-dot{background:var(--green-pale);border-color:var(--green);color:var(--green);}
+.ps-label{font-size:9px;color:var(--muted);letter-spacing:.05em;text-align:center;white-space:nowrap;}
+.ps.active .ps-label{color:var(--green);font-weight:500;}
+.ps-line{height:2px;background:var(--border);flex:1;margin-top:-14px;}
+.ps-line.done{background:var(--green);}
 
-/* BOTÓN PRINCIPAL */
-.btn{
-  display:flex;align-items:center;
-  background:#fff;
-  border-radius:12px;
-  padding:16px 20px;
-  text-decoration:none;
-  color:#2a2a1e;
-  font-size:14px;
-  font-weight:400;
-  letter-spacing:0.01em;
-  transition:transform 0.15s,box-shadow 0.15s;
-  cursor:pointer;
-  border:none;
-  width:100%;
-  text-align:left;
-  position:relative;
-}
-.btn:hover{transform:scale(1.01);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
-.btn.primary{background:#4a5e3a;color:#fff;font-weight:500;letter-spacing:0.03em;justify-content:center;text-align:center;font-size:15px}
-.btn.primary:hover{background:#3a4e2e}
-.btn-icon{font-size:20px;margin-right:14px;width:28px;text-align:center;flex-shrink:0}
-.btn-chevron{margin-left:auto;color:#bbb;font-size:18px;flex-shrink:0}
-.btn.primary .btn-chevron{color:rgba(255,255,255,0.5)}
+/* MAIN */
+.main{max-width:520px;margin:0 auto;padding:20px 16px 60px;}
 
-/* SECCIÓN EXPANDIBLE */
-.section-btn{
-  display:flex;align-items:center;
-  background:#fff;
-  border-radius:12px;
-  padding:16px 20px;
-  cursor:pointer;
-  border:none;width:100%;text-align:left;
-  font-family:'Jost',sans-serif;font-size:14px;font-weight:400;
-  color:#2a2a1e;
-  transition:transform 0.15s,box-shadow 0.15s;
-}
-.section-btn:hover{transform:scale(1.01);box-shadow:0 4px 16px rgba(0,0,0,0.08)}
-.section-content{
-  background:#fff;
-  border-radius:0 0 12px 12px;
-  margin-top:-8px;
-  padding:0 20px 20px;
-  display:none;
-}
-.section-content.open{display:block}
-.section-wrap{display:flex;flex-direction:column;gap:0}
-.section-wrap .section-btn{border-radius:12px 12px 0 0}
-.section-wrap.closed .section-btn{border-radius:12px}
+/* STEP CARD */
+.step{display:none;}
+.step.active{display:block;}
+.step-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:var(--green);margin-bottom:4px;}
+.step-sub{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
 
-/* DIVIDER */
-.divider-label{
-  font-size:11px;letter-spacing:0.2em;text-transform:uppercase;
-  color:#999;text-align:center;margin:8px 0 2px;
-}
+/* INPUT */
+.field{margin-bottom:16px;}
+.field label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.input{width:100%;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-family:'Jost',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border .2s;}
+.input:focus{border-color:var(--green);}
+.input-guests{font-size:22px;font-weight:400;text-align:center;font-family:'Cormorant Garamond',serif;}
 
-/* ESPACIOS */
-.espacio{padding:14px 0;border-bottom:1px solid #f0ece6;}
-.espacio:last-child{border-bottom:none}
-.espacio-nombre{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:#2d3d22;margin-bottom:4px}
-.espacio-detalle{font-size:12px;color:#777;line-height:1.6}
-.espacio-tag{display:inline-block;background:#f0ece6;color:#4a5e3a;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:6px}
+/* GUEST COUNTER */
+.counter{display:flex;align-items:center;justify-content:center;gap:20px;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.counter-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:var(--cream);font-size:20px;color:var(--green);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-weight:300;}
+.counter-btn:hover{background:var(--green-pale);border-color:var(--green);}
+.counter-num{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:400;color:var(--green);min-width:60px;text-align:center;line-height:1;}
+.counter-label{font-size:10px;color:var(--muted);text-align:center;margin-top:2px;letter-spacing:.06em;}
 
-/* PAQUETES */
-.paq{padding:14px 0;border-bottom:1px solid #f0ece6}
-.paq:last-child{border-bottom:none}
-.paq-nombre{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:#2d3d22;margin-bottom:4px}
-.paq-precio{font-size:13px;font-weight:500;color:#4a5e3a;margin-bottom:6px}
-.paq-desc{font-size:12px;color:#777;line-height:1.7}
-.paq-items{margin-top:6px;font-size:12px;color:#555}
-.paq-item::before{content:'· ';color:#b8a882}
+/* CALENDAR */
+.cal-wrap{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;}
+.cal-wrap iframe{width:100%;border:none;display:block;}
+.cal-note{font-size:11px;color:var(--muted);text-align:center;padding:10px;border-top:1px solid var(--border);background:#fffdf9;}
 
-/* ADICIONALES */
-.adic{padding:12px 0;border-bottom:1px solid #f0ece6}
-.adic:last-child{border-bottom:none}
-.adic-titulo{font-size:13px;font-weight:500;color:#2d3d22;margin-bottom:4px}
-.adic-desc{font-size:12px;color:#777;line-height:1.6}
+/* SPACE CARDS */
+.space-grid{display:flex;flex-direction:column;gap:10px;}
+.space-card{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;position:relative;}
+.space-card:hover{border-color:var(--green-light);transform:translateY(-1px);}
+.space-card.selected{border-color:var(--green);background:var(--green-pale);}
+.space-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none;}
+.sc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.sc-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--green);}
+.sc-cap{font-size:11px;color:var(--muted);background:var(--cream);padding:3px 10px;border-radius:20px;}
+.sc-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+.sc-check{position:absolute;top:14px;right:14px;width:22px;height:22px;border-radius:50%;background:var(--green);display:none;align-items:center;justify-content:center;color:#fff;font-size:12px;}
+.space-card.selected .sc-check{display:flex;}
 
-/* CALENDARIO */
-.cal-wrap{margin-top:4px}
-.cal-wrap iframe{border-radius:8px;width:100%;border:none;display:block}
-.cal-info{background:#f8f5f0;border-radius:8px;padding:14px;margin-top:10px;font-size:12px;color:#666;line-height:1.7;text-align:center}
+/* SLOT BUTTONS */
+.slot-section{margin-bottom:14px;}
+.slot-section-title{font-size:11px;color:var(--green);font-weight:500;letter-spacing:.06em;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.slot-grid{display:flex;flex-wrap:wrap;gap:6px;}
+.slot-btn{background:var(--white);border:1px solid var(--border);border-radius:20px;padding:7px 14px;font-size:12px;font-family:'Jost',sans-serif;cursor:pointer;color:var(--text);transition:all .15s;white-space:nowrap;}
+.slot-btn:hover,.slot-btn.sel{background:var(--green);color:#fff;border-color:var(--green);}
+.slot-note{font-size:10px;color:#bbb;margin-top:4px;}
 
-/* POLITICAS */
-.politica{font-size:12px;color:#666;line-height:1.8;padding:8px 0;border-bottom:1px solid #f0ece6}
-.politica:last-child{border-bottom:none}
-.politica::before{content:'✓  ';color:#4a5e3a;font-weight:500}
+/* PACKAGE CARDS */
+.pkg-grid{display:flex;flex-direction:column;gap:10px;}
+.pkg-card{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;}
+.pkg-card:hover{border-color:var(--green-light);}
+.pkg-card.selected{border-color:var(--green);background:var(--green-pale);}
+.pkg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.pkg-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:500;color:var(--green);}
+.pkg-price{font-size:13px;font-weight:500;color:var(--gold);}
+.pkg-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+.pkg-items{margin-top:8px;display:flex;flex-direction:column;gap:2px;}
+.pkg-item{font-size:11px;color:#555;}
+.pkg-item::before{content:'· ';color:var(--gold);}
 
-/* PAGO */
-.pago-num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:#4a5e3a;text-align:center;line-height:1;margin:8px 0 4px}
-.pago-label{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#999;text-align:center;margin-bottom:16px}
-.pago-dato{background:#f8f5f0;border-radius:8px;padding:14px;font-size:12px;color:#555;line-height:1.8;text-align:center}
-.pago-dato strong{display:block;font-weight:500;color:#2d3d22;font-size:13px;margin-bottom:2px}
+/* EXTRAS */
+.extra-section{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;}
+.extra-title{font-size:13px;font-weight:500;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.extra-opts{display:flex;flex-direction:column;gap:8px;}
+.extra-opt{display:flex;align-items:flex-start;gap:10px;padding:10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .15s;}
+.extra-opt:hover{border-color:var(--green-light);background:#fafaf7;}
+.extra-opt.selected{border-color:var(--green);background:var(--green-pale);}
+.extra-opt input[type=checkbox],
+.extra-opt input[type=radio]{width:16px;height:16px;margin-top:2px;accent-color:var(--green);flex-shrink:0;cursor:pointer;}
+.extra-opt-text{flex:1;}
+.extra-opt-name{font-size:13px;color:var(--text);}
+.extra-opt-desc{font-size:11px;color:var(--muted);margin-top:1px;}
+.extra-opt-price{font-size:12px;font-weight:500;color:var(--gold);margin-top:2px;}
 
-/* SOCIALS */
-.socials{display:flex;gap:14px;margin-top:16px;justify-content:center}
-.social-btn{
-  width:44px;height:44px;border-radius:50%;
-  background:#fff;display:flex;align-items:center;justify-content:center;
-  text-decoration:none;color:#555;font-size:18px;
-  transition:transform 0.15s;
-}
-.social-btn:hover{transform:scale(1.1)}
+/* SUMMARY */
+.summary-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:14px;}
+.sum-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--green);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+.sum-row{display:flex;justify-content:space-between;align-items:baseline;padding:6px 0;border-bottom:1px solid #f5f0e8;font-size:13px;}
+.sum-row:last-child{border-bottom:none;}
+.sum-label{color:var(--muted);}
+.sum-val{font-weight:500;color:var(--text);text-align:right;max-width:60%;}
+.sum-total{font-size:15px;font-weight:500;color:var(--green);margin-top:8px;padding-top:8px;border-top:2px solid var(--border);}
+.sum-note{font-size:11px;color:var(--muted);line-height:1.6;margin-top:10px;}
 
-/* FOOTER */
-.footer{margin-top:28px;font-size:11px;color:#bbb;text-align:center}
-.footer a{color:#bbb;text-decoration:none}
+/* ANTICIPO */
+.anticipo-box{background:#f8f5f0;border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;margin-bottom:14px;}
+.antic-amount{font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;color:var(--green);line-height:1;}
+.antic-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:2px;margin-bottom:14px;}
+.antic-bank{font-size:12px;color:#555;line-height:2;}
+.antic-clabe{font-size:16px;font-weight:500;color:var(--text);letter-spacing:.04em;margin:4px 0;}
 
-/* TABS PAQUETES */
-.tabs-mini{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;margin-top:4px}
-.tab-mini{background:#f0ece6;border:none;border-radius:20px;padding:6px 14px;font-family:'Jost',sans-serif;font-size:11px;letter-spacing:0.05em;color:#555;cursor:pointer;transition:all 0.15s}
-.tab-mini.active{background:#4a5e3a;color:#fff}
-.tab-paq{display:none}
-.tab-paq.active{display:block}
-.slot-btn{background:#f0ece6;border:1px solid #e8e2d8;border-radius:20px;padding:5px 12px;font-size:11px;font-family:'Jost',sans-serif;cursor:pointer;color:#2d3d22;font-weight:400;transition:all 0.15s;white-space:nowrap}
-.slot-btn:hover,.slot-btn.selected{background:#4a5e3a;color:#fff;border-color:#4a5e3a}
+/* BUTTONS */
+.btn-primary{display:block;width:100%;background:var(--green);color:#fff;border:none;border-radius:12px;padding:15px;font-family:'Jost',sans-serif;font-size:14px;font-weight:500;letter-spacing:.04em;cursor:pointer;transition:background .2s;text-align:center;text-decoration:none;}
+.btn-primary:hover{background:var(--green-light);}
+.btn-primary:disabled{background:#bbb;cursor:not-allowed;}
+.btn-whats{background:#25D366;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-whats:hover{background:#1ebe5d;}
+.btn-back{background:none;border:1px solid var(--border);color:var(--muted);border-radius:12px;padding:12px;font-family:'Jost',sans-serif;font-size:13px;cursor:pointer;width:100%;margin-bottom:10px;transition:all .2s;}
+.btn-back:hover{border-color:var(--green);color:var(--green);}
+
+/* WARNING */
+.warn{background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:12px 14px;font-size:12px;color:#7a6000;line-height:1.6;margin-bottom:14px;display:flex;gap:8px;}
+
+/* CAPACITY WARNING */
+.cap-warn{background:#fff3f3;border:1px solid #ffcdd2;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--danger);margin-top:-6px;margin-bottom:10px;}
 </style>
 </head>
 <body>
 
-<!-- AVATAR -->
-<div class="avatar">
-  <img src="LOGO_AMALAY_WEBSITE.png" alt="AMALAY"/>
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo"><img src="LOGO_AMALAY_WEBSITE.png" alt="AMALAY"/></div>
+  <h1>Eventos Privados</h1>
+  <p>Baby showers · Despedidas · Bodas · Cumpleaños</p>
 </div>
 
-<div class="handle">@amalaycoffee</div>
-<div class="tagline">
-  Eventos privados · Plaza Duendes, San Pedro Garza García<br/>
-  Baby showers · Despedidas · Bodas · Cumpleaños<br/>
-  <span style="font-size:11px;color:#999">Lun–Mié 8am–8pm · Jue–Sáb 8am–11pm</span>
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="ps active" id="ps1"><div class="ps-dot">1</div><div class="ps-label">Personas<br>& Fecha</div></div>
+    <div class="ps-line" id="pl1"></div>
+    <div class="ps" id="ps2"><div class="ps-dot">2</div><div class="ps-label">Espacio<br>& Horario</div></div>
+    <div class="ps-line" id="pl2"></div>
+    <div class="ps" id="ps3"><div class="ps-dot">3</div><div class="ps-label">Paquete</div></div>
+    <div class="ps-line" id="pl3"></div>
+    <div class="ps" id="ps4"><div class="ps-dot">4</div><div class="ps-label">Extras</div></div>
+    <div class="ps-line" id="pl4"></div>
+    <div class="ps" id="ps5"><div class="ps-dot">5</div><div class="ps-label">Confirmar</div></div>
+  </div>
 </div>
 
-<div class="card">
+<div class="main">
 
-  <!-- FLUJO DE RESERVA EN 2 PASOS -->
-  <div style="background:#fff;border-radius:12px;padding:20px;width:100%">
+<!-- STEP 1: Personas & Fecha -->
+<div class="step active" id="step1">
+  <div class="step-title">¿Para cuántas personas?</div>
+  <div class="step-sub">Selecciona el número de invitados y elige una fecha disponible en el calendario.</div>
 
-    <!-- PASO 1 -->
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
-      <div style="width:24px;height:24px;background:#4a5e3a;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;flex-shrink:0">1</div>
-      <p style="font-size:13px;font-weight:500;color:#2d3d22">Elige tu espacio y horario</p>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:20px">
-
-      <div style="border:1px solid #e8e2d8;border-radius:8px;padding:12px">
-        <div style="font-size:11px;color:#4a5e3a;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:4px">🌿 Terraza privada con balcón · 10–24 personas</div>
-        <div style="font-size:11px;color:#aaa;margin-bottom:8px">Todo el día · Sin renta de espacio · Solo consumo + 18% servicio</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="font-size:11px;color:#4a5e3a;font-weight:500;margin-bottom:2px">🌅 Brunch</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px">
-            <button onclick="seleccionar('Terraza · Brunch 8:00am – 11:00am',this)" class="slot-btn">8:00 – 11:00am</button>
-            <button onclick="seleccionar('Terraza · Brunch 8:30am – 11:30am',this)" class="slot-btn">8:30 – 11:30am</button>
-            <button onclick="seleccionar('Terraza · Brunch 9:00am – 12:00pm',this)" class="slot-btn">9:00am – 12:00pm</button>
-            <button onclick="seleccionar('Terraza · Brunch 9:30am – 12:30pm',this)" class="slot-btn">9:30am – 12:30pm</button>
-            <button onclick="seleccionar('Terraza · Brunch 10:00am – 1:00pm',this)" class="slot-btn">10:00am – 1:00pm</button>
-            <button onclick="seleccionar('Terraza · Brunch 10:30am – 1:30pm',this)" class="slot-btn">10:30am – 1:30pm</button>
-          </div>
-          <div style="font-size:11px;color:#4a5e3a;font-weight:500;margin:4px 0 2px">🍽️ Comida / Merienda</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px">
-            <button onclick="seleccionar('Terraza · Comida 1:30pm – 4:30pm',this)" class="slot-btn">1:30 – 4:30pm</button>
-            <button onclick="seleccionar('Terraza · Comida 2:00pm – 5:00pm',this)" class="slot-btn">2:00 – 5:00pm</button>
-            <button onclick="seleccionar('Terraza · Comida 2:30pm – 5:30pm',this)" class="slot-btn">2:30 – 5:30pm</button>
-            <button onclick="seleccionar('Terraza · Comida 3:00pm – 6:00pm',this)" class="slot-btn">3:00 – 6:00pm</button>
-            <button onclick="seleccionar('Terraza · Comida 3:30pm – 6:30pm',this)" class="slot-btn">3:30 – 6:30pm</button>
-            <button onclick="seleccionar('Terraza · Comida 4:00pm – 7:00pm',this)" class="slot-btn">4:00 – 7:00pm</button>
-          </div>
-          <div style="font-size:11px;color:#4a5e3a;font-weight:500;margin:4px 0 2px">🌙 Cena</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px">
-            <button onclick="seleccionar('Terraza · Cena 7:30pm – 10:30pm',this)" class="slot-btn">7:30 – 10:30pm</button>
-            <button onclick="seleccionar('Terraza · Cena 8:00pm – 11:00pm',this)" class="slot-btn">8:00 – 11:00pm</button>
-          </div>
-          <div style="font-size:10px;color:#bbb;margin-top:4px">Lun–Mié máx 8pm · Jue–Sáb máx 11pm</div>
-        </div>
+  <div class="field">
+    <label>Número de personas</label>
+    <div class="counter">
+      <button class="counter-btn" onclick="changeGuests(-1)">−</button>
+      <div>
+        <div class="counter-num" id="guests-num">20</div>
+        <div class="counter-label">PERSONAS</div>
       </div>
-
-      <div style="border:1px solid #e8e2d8;border-radius:8px;padding:12px">
-        <div style="font-size:11px;color:#4a5e3a;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px">🌳 Jardín privado · 25–44 personas</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="font-size:11px;color:#4a5e3a;font-weight:500;margin-bottom:2px">🌅 Brunch</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px">
-            <button onclick="seleccionar('Jardín · Brunch 8:00am – 11:00am',this)" class="slot-btn">8:00 – 11:00am</button>
-            <button onclick="seleccionar('Jardín · Brunch 8:30am – 11:30am',this)" class="slot-btn">8:30 – 11:30am</button>
-            <button onclick="seleccionar('Jardín · Brunch 9:00am – 12:00pm',this)" class="slot-btn">9:00am – 12:00pm</button>
-            <button onclick="seleccionar('Jardín · Brunch 9:30am – 12:30pm',this)" class="slot-btn">9:30am – 12:30pm</button>
-            <button onclick="seleccionar('Jardín · Brunch 10:00am – 1:00pm',this)" class="slot-btn">10:00am – 1:00pm</button>
-            <button onclick="seleccionar('Jardín · Brunch 10:30am – 1:30pm',this)" class="slot-btn">10:30am – 1:30pm</button>
-          </div>
-          <div style="font-size:11px;color:#4a5e3a;font-weight:500;margin:4px 0 2px">🍽️ Comida / Merienda</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px">
-            <button onclick="seleccionar('Jardín · Comida 1:30pm – 4:30pm',this)" class="slot-btn">1:30 – 4:30pm</button>
-            <button onclick="seleccionar('Jardín · Comida 2:00pm – 5:00pm',this)" class="slot-btn">2:00 – 5:00pm</button>
-            <button onclick="seleccionar('Jardín · Comida 2:30pm – 5:30pm',this)" class="slot-btn">2:30 – 5:30pm</button>
-            <button onclick="seleccionar('Jardín · Comida 3:00pm – 6:00pm',this)" class="slot-btn">3:00 – 6:00pm</button>
-            <button onclick="seleccionar('Jardín · Comida 3:30pm – 6:30pm',this)" class="slot-btn">3:30 – 6:30pm</button>
-            <button onclick="seleccionar('Jardín · Comida 4:00pm – 7:00pm',this)" class="slot-btn">4:00 – 7:00pm</button>
-          </div>
-          <div style="font-size:11px;color:#4a5e3a;font-weight:500;margin:4px 0 2px">🌙 Cena</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px">
-            <button onclick="seleccionar('Jardín · Cena 7:30pm – 10:30pm',this)" class="slot-btn">7:30 – 10:30pm</button>
-            <button onclick="seleccionar('Jardín · Cena 8:00pm – 11:00pm',this)" class="slot-btn">8:00 – 11:00pm</button>
-          </div>
-          <div style="font-size:10px;color:#bbb;margin-top:4px">Lun–Mié máx 8pm · Jue–Sáb máx 11pm</div>
-        </div>
-      </div>
-
-      <div style="border:1px solid #e8e2d8;border-radius:8px;padding:12px">
-        <div style="font-size:11px;color:#4a5e3a;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px">🏛️ Salón interior · 15–50 personas</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="font-size:11px;color:#4a5e3a;font-weight:500;margin-bottom:2px">🌅 Brunch</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px">
-            <button onclick="seleccionar('Interior · Brunch 8:00am – 11:00am',this)" class="slot-btn">8:00 – 11:00am</button>
-            <button onclick="seleccionar('Interior · Brunch 8:30am – 11:30am',this)" class="slot-btn">8:30 – 11:30am</button>
-            <button onclick="seleccionar('Interior · Brunch 9:00am – 12:00pm',this)" class="slot-btn">9:00am – 12:00pm</button>
-            <button onclick="seleccionar('Interior · Brunch 9:30am – 12:30pm',this)" class="slot-btn">9:30am – 12:30pm</button>
-            <button onclick="seleccionar('Interior · Brunch 10:00am – 1:00pm',this)" class="slot-btn">10:00am – 1:00pm</button>
-            <button onclick="seleccionar('Interior · Brunch 10:30am – 1:30pm',this)" class="slot-btn">10:30am – 1:30pm</button>
-          </div>
-          <div style="font-size:11px;color:#4a5e3a;font-weight:500;margin:4px 0 2px">🍽️ Comida / Merienda</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px">
-            <button onclick="seleccionar('Interior · Comida 1:30pm – 4:30pm',this)" class="slot-btn">1:30 – 4:30pm</button>
-            <button onclick="seleccionar('Interior · Comida 2:00pm – 5:00pm',this)" class="slot-btn">2:00 – 5:00pm</button>
-            <button onclick="seleccionar('Interior · Comida 2:30pm – 5:30pm',this)" class="slot-btn">2:30 – 5:30pm</button>
-            <button onclick="seleccionar('Interior · Comida 3:00pm – 6:00pm',this)" class="slot-btn">3:00 – 6:00pm</button>
-            <button onclick="seleccionar('Interior · Comida 3:30pm – 6:30pm',this)" class="slot-btn">3:30 – 6:30pm</button>
-            <button onclick="seleccionar('Interior · Comida 4:00pm – 7:00pm',this)" class="slot-btn">4:00 – 7:00pm</button>
-          </div>
-          <div style="font-size:11px;color:#4a5e3a;font-weight:500;margin:4px 0 2px">🌙 Cena</div>
-          <div style="display:flex;flex-wrap:wrap;gap:5px">
-            <button onclick="seleccionar('Interior · Cena 7:30pm – 10:30pm',this)" class="slot-btn">7:30 – 10:30pm</button>
-            <button onclick="seleccionar('Interior · Cena 8:00pm – 11:00pm',this)" class="slot-btn">8:00 – 11:00pm</button>
-          </div>
-          <div style="font-size:10px;color:#bbb;margin-top:4px">Lun–Mié máx 8pm · Jue–Sáb máx 11pm</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PASO 2 — aparece tras seleccionar -->
-    <div id="paso2" style="display:none">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-        <div style="width:24px;height:24px;background:#4a5e3a;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;flex-shrink:0">2</div>
-        <p style="font-size:13px;font-weight:500;color:#2d3d22">Paga el anticipo para confirmar</p>
-      </div>
-
-      <div style="background:#f8f5f0;border-radius:8px;padding:16px;margin-bottom:14px">
-        <div style="text-align:center;margin-bottom:12px">
-          <span style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#999">Seleccionaste</span>
-          <div id="seleccion-label" style="font-size:13px;font-weight:500;color:#2d3d22;margin-top:4px"></div>
-        </div>
-        <div style="border-top:1px solid #e8e2d8;padding-top:12px;font-size:12px;color:#555;line-height:2;text-align:center">
-          <strong style="color:#2d3d22;font-size:15px">Anticipo: $1,000 MXN</strong><br/>
-          Amalay Foods · Santander<br/>
-          <strong style="font-size:13px;letter-spacing:0.04em">014580655083036033</strong><br/>
-          <span style="color:#888;font-size:11px">El anticipo se descuenta del total final</span>
-        </div>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
-        <div style="width:24px;height:24px;background:#4a5e3a;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;flex-shrink:0">3</div>
-        <p style="font-size:13px;font-weight:500;color:#2d3d22">Envía tu comprobante y agenda la fecha</p>
-      </div>
-
-      <a id="btn-whats-anticipo" href="#" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;padding:14px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:8px">
-        <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Enviar comprobante por WhatsApp
-      </a>
-
-      <p style="font-size:11px;color:#aaa;text-align:center;margin-top:8px">✅ Tu fecha queda confirmada cuando recibamos tu comprobante. Te avisamos por WhatsApp.</p>
+      <button class="counter-btn" onclick="changeGuests(1)">+</button>
     </div>
   </div>
 
-  <!-- NUESTROS ESPACIOS -->
-  <div class="section-wrap closed" id="wrap-espacios">
-    <button class="section-btn" onclick="toggle('espacios')">
-      <span class="btn-icon">🏡</span>
-      Nuestros espacios
-      <span class="btn-chevron" id="chev-espacios">›</span>
-    </button>
-    <div class="section-content" id="sec-espacios">
-      <div class="espacio">
-        <span class="espacio-tag">Interior</span>
-        <div class="espacio-nombre">Salón Principal</div>
-        <div class="espacio-detalle">15 – 50 personas · Desde 2:30 pm<br/>Comidas, meriendas y cenas.</div>
-      </div>
-      <div class="espacio">
-        <span class="espacio-tag">Jardín Interior</span>
-        <div class="espacio-nombre">Jardín Privado</div>
-        <div class="espacio-detalle">25 – 44 personas · Desde 2:30 pm<br/>Rodeado de vegetación, íntimo y exclusivo.</div>
-      </div>
-      <div class="espacio">
-        <span class="espacio-tag">Terraza</span>
-        <div class="espacio-nombre">Terraza Privada con Balcón</div>
-        <div class="espacio-detalle">10 – 24 personas · Disponible todo el día desde las 8am<br/>Sin renta de espacio — solo consumo + 18% de servicio.</div>
-      </div>
-      <div style="background:#f8f5f0;border-radius:8px;padding:12px;margin-top:12px;font-size:12px;color:#666;line-height:1.8">
-        🕐 <strong style="color:#2d3d22">Horarios del restaurante</strong><br/>
-        Brunch: 8:00 am – 1:30 pm (todos los días)<br/>
-        Lunch & Cena: 1:30 pm – 8:00 pm (Lun–Mié)<br/>
-        Lunch & Cena: 1:30 pm – 11:00 pm (Jue–Sáb)
-      </div>
-      <div style="font-size:11px;color:#aaa;margin-top:10px;text-align:center">*Sujeto a disponibilidad del restaurante</div>
+  <div class="field">
+    <label>Elige tu fecha</label>
+    <div class="warn">📌 Las fechas <strong>con eventos marcados</strong> están OCUPADAS. Las fechas vacías están disponibles.</div>
+    <div class="cal-wrap">
+      <iframe src="https://calendar.google.com/calendar/embed?src=d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c507ff2c3bd56534fe642c%40group.calendar.google.com&ctz=America%2FMonterrey&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=MONTH&bgcolor=%23ffffff&color=%234a5e3a" height="300"></iframe>
+      <div class="cal-note">¿Encontraste tu fecha? Escríbela abajo 👇</div>
     </div>
+    <input class="input" type="date" id="fecha-input" min="" placeholder="dd/mm/aaaa"/>
   </div>
 
-  <!-- PAQUETES Y PRECIOS -->
-  <div class="section-wrap closed" id="wrap-paquetes">
-    <button class="section-btn" onclick="toggle('paquetes')">
-      <span class="btn-icon">🍽️</span>
-      Paquetes y precios
-      <span class="btn-chevron" id="chev-paquetes">›</span>
-    </button>
-    <div class="section-content" id="sec-paquetes">
-      <div class="tabs-mini">
-        <button class="tab-mini active" onclick="showPaq('brunch',this)">Brunch</button>
-        <button class="tab-mini" onclick="showPaq('cena',this)">Merienda/Cena</button>
-        <button class="tab-mini" onclick="showPaq('pizza',this)">Pizza & Pasta</button>
-        <button class="tab-mini" onclick="showPaq('carta',this)">A la Carta</button>
-      </div>
-
-      <div class="tab-paq active" id="paq-brunch">
-        <div class="paq">
-          <div class="paq-nombre">Brunch</div>
-          <div class="paq-precio">$480 por persona</div>
-          <div class="paq-desc">Incluye: plato de fruta mixta + plato fuerte + bebidas refill (café, té, limonada, pepino, frutos rojos, mineral o jamaica)</div>
-          <div class="paq-items">
-            <div class="paq-item">Avo Toast con huevo pochado</div>
-            <div class="paq-item">Chilaquiles verdes con pollo</div>
-            <div class="paq-item">Enchiladas suizas</div>
-            <div class="paq-item" style="color:#999;margin-top:4px">+ Postre: Pay manzana, Brownie, Blueberry Cheesecake o Carrot Cake (+$80 p/p)</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-paq" id="paq-cena">
-        <div class="paq">
-          <div class="paq-nombre">Merienda / Cena</div>
-          <div class="paq-precio">$480 por persona</div>
-          <div class="paq-desc">Incluye: plato fuerte + postre incluido + bebidas refill</div>
-          <div class="paq-items">
-            <div class="paq-item">½ Ensalada + ½ Panini + ½ Sopa tomate — $480</div>
-            <div class="paq-item">4 Enchiladas suizas — $480</div>
-            <div class="paq-item">3 Taquitos Amalay de RibEye — $500</div>
-            <div class="paq-item">Pizza + Pasta Mamarosa — $480</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-paq" id="paq-pizza">
-        <div class="paq">
-          <div class="paq-nombre">Pizza & Pasta</div>
-          <div class="paq-precio">$480 por persona</div>
-          <div class="paq-desc">1 pizza c/2 personas (compartir) + pasta + postre + bebidas suaves refill</div>
-          <div class="paq-items">
-            <div class="paq-item">Pizza Prosciutto / Margarita / Pepperoni</div>
-            <div class="paq-item">Pasta Mamarosa o Bolognesa</div>
-            <div class="paq-item">Postre: Pay, Brownie, Cheesecake o Carrot Cake</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-paq" id="paq-carta">
-        <div class="paq">
-          <div class="paq-nombre">A la Carta</div>
-          <div class="paq-precio">Consumo mínimo $480 p/p</div>
-          <div class="paq-desc">Elige libremente del menú. Solo para grupos menores a 20 personas.<br/>+$80 p/p: refill de limonadas, café y té.<br/>Bebidas especiales y postres aparte.</div>
-        </div>
-      </div>
-
-      <div style="font-size:11px;color:#aaa;margin-top:8px;text-align:center">Se permiten hasta 2 opciones de plato fuerte por evento. Precios pueden variar según inflación.</div>
-    </div>
-  </div>
-
-  <!-- VER MENÚ COMPLETO -->
-  <a href="https://drive.google.com/file/d/1NB6vlta9a348J7U2HGDt5XH7-Nf8iEFy/view" target="_blank" class="btn">
-    <span class="btn-icon">📋</span>
-    Ver menú completo
-    <span class="btn-chevron">›</span>
-  </a>
-
-  <!-- CALENDARIO -->
-  <div class="section-wrap" id="wrap-calendario">
-    <button class="section-btn" onclick="toggle('calendario')">
-      <span class="btn-icon">📅</span>
-      Ver fechas disponibles
-      <span class="btn-chevron" id="chev-calendario">˅</span>
-    </button>
-    <div class="section-content open" id="sec-calendario">
-      <div class="cal-wrap">
-        <div style="background:#fff8e1;border-radius:8px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:#856404;display:flex;align-items:flex-start;gap:8px"><span style="font-size:16px;flex-shrink:0">📌</span><span>Las fechas <strong>con eventos marcados</strong> están OCUPADAS. Las fechas vacías están disponibles.</span></div>
-        <iframe
-          src="https://calendar.google.com/calendar/embed?src=d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c507ff2c3bd56534fe642c%40group.calendar.google.com&ctz=America%2FMonterrey&showTitle=0&showNav=1&showDate=1&showPrint=0&showTabs=0&showCalendars=0&showTz=0&mode=MONTH&bgcolor=%23f8f5f0&color=%234a5e3a"
-          height="380"
-          frameborder="0"
-          scrolling="no">
-        </iframe>
-        <div class="cal-info">
-          ¿Encontraste tu fecha libre? Selecciona espacio y horario arriba y contáctanos 🌿
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SERVICIOS ADICIONALES -->
-  <div class="section-wrap closed" id="wrap-adicionales">
-    <button class="section-btn" onclick="toggle('adicionales')">
-      <span class="btn-icon">✨</span>
-      Servicios adicionales
-      <span class="btn-chevron" id="chev-adicionales">›</span>
-    </button>
-    <div class="section-content" id="sec-adicionales">
-      <div class="adic">
-        <div class="adic-titulo">🌿 Entradas para compartir</div>
-        <div class="adic-desc">Guacamole $160 · Torre mini toasts $350 · Canasta pan dulce $170 · Crunchy Mix $170 · Crudités $170 · Hummus $170 · Papitas $92</div>
-      </div>
-      <div class="adic">
-        <div class="adic-titulo">💐 Decoración de mesa</div>
-        <div class="adic-desc">Básica (incluida) · Especial +$300 · Upgrade +$500 · Upgrade Amalay $650<br/><span style="color:#aaa;font-size:11px">*Imágenes de referencia, elementos pueden variar</span></div>
-      </div>
-      <div class="adic">
-        <div class="adic-titulo">🎂 Pastel personalizado</div>
-        <div class="adic-desc">8-10 personas $800 (Vainilla, Chocolate, Zanahoria) · Descorche externo $350<br/>Reservar con mínimo 5 días de anticipación.</div>
-      </div>
-      <div class="adic">
-        <div class="adic-titulo">🎁 Detalles & regalitos</div>
-        <div class="adic-desc">Libreta $150 · Velita $90 · Sobre pedido. Pregunta por opciones para tu evento.</div>
-      </div>
-      <div class="adic">
-        <div class="adic-titulo">🍹 Cócteles</div>
-        <div class="adic-desc">Mimosas $100 · Mezcalina Jamaica $240 · My Crush Margarita $240 · Aperol Spritz $240 · y más...</div>
-      </div>
-      <div class="adic">
-        <div class="adic-titulo">🍷 Vinos, cervezas & licores</div>
-        <div class="adic-desc">Blancos, rosados y tintos españoles y mexicanos · Cerveza $60 · Tequila, Mezcal, Baileys y más.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PAGO DE ANTICIPO -->
-  <div class="section-wrap closed" id="wrap-pago">
-    <button class="section-btn" onclick="toggle('pago')">
-      <span class="btn-icon">💳</span>
-      Pago de anticipo
-      <span class="btn-chevron" id="chev-pago">›</span>
-    </button>
-    <div class="section-content" id="sec-pago">
-      <div class="pago-num">$1,000</div>
-      <div class="pago-label">Anticipo para reservar · Se descuenta del total</div>
-      <div class="pago-dato">
-        <strong>Transferencia bancaria</strong>
-        Amalay Foods · Santander<br/>
-        <strong style="font-size:14px;letter-spacing:0.05em">014580655083036033</strong><br/>
-        Envía tu comprobante por WhatsApp para bloquear la fecha
-      </div>
-      <div style="font-size:11px;color:#aaa;margin-top:10px;text-align:center">El 50% del total se liquida 3 días antes del evento.<br/>Anticipo no reembolsable en caso de cancelación.</div>
-    </div>
-  </div>
-
-  <!-- POLITICAS -->
-  <div class="section-wrap closed" id="wrap-politicas">
-    <button class="section-btn" onclick="toggle('politicas')">
-      <span class="btn-icon">📄</span>
-      Políticas del evento
-      <span class="btn-chevron" id="chev-politicas">›</span>
-    </button>
-    <div class="section-content" id="sec-politicas">
-      <div class="politica">Cotización basada en número de invitados, confirmar 1 semana antes.</div>
-      <div class="politica">50% del total liquidado 3 días antes para confirmar producción.</div>
-      <div class="politica">Sin renta de espacio — solo consumo + 18% de servicio.</div>
-      <div class="politica">Invitados ausentes: alimentos entregados para llevar, sin reembolso.</div>
-      <div class="politica">Decoración externa requiere fotos y autorización previa.</div>
-      <div class="politica">No se permiten materiales que dañen instalaciones.</div>
-      <div class="politica">Daños son responsabilidad del contratista.</div>
-      <div class="politica">Retirar decoración y objetos al finalizar el evento.</div>
-    </div>
-  </div>
-
-  <!-- SITIO WEB -->
-  <a href="https://cafeamalay.com" class="btn">
-    <span class="btn-icon">🌐</span>
-    cafeamalay.com
-    <span class="btn-chevron">›</span>
-  </a>
-
+  <button class="btn-primary" onclick="goStep(2)">Siguiente →</button>
 </div>
 
-<!-- SOCIALS -->
-<div class="socials">
-  <a href="https://instagram.com/amalaycoffee" target="_blank" class="social-btn">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-  </a>
-  <a href="https://facebook.com/cafeamalay1" target="_blank" class="social-btn">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-  </a>
-  <a href="https://wa.me/528131190757" target="_blank" class="social-btn">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  </a>
-  <a href="/cdn-cgi/l/email-protection#8ae7e5e4e3edfabdbfcaede7ebe3e6a4e9e5e7" class="social-btn">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-  </a>
+<!-- STEP 2: Espacio & Horario -->
+<div class="step" id="step2">
+  <div class="step-title">Elige tu espacio y horario</div>
+  <div class="step-sub" id="step2-sub">Espacios disponibles para tu grupo.</div>
+
+  <div class="space-grid" id="spaces-grid"></div>
+
+  <div id="slots-wrap" style="display:none;margin-top:16px;">
+    <div class="field">
+      <label>Horario disponible</label>
+      <div id="slots-container"></div>
+    </div>
+  </div>
+
+  <div style="height:14px;"></div>
+  <button class="btn-back" onclick="goStep(1)">← Atrás</button>
+  <button class="btn-primary" id="btn-step2" onclick="goStep(3)" disabled>Siguiente →</button>
 </div>
 
-<div class="footer">Sistema de reservaciones por <a href="https://cafeamalay.com">cafeamalay.com</a></div>
+<!-- STEP 3: Paquete -->
+<div class="step" id="step3">
+  <div class="step-title">Elige tu paquete</div>
+  <div class="step-sub">Todos los paquetes son $480 por persona. Se permiten hasta 2 opciones de plato fuerte por evento.</div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-function toggle(id){
-  const wrap=document.getElementById('wrap-'+id);
-  const sec=document.getElementById('sec-'+id);
-  const chev=document.getElementById('chev-'+id);
-  const isOpen=sec.classList.contains('open');
-  sec.classList.toggle('open');
-  wrap.classList.toggle('closed',isOpen);
-  chev.textContent=isOpen?'›':'˅';
-}
-function showPaq(id,btn){
-  document.querySelectorAll('.tab-paq').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.tab-mini').forEach(b=>b.classList.remove('active'));
-  document.getElementById('paq-'+id).classList.add('active');
-  btn.classList.add('active');
-}
-function seleccionar(label, el){
-  document.getElementById('seleccion-label').textContent=label;
-  const msg=encodeURIComponent('Hola! Me gustaría reservar un evento privado en AMALAY 🌿\n\nEspacio y horario: '+label+'\n\nAdjunto mi comprobante de anticipo ($1,000 MXN) para confirmar la fecha. ¡Gracias!');
-  document.getElementById('btn-whats-anticipo').href='https://wa.me/528131190757?text='+msg;
-  const paso2=document.getElementById('paso2');
-  paso2.style.display='block';
-  paso2.scrollIntoView({behavior:'smooth',block:'nearest'});
-  document.querySelectorAll('.slot-btn').forEach(function(b){b.classList.remove('selected')});
-  if(el) el.classList.add('selected');
+  <div class="pkg-grid" id="pkg-grid"></div>
+
+  <div style="height:14px;"></div>
+  <button class="btn-back" onclick="goStep(2)">← Atrás</button>
+  <button class="btn-primary" id="btn-step3" onclick="goStep(4)" disabled>Siguiente →</button>
+</div>
+
+<!-- STEP 4: Extras -->
+<div class="step" id="step4">
+  <div class="step-title">Servicios adicionales</div>
+  <div class="step-sub">Personaliza tu evento. Todo es opcional.</div>
+
+  <!-- PASTEL -->
+  <div class="extra-section">
+    <div class="extra-title">🎂 Pastel</div>
+    <div class="extra-opts">
+      <label class="extra-opt" id="opt-pastel-no">
+        <input type="radio" name="pastel" value="no" checked onchange="updatePastel(this)"/>
+        <div class="extra-opt-text">
+          <div class="extra-opt-name">Sin pastel</div>
+          <div class="extra-opt-desc">No requiero pastel</div>
+        </div>
+      </label>
+      <label class="extra-opt" id="opt-pastel-amalay">
+        <input type="radio" name="pastel" value="amalay" onchange="updatePastel(this)"/>
+        <div class="extra-opt-text">
+          <div class="extra-opt-name">Pastel personalizado de AMALAY</div>
+          <div class="extra-opt-desc">8-10 personas · Vainilla, Chocolate o Zanahoria · Reservar con 5 días mínimo</div>
+          <div class="extra-opt-price">$800</div>
+        </div>
+      </label>
+      <label class="extra-opt" id="opt-pastel-externo">
+        <input type="radio" name="pastel" value="externo" onchange="updatePastel(this)"/>
+        <div class="extra-opt-text">
+          <div class="extra-opt-name">Llevo mi propio pastel</div>
+          <div class="extra-opt-desc">Descorche por pastel externo</div>
+          <div class="extra-opt-price">$350</div>
+        </div>
+      </label>
+    </div>
+    <div id="pastel-flavor-wrap" style="display:none;margin-top:10px;">
+      <label style="font-size:11px;color:var(--muted);display:block;margin-bottom:6px;">Sabor del pastel</label>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="slot-btn" onclick="selectFlavor(this,'Vainilla')">Vainilla</button>
+        <button class="slot-btn" onclick="selectFlavor(this,'Chocolate')">Chocolate</button>
+        <button class="slot-btn" onclick="selectFlavor(this,'Zanahoria')">Zanahoria</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENTRADAS -->
+  <div class="extra-section">
+    <div class="extra-title">🌿 Entradas para compartir</div>
+    <div class="extra-opts" id="entradas-opts">
+      <label class="extra-opt"><input type="checkbox" value="Guacamole $160" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Guacamole con totopos de nopal</div><div class="extra-opt-price">$160</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Torre mini toasts $350" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Torre mini toasts</div><div class="extra-opt-price">$350</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Canasta pan dulce $170" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Canasta pan dulce (4 piezas)</div><div class="extra-opt-desc">Croissant, concha, cinnamon roll, chocolatín, muffin blueberry</div><div class="extra-opt-price">$170</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Crunchy Mix $170" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Crunchy Mix</div><div class="extra-opt-desc">Chips de Jamaica, pepino, churritos, mangogos, flor de jamaica</div><div class="extra-opt-price">$170</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Crudités $170" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Crudités</div><div class="extra-opt-desc">Jícama, pepino y zanahoria con salsa RoJamaica</div><div class="extra-opt-price">$170</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Hummus $170" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Hummus</div><div class="extra-opt-desc">Betabel, chipotle y natural. Con crudités y pan masa madre</div><div class="extra-opt-price">$170</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Papitas $92" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Papitas de galeana con aderezo de la casa</div><div class="extra-opt-price">$92</div></div></label>
+    </div>
+  </div>
+
+  <!-- DECORACIÓN -->
+  <div class="extra-section">
+    <div class="extra-title">💐 Decoración de mesa</div>
+    <div class="extra-opts">
+      <label class="extra-opt" id="opt-deco-basic">
+        <input type="radio" name="deco" value="Básica (incluida)" checked onchange="updateDeco(this)"/>
+        <div class="extra-opt-text">
+          <div class="extra-opt-name">Básica — Incluida</div>
+          <div class="extra-opt-desc">Camino de mesa de gasa rosa con floreritos tradicionales</div>
+          <div class="extra-opt-price">Incluida en el paquete</div>
+        </div>
+      </label>
+      <label class="extra-opt">
+        <input type="radio" name="deco" value="Especial +$300" onchange="updateDeco(this)"/>
+        <div class="extra-opt-text">
+          <div class="extra-opt-name">Especial</div>
+          <div class="extra-opt-desc">Gasa con floreros de vidrio transparentes con flores y velas (tarde-noche)</div>
+          <div class="extra-opt-price">+$300</div>
+        </div>
+      </label>
+      <label class="extra-opt">
+        <input type="radio" name="deco" value="Upgrade +$500" onchange="updateDeco(this)"/>
+        <div class="extra-opt-text">
+          <div class="extra-opt-name">Upgrade</div>
+          <div class="extra-opt-desc">Mantelitos de hojas y flores + centro de mesa con gasa y flores + velas y copas</div>
+          <div class="extra-opt-price">+$500</div>
+        </div>
+      </label>
+      <label class="extra-opt">
+        <input type="radio" name="deco" value="Upgrade Amalay +$650" onchange="updateDeco(this)"/>
+        <div class="extra-opt-text">
+          <div class="extra-opt-name">Upgrade Amalay ⭐</div>
+          <div class="extra-opt-desc">Platos base, centro de mesa con gasa, floreros de vidrio con flores, velas y copas en la noche</div>
+          <div class="extra-opt-price">+$650</div>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <button class="btn-back" onclick="goStep(3)">← Atrás</button>
+  <button class="btn-primary" onclick="goStep(5)">Ver resumen →</button>
+</div>
+
+<!-- STEP 5: Confirmar -->
+<div class="step" id="step5">
+  <div class="step-title">Resumen de tu evento</div>
+  <div class="step-sub">Revisa los detalles y paga el anticipo para confirmar tu fecha.</div>
+
+  <div class="summary-card">
+    <div class="sum-title">📋 Detalles del evento</div>
+    <div class="sum-row"><span class="sum-label">Fecha</span><span class="sum-val" id="sum-fecha">—</span></div>
+    <div class="sum-row"><span class="sum-label">Personas</span><span class="sum-val" id="sum-personas">—</span></div>
+    <div class="sum-row"><span class="sum-label">Espacio</span><span class="sum-val" id="sum-espacio">—</span></div>
+    <div class="sum-row"><span class="sum-label">Horario</span><span class="sum-val" id="sum-horario">—</span></div>
+    <div class="sum-row"><span class="sum-label">Paquete</span><span class="sum-val" id="sum-paquete">—</span></div>
+    <div class="sum-row" id="sum-pastel-row"><span class="sum-label">Pastel</span><span class="sum-val" id="sum-pastel">—</span></div>
+    <div class="sum-row" id="sum-entradas-row" style="display:none"><span class="sum-label">Entradas</span><span class="sum-val" id="sum-entradas">—</span></div>
+    <div class="sum-row"><span class="sum-label">Decoración</span><span class="sum-val" id="sum-deco">—</span></div>
+  </div>
+
+  <div class="summary-card">
+    <div class="sum-title">💰 Estimado de costos</div>
+    <div class="sum-row"><span class="sum-label">Consumo mínimo</span><span class="sum-val" id="sum-consumo">—</span></div>
+    <div class="sum-row"><span class="sum-label">18% servicio</span><span class="sum-val" id="sum-servicio">—</span></div>
+    <div class="sum-row sum-total"><span>Total estimado</span><span id="sum-total">—</span></div>
+    <div class="sum-note">*Los precios pueden variar. El total final depende del consumo real del evento. El anticipo se descuenta del total.</div>
+  </div>
+
+  <div class="anticipo-box">
+    <div class="antic-amount">$1,000</div>
+    <div class="antic-label">Anticipo para reservar · Se descuenta del total</div>
+    <div class="antic-bank">
+      <strong>Amalay Foods · Santander</strong><br/>
+      <div class="antic-clabe">014580655083036033</div>
+      Envía tu comprobante por WhatsApp para bloquear la fecha
+    </div>
+  </div>
+
+  <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;line-height:1.8;">
+    El 50% del total se liquida 3 días antes del evento.<br/>
+    Anticipo no reembolsable en caso de cancelación.
+  </div>
+
+  <a id="btn-whatsapp" href="#" target="_blank" class="btn-primary btn-whats" style="margin-bottom:10px;">
+    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    1. Enviar comprobante por WhatsApp
+  </a>
+
+  <a id="btn-gcal" href="#" target="_blank" class="btn-primary" style="margin-bottom:10px;background:#4285f4;display:flex;align-items:center;justify-content:center;gap:8px;">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+    2. Agregar al Google Calendar de Amalay
+  </a>
+
+  <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.8;background:#f8f5f0;padding:10px;border-radius:8px;">
+    📌 Primero envía tu comprobante por WhatsApp.<br/>
+    Luego Monica confirmará y agregará la fecha al calendario.
+  </div>
+
+  <button class="btn-back" onclick="goStep(4)">← Modificar</button>
+</div>
+
+</div><!-- /main -->
+
+<script>
+// ── STATE ──
+const state = {
+  guests: 20,
+  fecha: '',
+  espacio: '',
+  horario: '',
+  paquete: '',
+  paqueteNombre: '',
+  pastel: 'no',
+  pastelFlavor: '',
+  entradas: [],
+  deco: 'Básica (incluida)',
+  currentStep: 1
+};
+
+// ── SPACES ──
+const SPACES = [
+  { id:'terraza', name:'🌿 Terraza privada con balcón', cap:[10,24], desc:'Segundo piso · Sin renta · Solo consumo + 18% servicio · Disponible todo el día desde las 8am', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
+  { id:'jardin', name:'🌳 Jardín interior privado', cap:[25,44], desc:'Rodeado de vegetación · Íntimo y exclusivo · Disponible desde las 2:30pm', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
+  { id:'salon', name:'🏛️ Salón interior', cap:[15,50], desc:'Desde 2:30pm · Comidas, meriendas y cenas', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}}
+];
+
+// ── PACKAGES ──
+const PACKAGES = [
+  { id:'brunch', name:'Brunch', price:'$480 p/p', desc:'Incluye: plato de fruta mixta + plato fuerte + bebidas refill (café, té, limonada, pepino, frutos rojos, mineral o jamaica)', items:['Avo Toast con huevo pochado','Chilaquiles verdes con pollo','Enchiladas suizas','Postre opcional +$80 p/p (Pay manzana, Brownie, Cheesecake o Carrot Cake)']},
+  { id:'cena', name:'Merienda / Cena', price:'$480 p/p', desc:'Incluye: plato fuerte + postre incluido + bebidas refill', items:['½ Ensalada + ½ Panini + ½ Sopa tomate — $480','4 Enchiladas suizas — $480','3 Taquitos Amalay de RibEye — $500','Pizza + Pasta Mamarosa — $480']},
+  { id:'pizza', name:'Pizza & Pasta', price:'$480 p/p', desc:'1 pizza por cada 2 personas + pasta + postre + bebidas suaves refill', items:['Pizza Prosciutto / Margarita / Pepperoni','Pasta Mamarosa o Bolognesa','Postre incluido']},
+  { id:'carta', name:'A la Carta', price:'Mín. $480 p/p', desc:'Elige libremente del menú. Solo para grupos menores a 20 personas. +$80 p/p refill de limonadas, café y té.', items:['Bebidas especiales y postres aparte','Disponible según horario: Brunch o Lunch']}
+];
+
+// ── NAVIGATION ──
+function goStep(n) {
+  // Validations
+  if(n === 2) {
+    if(!state.fecha) { alert('Por favor selecciona una fecha'); return; }
+  }
+  if(n === 3) {
+    if(!state.espacio) { alert('Por favor selecciona un espacio'); return; }
+    if(!state.horario) { alert('Por favor selecciona un horario'); return; }
+  }
+  if(n === 4) {
+    if(!state.paquete) { alert('Por favor selecciona un paquete'); return; }
+    if(state.paquete === 'carta' && state.guests >= 20) { alert('A la Carta solo aplica para grupos menores a 20 personas'); return; }
+  }
+  if(n === 5) buildSummary();
+
+  // Update steps
+  for(let i=1;i<=5;i++){
+    document.getElementById('step'+i).classList.toggle('active', i===n);
+    const ps = document.getElementById('ps'+i);
+    ps.classList.remove('active','done');
+    if(i===n) ps.classList.add('active');
+    else if(i<n) ps.classList.add('done');
+    if(i<5){
+      const pl = document.getElementById('pl'+i);
+      pl.classList.toggle('done', i<n);
+    }
+  }
+  state.currentStep = n;
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  if(n===2) renderSpaces();
+  if(n===3) renderPackages();
 }
 
+// ── GUESTS ──
+function changeGuests(delta) {
+  state.guests = Math.max(10, Math.min(50, state.guests + delta));
+  document.getElementById('guests-num').textContent = state.guests;
+}
+
+// ── DATE ──
+document.getElementById('fecha-input').addEventListener('change', function(){
+  state.fecha = this.value;
+});
+// Set min date to today
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('fecha-input').min = today;
+
+// ── SPACES ──
+function renderSpaces() {
+  const g = state.guests;
+  document.getElementById('step2-sub').textContent = `Espacios disponibles para ${g} personas.`;
+  const html = SPACES.map(sp => {
+    const fits = g >= sp.cap[0] && g <= sp.cap[1];
+    const tooFew = g < sp.cap[0];
+    const tooMany = g > sp.cap[1];
+    const disabled = !fits;
+    const capText = `${sp.cap[0]}–${sp.cap[1]} personas`;
+    let warn = '';
+    if(tooFew) warn = `<div class="cap-warn">Tu grupo de ${g} personas está por debajo del mínimo de ${sp.cap[0]}.</div>`;
+    if(tooMany) warn = `<div class="cap-warn">Tu grupo de ${g} personas excede el máximo de ${sp.cap[1]}.</div>`;
+    return `<div>
+      <div class="space-card ${disabled?'disabled':''}" id="sc-${sp.id}" onclick="selectSpace('${sp.id}')">
+        <div class="sc-check">✓</div>
+        <div class="sc-header">
+          <div class="sc-name">${sp.name}</div>
+          <div class="sc-cap">${capText}</div>
+        </div>
+        <div class="sc-desc">${sp.desc}</div>
+      </div>
+      ${warn}
+    </div>`;
+  }).join('');
+  document.getElementById('spaces-grid').innerHTML = html;
+  document.getElementById('slots-wrap').style.display = 'none';
+  document.getElementById('btn-step2').disabled = true;
+  state.espacio = '';
+  state.horario = '';
+}
+
+function selectSpace(id) {
+  state.espacio = id;
+  state.horario = '';
+  document.querySelectorAll('.space-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('sc-'+id)?.classList.add('selected');
+  renderSlots(id);
+  document.getElementById('btn-step2').disabled = true;
+}
+
+function renderSlots(id) {
+  const sp = SPACES.find(s=>s.id===id);
+  if(!sp) return;
+  let html = '';
+  const sections = [{key:'brunch',icon:'🌅',label:'Brunch'},{key:'comida',icon:'🍽️',label:'Comida / Merienda'},{key:'cena',icon:'🌙',label:'Cena'}];
+  sections.forEach(sec => {
+    html += `<div class="slot-section">
+      <div class="slot-section-title">${sec.icon} ${sec.label}</div>
+      <div class="slot-grid">
+        ${sp.slots[sec.key].map(s=>`<button class="slot-btn" onclick="selectSlot(this,'${s}','${sec.label}')">${s}</button>`).join('')}
+      </div>
+    </div>`;
+  });
+  html += `<div class="slot-note">Lun–Mié máx 8pm · Jue–Sáb máx 11pm</div>`;
+  document.getElementById('slots-container').innerHTML = html;
+  document.getElementById('slots-wrap').style.display = 'block';
+}
+
+function selectSlot(btn, slot, tipo) {
+  document.querySelectorAll('#slots-container .slot-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.horario = `${tipo} · ${slot}`;
+  document.getElementById('btn-step2').disabled = false;
+}
+
+// ── PACKAGES ──
+function renderPackages() {
+  const html = PACKAGES.map(p => {
+    const disabled = p.id === 'carta' && state.guests >= 20;
+    return `<div class="pkg-card ${disabled?'':''}${disabled?' disabled-pkg':''}" id="pc-${p.id}" onclick="${disabled?'alert(\"A la Carta solo aplica para grupos menores a 20 personas\")':'selectPkg(\\\"'+p.id+'\\\",\\\"'+p.name+'\\\")'}">
+      <div class="pkg-header">
+        <div class="pkg-name">${p.name}</div>
+        <div class="pkg-price">${p.price}</div>
+      </div>
+      <div class="pkg-desc">${p.desc}</div>
+      <div class="pkg-items">${p.items.map(i=>`<div class="pkg-item">${i}</div>`).join('')}</div>
+      ${disabled?'<div style="font-size:11px;color:#c0392b;margin-top:6px;">Solo para menos de 20 personas</div>':''}
+    </div>`;
+  }).join('');
+  document.getElementById('pkg-grid').innerHTML = html;
+  document.getElementById('btn-step3').disabled = true;
+}
+
+function cartaWarning() { alert("A la Carta solo aplica para grupos menores a 20 personas."); }
+
+function selectPkg(id, nombre) {
+  state.paquete = id;
+  state.paqueteNombre = nombre;
+  document.querySelectorAll('.pkg-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('pc-'+id)?.classList.add('selected');
+  document.getElementById('btn-step3').disabled = false;
+}
+
+// ── EXTRAS ──
+function updatePastel(radio) {
+  state.pastel = radio.value;
+  state.pastelFlavor = '';
+  document.getElementById('pastel-flavor-wrap').style.display = radio.value==='amalay' ? 'block' : 'none';
+  document.querySelectorAll('.slot-btn').forEach(b=>b.classList.remove('sel'));
+  updateExtrasStyle();
+}
+
+function selectFlavor(btn, flavor) {
+  document.querySelectorAll('#pastel-flavor-wrap .slot-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.pastelFlavor = flavor;
+}
+
+function updateExtras() {
+  state.entradas = [];
+  document.querySelectorAll('#entradas-opts input[type=checkbox]:checked').forEach(cb => {
+    state.entradas.push(cb.value);
+  });
+}
+
+function updateDeco(radio) {
+  state.deco = radio.value;
+  updateExtrasStyle();
+}
+
+function updateExtrasStyle() {
+  document.querySelectorAll('.extra-opt').forEach(opt => {
+    const inp = opt.querySelector('input');
+    if(!inp) return;
+    opt.classList.toggle('selected', inp.checked);
+  });
+}
+
+// ── SUMMARY ──
+function buildSummary() {
+  const fechaFormatted = state.fecha ? new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
+  const espacioObj = SPACES.find(s=>s.id===state.espacio);
+  document.getElementById('sum-fecha').textContent = fechaFormatted;
+  document.getElementById('sum-personas').textContent = state.guests + ' personas';
+  document.getElementById('sum-espacio').textContent = espacioObj?.name || '—';
+  document.getElementById('sum-horario').textContent = state.horario || '—';
+  document.getElementById('sum-paquete').textContent = `${state.paqueteNombre} · $480 p/p`;
+
+  // Pastel
+  let pastelText = 'Sin pastel';
+  if(state.pastel === 'amalay') pastelText = `Pastel AMALAY${state.pastelFlavor ? ' · '+state.pastelFlavor : ''} · $800`;
+  if(state.pastel === 'externo') pastelText = 'Pastel externo · Descorche $350';
+  document.getElementById('sum-pastel').textContent = pastelText;
+
+  // Entradas
+  if(state.entradas.length > 0) {
+    document.getElementById('sum-entradas-row').style.display = 'flex';
+    document.getElementById('sum-entradas').textContent = state.entradas.join(', ');
+  } else {
+    document.getElementById('sum-entradas-row').style.display = 'none';
+  }
+  document.getElementById('sum-deco').textContent = state.deco;
+
+  // Costs
+  const base = state.guests * 480;
+  const servicio = Math.round(base * 0.18);
+  const total = base + servicio;
+  document.getElementById('sum-consumo').textContent = `$${base.toLocaleString()} (${state.guests} × $480)`;
+  document.getElementById('sum-servicio').textContent = `$${servicio.toLocaleString()}`;
+  document.getElementById('sum-total').textContent = `$${total.toLocaleString()} MXN`;
+
+  // WhatsApp
+  const msg = buildWhatsAppMsg(fechaFormatted, espacioObj?.name, total);
+  document.getElementById('btn-whatsapp').href = 'https://wa.me/528182543303?text='+encodeURIComponent(msg);
+
+  // Google Calendar link
+  const gcal = buildGCalLink(fechaFormatted, espacioObj?.name);
+  const gcalBtn = document.getElementById('btn-gcal');
+  if(gcalBtn) gcalBtn.href = gcal;
+}
+
+
+function buildGCalLink(fechaText, espacio) {
+  // Build Google Calendar "add event" link
+  const d = new Date(state.fecha + 'T12:00:00');
+  const pad = n => String(n).padStart(2,'0');
+  const ymd = d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate());
+  
+  // Parse start/end from horario e.g. "Brunch · 8:00 – 11:00am"
+  let startH = '12', endH = '14';
+  const horario = state.horario;
+  const timeMatch = horario.match(/(\d+):?(\d*)\s*(am|pm)?.*?–.*?(\d+):?(\d*)\s*(am|pm)?/i);
+  if(timeMatch) {
+    let sh = parseInt(timeMatch[1]), sm = parseInt(timeMatch[2]||0);
+    let eh = parseInt(timeMatch[4]), em = parseInt(timeMatch[5]||0);
+    const endPeriod = (timeMatch[6]||'').toLowerCase();
+    const startPeriod = (timeMatch[3]||endPeriod).toLowerCase();
+    if(startPeriod === 'pm' && sh < 12) sh += 12;
+    if(endPeriod === 'pm' && eh < 12) eh += 12;
+    if(startPeriod === 'am' && sh === 12) sh = 0;
+    startH = pad(sh) + pad(sm) + '00';
+    endH = pad(eh) + pad(em) + '00';
+  }
+
+  const title = encodeURIComponent(`Evento AMALAY · ${espacio} · ${state.guests} personas`);
+  const details = encodeURIComponent(`Paquete: ${state.paqueteNombre}\nPersonas: ${state.guests}\nDecoración: ${state.deco}\nContacto: 81 8254 3303`);
+  const location = encodeURIComponent('AMALAY Coffee & Market, Calzada San Pedro 102, Plaza Duendes, San Pedro Garza García');
+  
+  const start = `${ymd}T${startH}`;
+  const end = `${ymd}T${endH}`;
+  
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}&crm=AVAILABLE`;
+}
+
+function buildWhatsAppMsg(fecha, espacio, total) {
+  let msg = `Hola! Quiero reservar un evento privado en AMALAY 🌿\n\n`;
+  msg += `📅 Fecha: ${fecha}\n`;
+  msg += `👥 Personas: ${state.guests}\n`;
+  msg += `🏡 Espacio: ${espacio}\n`;
+  msg += `🕐 Horario: ${state.horario}\n`;
+  msg += `🍽️ Paquete: ${state.paqueteNombre} ($480 p/p)\n`;
+  if(state.pastel !== 'no') msg += `🎂 Pastel: ${state.pastel==='amalay'?`AMALAY · ${state.pastelFlavor} · $800`:'Externo · Descorche $350'}\n`;
+  if(state.entradas.length > 0) msg += `🌿 Entradas: ${state.entradas.join(', ')}\n`;
+  msg += `💐 Decoración: ${state.deco}\n`;
+  msg += `\n💰 Total estimado: $${total.toLocaleString()} MXN\n`;
+  msg += `\nAdjunto mi comprobante de anticipo ($1,000 MXN) para confirmar la fecha. ¡Gracias!`;
+  return msg;
+}
 </script>
 </body>
 </html>
