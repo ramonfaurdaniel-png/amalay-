@@ -196,6 +196,69 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 @media (max-width:760px){.booking-shell{grid-template-columns:1fr}.time-grid{grid-template-columns:1fr 1fr}.times-card{padding:14px}}
 @media (max-width:440px){.time-grid{grid-template-columns:1fr}}
 
+
+/* visual polish */
+.main{max-width:1060px;padding:24px 20px 70px;}
+.step-title{font-size:34px;line-height:1;}
+.step-sub{font-size:14px;max-width:760px;}
+.warn{background:linear-gradient(180deg,#fff9ea 0%,#fff5db 100%);border:1px solid #efcf78;border-radius:16px;padding:16px 18px;box-shadow:0 10px 24px rgba(191,153,84,.08);}
+.avail-legend{gap:18px;margin:4px 0 14px;font-size:12px}
+.booking-shell{grid-template-columns:minmax(0,1.18fr) minmax(330px,.82fr);gap:18px;align-items:stretch}
+.cal-wrap,.times-card{border-radius:22px;border:1px solid #e6dacb;box-shadow:0 16px 40px rgba(62,47,25,.08);overflow:hidden}
+.availability-wrap{background:#fff}
+.avail-head{padding:18px 18px 14px;background:linear-gradient(180deg,#fffdf9 0%,#faf5ee 100%);}
+.avail-month{font-size:38px;letter-spacing:.01em}
+.cal-nav-btn{width:42px;height:42px;border-radius:50%;font-size:28px;box-shadow:0 6px 16px rgba(61,90,46,.08);}
+.avail-weekdays{padding:12px 14px 4px}
+.avail-weekdays div{font-size:11px;font-weight:500;color:#7f7a71}
+.avail-grid{gap:10px;padding:8px 14px 18px;background:linear-gradient(180deg,#fff 0%,#fdfbf7 100%)}
+.avail-day{min-height:92px;border-radius:18px;padding:12px 10px;box-shadow:0 6px 14px rgba(61,45,25,.05)}
+.avail-day.available{background:linear-gradient(180deg,#fbfff8 0%,#f3faec 100%);border-color:#bdd4a5}
+.avail-day.partial{background:linear-gradient(180deg,#fffaf0 0%,#fff1d7 100%);border-color:#e5c98c}
+.avail-day.full{background:linear-gradient(180deg,#fff4f1 0%,#fde5de 100%);border-color:#ebb6a6}
+.avail-day.past{background:linear-gradient(180deg,#faf8f4 0%,#f1ece4 100%)}
+.avail-day.selected{transform:translateY(-2px);box-shadow:0 12px 24px rgba(61,90,46,.16),0 0 0 2px rgba(61,90,46,.08) inset}
+.avail-day:hover{transform:translateY(-2px);box-shadow:0 12px 22px rgba(61,45,25,.09)}
+.avail-num{font-size:30px;font-family:'Cormorant Garamond',serif;font-weight:600}
+.avail-meta{font-size:12px}
+.cal-note{font-size:12px;padding:14px;background:#fcfaf6}
+.times-card{padding:20px;background:linear-gradient(180deg,#fff 0%,#fcfaf7 100%)}
+.times-head{font-size:38px;line-height:1}
+.times-sub{font-size:13px;margin-bottom:16px;max-width:300px}
+.selected-date-pill{padding:10px 14px;font-size:13px;border-radius:999px;box-shadow:0 8px 16px rgba(61,90,46,.08)}
+.time-groups{gap:16px}
+.time-group{padding:12px;border:1px solid #efe3d3;border-radius:18px;background:rgba(255,255,255,.75)}
+.time-group-title{font-size:12px;margin-bottom:10px}
+.time-grid{gap:10px}
+.time-btn{padding:14px 14px;border-radius:16px;font-size:15px;font-weight:500;min-height:64px;display:flex;align-items:center;justify-content:center;text-align:center;box-shadow:0 6px 14px rgba(61,45,25,.04)}
+.time-btn:hover{transform:translateY(-1px);box-shadow:0 10px 20px rgba(61,90,46,.12)}
+.time-btn.sel{box-shadow:0 12px 24px rgba(61,90,46,.18)}
+.time-btn.disabled{background:linear-gradient(180deg,#f9f5ee 0%,#f2ebe0 100%);color:#a89a8b;border-color:#e5dacd}
+.time-btn.disabled::after{content:'Ocupado';display:block;font-size:11px;font-weight:400;margin-top:4px;opacity:.9}
+.time-note{margin-top:16px;padding-top:12px;border-top:1px solid #eee0cf}
+.input{border-radius:16px;padding:16px 18px;font-size:16px;box-shadow:0 8px 16px rgba(61,45,25,.04)}
+.btn-primary{margin-top:10px;border-radius:18px;padding:17px;font-size:15px;box-shadow:0 14px 24px rgba(61,90,46,.16)}
+@media (max-width: 900px){
+  .main{max-width:760px;padding:18px 16px 64px;}
+  .booking-shell{grid-template-columns:1fr;gap:14px}
+  .step-title{font-size:30px}
+  .times-head{font-size:32px}
+}
+@media (max-width: 540px){
+  .main{padding:16px 12px 54px;}
+  .step-title{font-size:28px}
+  .step-sub{font-size:13px}
+  .warn{padding:14px 14px;border-radius:14px}
+  .avail-head{padding:14px 14px 10px}
+  .avail-month{font-size:28px}
+  .cal-nav-btn{width:38px;height:38px;font-size:24px}
+  .avail-grid{gap:8px;padding:8px 10px 14px}
+  .avail-day{min-height:82px;border-radius:16px;padding:10px 8px}
+  .avail-num{font-size:26px}
+  .times-card{padding:16px}
+  .time-grid{grid-template-columns:1fr 1fr}
+}
+
 </style>
 </head>
 <body>
