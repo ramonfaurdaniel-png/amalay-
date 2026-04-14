@@ -565,11 +565,29 @@ function renderPackages() {
 
 function cartaWarning() { alert("A la Carta solo aplica para grupos menores a 20 personas."); }
 
+function addCheckmark(card) {
+  card.querySelectorAll('.pkg-check').forEach(e=>e.remove());
+  const chk = document.createElement('div');
+  chk.className = 'pkg-check';
+  chk.innerHTML = '✓ Seleccionado';
+  chk.style.cssText = 'margin-top:10px;padding:6px 12px;background:var(--green);color:#fff;border-radius:20px;font-size:11px;font-weight:500;letter-spacing:.04em;display:inline-block;';
+  card.appendChild(chk);
+}
+
 function selectPkg(id, nombre) {
   state.paquete = id;
   state.paqueteNombre = nombre;
-  document.querySelectorAll('.pkg-card').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('pc-'+id)?.classList.add('selected');
+  document.querySelectorAll('.pkg-card').forEach(c => {
+    c.classList.remove('selected');
+    c.querySelectorAll('.pkg-check').forEach(e=>e.remove());
+    c.style.transform = '';
+  });
+  const card = document.getElementById('pc-'+id);
+  if(card) {
+    card.classList.add('selected');
+    card.style.transform = 'scale(1.01)';
+    addCheckmark(card);
+  }
   document.getElementById('btn-step3').disabled = false;
 }
 
