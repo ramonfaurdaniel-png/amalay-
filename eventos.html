@@ -566,56 +566,44 @@ const SLOT_GROUPS = [
 let calendarCursor = new Date(today.getFullYear(), today.getMonth(), 1);
 let availabilityByDate = new Map(); // Se llena al cargar el ICS en vivo
 
+// ICS embebido como fallback (se actualiza con fetch en vivo)
+const ICS_STATIC = "BEGIN:VCALENDAR\nPRODID:-//Google Inc//Google Calendar 70.9054//EN\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:Amalay Eventos \nX-WR-TIMEZONE:America/Monterrey\nBEGIN:VTIMEZONE\nTZID:America/Mexico_City\nX-LIC-LOCATION:America/Mexico_City\nBEGIN:STANDARD\nTZOFFSETFROM:-0600\nTZOFFSETTO:-0600\nTZNAME:CST\nDTSTART:19700101T000000\nEND:STANDARD\nEND:VTIMEZONE\nBEGIN:VEVENT\nDTSTART:20260516T200000Z\nDTEND:20260516T210000Z\nDTSTAMP:20260414T184653Z\nUID:EB45D786-C7BF-4E97-8F9D-77F9ADB02DA8\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260416T193000Z\nDTEND:20260416T203000Z\nDTSTAMP:20260414T184653Z\nUID:F94194A2-44DC-48C6-819F-CA5EFB17465D\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260418T013000Z\nDTEND:20260418T023000Z\nDTSTAMP:20260414T184653Z\nUID:AD2ED0EF-99AC-49A8-81AA-7A4C3D6C8C55\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260412T190000Z\nDTEND:20260412T200000Z\nDTSTAMP:20260414T184653Z\nUID:835274A5-5B67-4D93-84EB-91F58187D137\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260321T203000Z\nDTEND:20260321T213000Z\nDTSTAMP:20260414T184653Z\nUID:8AD3C0B0-BBB3-4460-A4CA-6687607FE996\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART;TZID=America/Mexico_City:20261029T080000\nDTEND;TZID=America/Mexico_City:20261029T090000\nDTSTAMP:20260414T184653Z\nUID:58E0682F-0641-47EB-8241-81EA90FB33E6\nRECURRENCE-ID;TZID=America/Mexico_City:20261029T080000\nCLASS:PUBLIC\nCREATED:20260414T145325Z\nLAST-MODIFIED:20260414T150428Z\nSEQUENCE:1\nSTATUS:CONFIRMED\nSUMMARY:Bertha zambranos BDay\nTRANSP:OPAQUE\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART;TZID=America/Mexico_City:20271029T080000\nDTEND;TZID=America/Mexico_City:20271029T090000\nDTSTAMP:20260414T184653Z\nUID:58E0682F-0641-47EB-8241-81EA90FB33E6\nRECURRENCE-ID;TZID=America/Mexico_City:20271029T080000\nCLASS:PUBLIC\nCREATED:20260414T145325Z\nLAST-MODIFIED:20260414T150428Z\nSEQUENCE:1\nSTATUS:CONFIRMED\nSUMMARY:Bertha zambranos BDay\nTRANSP:OPAQUE\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260426T000000Z\nDTEND:20260426T010000Z\nDTSTAMP:20260414T184653Z\nUID:7A3A9D2E-2559-479F-8592-C677A858622F\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260319T150000Z\nDTEND:20260319T160000Z\nDTSTAMP:20260414T184653Z\nUID:A87127DC-D6B0-4777-9F11-1A583D547F3D\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260418T151500Z\nDTEND:20260418T161500Z\nDTSTAMP:20260414T184653Z\nUID:C9C73FA6-FE35-41BE-A1F6-DFBC84D3B19C\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260419T013000Z\nDTEND:20260419T023000Z\nDTSTAMP:20260414T184653Z\nUID:51E4CDEC-6A9E-408F-B1D1-5D816E8DAEE2\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260315T200000Z\nDTEND:20260315T210000Z\nDTSTAMP:20260414T184653Z\nUID:DF87402A-357D-453C-B33B-C57DF2FC6DE7\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260412T000000Z\nDTEND:20260412T010000Z\nDTSTAMP:20260414T184653Z\nUID:33DB8408-7C6F-45A1-8308-6E6EF0450E61\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260524T013000Z\nDTEND:20260524T023000Z\nDTSTAMP:20260414T184653Z\nUID:36507CDC-0AB2-4364-A104-23AE41C21839\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260509T220000Z\nDTEND:20260509T230000Z\nDTSTAMP:20260414T184653Z\nUID:5C73D7FC-80FD-4D68-87DE-E2514F6CB8C9\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260314T163000Z\nDTEND:20260314T173000Z\nDTSTAMP:20260414T184653Z\nUID:16D406BE-F36E-46EB-86E3-3AED053BB9C1\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260411T160000Z\nDTEND:20260411T170000Z\nDTSTAMP:20260414T184653Z\nUID:A1E56662-BB8D-4475-B04B-AC78B3ABB110\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART;TZID=America/Mexico_City:20261213T090000\nDTEND;TZID=America/Mexico_City:20261213T100000\nDTSTAMP:20260414T184653Z\nUID:5E9054C6-4197-402E-9B96-C8E985C636D0\nRECURRENCE-ID;TZID=America/Mexico_City:20261213T090000\nCLASS:PUBLIC\nCREATED:20260414T145326Z\nLAST-MODIFIED:20260414T150428Z\nSEQUENCE:0\nSTATUS:CONFIRMED\nSUMMARY:Happy b day Mariana Camargo\nTRANSP:OPAQUE\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART;TZID=America/Mexico_City:20271213T090000\nDTEND;TZID=America/Mexico_City:20271213T100000\nDTSTAMP:20260414T184653Z\nUID:5E9054C6-4197-402E-9B96-C8E985C636D0\nRECURRENCE-ID;TZID=America/Mexico_City:20271213T090000\nCLASS:PUBLIC\nCREATED:20260414T145326Z\nLAST-MODIFIED:20260414T150428Z\nSEQUENCE:0\nSTATUS:CONFIRMED\nSUMMARY:Happy b day Mariana Camargo\nTRANSP:OPAQUE\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260426T190000Z\nDTEND:20260426T200000Z\nDTSTAMP:20260414T184653Z\nUID:3BF08F92-9A79-419A-B2D5-6CDEA8B6923A\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260423T170000Z\nDTEND:20260423T180000Z\nDTSTAMP:20260414T184653Z\nUID:CB4BA858-8743-4C9A-B8A7-5A56362DDE0E\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260327T150000Z\nDTEND:20260327T160000Z\nDTSTAMP:20260414T184653Z\nUID:6776E4C3-00AC-4C47-96D3-F4706B6BFA17\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260418T193000Z\nDTEND:20260418T203000Z\nDTSTAMP:20260414T184653Z\nUID:78B3862D-C416-4357-9574-CF56FC5CDF5F\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260412T013000Z\nDTEND:20260412T023000Z\nDTSTAMP:20260414T184653Z\nUID:8B7B0388-8EA7-4342-9FFC-9289E9B4143B\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260425T220000Z\nDTEND:20260425T230000Z\nDTSTAMP:20260414T184653Z\nUID:3023B79C-9A44-4467-8C4B-BFBCFB01F981\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260523T220000Z\nDTEND:20260523T230000Z\nDTSTAMP:20260414T184653Z\nUID:A2787783-4BD8-4FF5-90DD-4E7B0D9BAED0\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260419T201500Z\nDTEND:20260419T211500Z\nDTSTAMP:20260414T184653Z\nUID:7F3EB065-DCFE-4117-BBF0-BBABB9E764B1\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260321T170000Z\nDTEND:20260321T180000Z\nDTSTAMP:20260414T184653Z\nUID:2658CEFE-F291-44FE-8933-DCA698658050\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260619T230000Z\nDTEND:20260620T000000Z\nDTSTAMP:20260414T184653Z\nUID:9592E66C-C271-4413-A18B-E7781D40C918\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260411T193000Z\nDTEND:20260411T203000Z\nDTSTAMP:20260414T184653Z\nUID:26364541-06E0-47D6-961F-FD59FB707AB2\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260413T153000Z\nDTEND:20260413T163000Z\nDTSTAMP:20260414T184653Z\nUID:E76F9600-9287-4876-8404-919A855FA252\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260425T204500Z\nDTEND:20260425T214500Z\nDTSTAMP:20260414T184653Z\nUID:01DC2B3A-96F7-4495-BC77-4AA86FC5186D\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260417T153000Z\nDTEND:20260417T163000Z\nDTSTAMP:20260414T184653Z\nUID:BB4B2CB5-7853-44CE-9A48-2599DF6CB20F\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260308T011000Z\nDTEND:20260308T021000Z\nDTSTAMP:20260414T184653Z\nUID:9D44DD6A-11A1-49B6-8492-1DFFF73211EB\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260418T233000Z\nDTEND:20260419T013000Z\nDTSTAMP:20260414T184653Z\nUID:CC2D2A6E-BBB4-4C2E-B850-5086CD2A2D52\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260410T160000Z\nDTEND:20260410T170000Z\nDTSTAMP:20260414T184653Z\nUID:CF909969-D060-4D24-BBB6-3AC695F28C48\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260425T173000Z\nDTEND:20260425T183000Z\nDTSTAMP:20260414T184653Z\nUID:FFFE3A36-647E-485C-A690-D284B47403BE\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nEND:VCALENDAR\n";
+
 async function initCalendar() {
-  // Loading state
-  document.getElementById('avail-month-label').textContent = 'Cargando…';
-  document.getElementById('availability-grid').innerHTML =
-    '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:13px;">🔄 Sincronizando disponibilidad…</div>';
-
-  if (!ICS_URL || ICS_URL === 'PEGA_AQUI_TU_URL_WEBCAL') {
-    document.getElementById('availability-grid').innerHTML =
-      '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#c0392b;font-size:12px;">⚠ Configura la URL del calendario en el código.</div>';
-    renderAvailabilityCalendar();
-    return;
-  }
-
-  // Intentar fetch directo (Google Calendar soporta CORS)
-  // Si falla, usar proxy como respaldo
-  const fetchUrl = ICS_URL.replace(/^webcal:\/\//i, 'https://');
-  let icsText = null;
-
-  // Intento 1: directo
-  try {
-    const resp = await fetch(fetchUrl, { cache: 'no-cache' });
-    if (resp.ok) { icsText = await resp.text(); console.log('✓ Fetch directo OK'); }
-  } catch(e) { console.warn('Fetch directo falló, intentando proxy...', e); }
-
-  // Intento 2: proxy allorigins
-  if (!icsText) {
-    try {
-      const resp = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(fetchUrl), { cache: 'no-cache' });
-      if (resp.ok) { icsText = await resp.text(); console.log('✓ Proxy allorigins OK'); }
-    } catch(e) { console.warn('Proxy allorigins falló:', e); }
-  }
-
-  // Intento 3: proxy corsproxy.io
-  if (!icsText) {
-    try {
-      const resp = await fetch('https://corsproxy.io/?' + encodeURIComponent(fetchUrl), { cache: 'no-cache' });
-      if (resp.ok) { icsText = await resp.text(); console.log('✓ Proxy corsproxy OK'); }
-    } catch(e) { console.warn('Proxy corsproxy falló:', e); }
-  }
-
-  if (icsText) {
-    availabilityByDate = buildAvailabilityFromICS(icsText);
-    console.log('Eventos cargados:', availabilityByDate.size, 'días con eventos');
-  } else {
-    console.error('No se pudo cargar el ICS por ningún método');
-    document.getElementById('availability-grid').innerHTML =
-      '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#c0392b;font-size:12px;">⚠ No se pudo cargar el calendario. Recarga la página.</div>';
-  }
-
+  // Mostrar calendario inmediatamente con datos estáticos
+  availabilityByDate = buildAvailabilityFromICS(ICS_STATIC);
   renderAvailabilityCalendar();
+  console.log('✓ Calendario cargado con datos estáticos:', availabilityByDate.size, 'días');
+
+  // Intentar actualizar con datos en vivo (sin bloquear UI)
+  if (!ICS_URL || ICS_URL === 'PEGA_AQUI_TU_URL_WEBCAL') return;
+
+  const fetchUrl = ICS_URL.replace(/^webcal:\/\//i, 'https://');
+  const proxies = [
+    fetchUrl,
+    'https://api.allorigins.win/raw?url=' + encodeURIComponent(fetchUrl),
+    'https://corsproxy.io/?' + encodeURIComponent(fetchUrl),
+  ];
+
+  for(const url of proxies) {
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      const resp = await fetch(url, { cache: 'no-cache', signal: controller.signal });
+      clearTimeout(timeout);
+      if(resp.ok) {
+        const text = await resp.text();
+        if(text.includes('BEGIN:VCALENDAR')) {
+          availabilityByDate = buildAvailabilityFromICS(text);
+          renderAvailabilityCalendar();
+          if(state.fecha) renderTimeOptions();
+          console.log('✓ Calendario actualizado en vivo desde:', url.slice(0,40));
+          return;
+        }
+      }
+    } catch(e) { console.warn('Fetch falló:', url.slice(0,40), e.message); }
+  }
+  console.log('ℹ Usando datos estáticos (fetch en vivo no disponible)');
 }
 
 initCalendar();
@@ -659,11 +647,22 @@ function slotStartMinutes(label){
   return h * 60 + mm;
 }
 function parseICSDateTime(raw){
-  const value = raw.trim().replace(/Z$/,'');
-  const m = value.match(/(\d{4})(\d{2})(\d{2})T?(\d{2})?(\d{2})?/);
+  const value = raw.trim();
+  const isUTC = value.endsWith('Z');
+  const clean = value.replace(/Z$/, '');
+  const m = clean.match(/(\d{4})(\d{2})(\d{2})T?(\d{2})?(\d{2})?/);
   if(!m) return null;
-  const y=+m[1], mo=+m[2], d=+m[3], h=+(m[4]||'0'), mi=+(m[5]||'0');
-  return { iso:`${y}-${pad2(mo)}-${pad2(d)}`, minutes:h*60+mi };
+  const y=+m[1], mo=+m[2]-1, d=+m[3], h=+(m[4]||0), mi=+(m[5]||0);
+  if(isUTC){
+    // Convertir UTC → Monterrey (CST = UTC-6, sin DST desde 2023)
+    const utc = new Date(Date.UTC(y, mo, d, h, mi, 0));
+    const mty = new Date(utc.getTime() - 6*60*60*1000);
+    return {
+      iso: `${mty.getUTCFullYear()}-${pad2(mty.getUTCMonth()+1)}-${pad2(mty.getUTCDate())}`,
+      minutes: mty.getUTCHours()*60 + mty.getUTCMinutes()
+    };
+  }
+  return { iso:`${y}-${pad2(mo+1)}-${pad2(d)}`, minutes:h*60+mi };
 }
 function buildAvailabilityFromICS(icsText){
   const map = new Map();
