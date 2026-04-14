@@ -579,14 +579,38 @@ async function initCalendar() {
     return;
   }
 
+  // Intentar fetch directo (Google Calendar soporta CORS)
+  // Si falla, usar proxy como respaldo
+  const fetchUrl = ICS_URL.replace(/^webcal:\/\//i, 'https://');
+  let icsText = null;
+
+  // Intento 1: directo
   try {
-    const fetchUrl = ICS_URL.replace(/^webcal:\/\//i, 'https://');
-    const resp = await fetch(PROXY + encodeURIComponent(fetchUrl));
-    if (!resp.ok) throw new Error('HTTP ' + resp.status);
-    const text = await resp.text();
-    availabilityByDate = buildAvailabilityFromICS(text);
-  } catch(err) {
-    console.error('Error cargando calendario:', err);
+    const resp = await fetch(fetchUrl, { cache: 'no-cache' });
+    if (resp.ok) { icsText = await resp.text(); console.log('✓ Fetch directo OK'); }
+  } catch(e) { console.warn('Fetch directo falló, intentando proxy...', e); }
+
+  // Intento 2: proxy allorigins
+  if (!icsText) {
+    try {
+      const resp = await fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(fetchUrl), { cache: 'no-cache' });
+      if (resp.ok) { icsText = await resp.text(); console.log('✓ Proxy allorigins OK'); }
+    } catch(e) { console.warn('Proxy allorigins falló:', e); }
+  }
+
+  // Intento 3: proxy corsproxy.io
+  if (!icsText) {
+    try {
+      const resp = await fetch('https://corsproxy.io/?' + encodeURIComponent(fetchUrl), { cache: 'no-cache' });
+      if (resp.ok) { icsText = await resp.text(); console.log('✓ Proxy corsproxy OK'); }
+    } catch(e) { console.warn('Proxy corsproxy falló:', e); }
+  }
+
+  if (icsText) {
+    availabilityByDate = buildAvailabilityFromICS(icsText);
+    console.log('Eventos cargados:', availabilityByDate.size, 'días con eventos');
+  } else {
+    console.error('No se pudo cargar el ICS por ningún método');
     document.getElementById('availability-grid').innerHTML =
       '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#c0392b;font-size:12px;">⚠ No se pudo cargar el calendario. Recarga la página.</div>';
   }
