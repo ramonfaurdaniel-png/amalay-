@@ -625,6 +625,27 @@ async function initCalendar() {
   console.log('ℹ Datos estáticos activos');
 }
 
+// ── ASUETOS MEXICANOS 2026 ── (días completamente bloqueados)
+const ASUETOS_2026 = new Set([
+  '2026-01-01', // Año Nuevo
+  '2026-02-02', // Día de la Candelaria (muy concurrido NL)
+  '2026-02-09', // Constitución (lunes)
+  '2026-03-16', // Benito Juárez (lunes)
+  '2026-04-02', // Jueves Santo
+  '2026-04-03', // Viernes Santo
+  '2026-04-04', // Sábado de Gloria
+  '2026-04-05', // Domingo de Pascua
+  '2026-05-01', // Día del Trabajo
+  '2026-05-10', // Día de las Madres
+  '2026-09-16', // Independencia
+  '2026-11-02', // Día de Muertos
+  '2026-11-16', // Revolución (lunes)
+  '2026-12-12', // Virgen de Guadalupe (muy concurrido NL)
+  '2026-12-24', // Nochebuena
+  '2026-12-25', // Navidad
+  '2026-12-31', // Nochevieja
+]);
+
 initCalendar();
 
 document.getElementById('fecha-input').addEventListener('change', function(){
@@ -683,27 +704,6 @@ function parseICSDateTime(raw){
   }
   return { iso:`${y}-${pad2(mo+1)}-${pad2(d)}`, minutes:h*60+mi };
 }
-// ── ASUETOS MEXICANOS 2026 ── (días completamente bloqueados)
-const ASUETOS_2026 = new Set([
-  '2026-01-01', // Año Nuevo
-  '2026-02-02', // Día de la Candelaria (muy concurrido NL)
-  '2026-02-09', // Constitución (lunes)
-  '2026-03-16', // Benito Juárez (lunes)
-  '2026-04-02', // Jueves Santo
-  '2026-04-03', // Viernes Santo
-  '2026-04-04', // Sábado de Gloria
-  '2026-04-05', // Domingo de Pascua
-  '2026-05-01', // Día del Trabajo
-  '2026-05-10', // Día de las Madres
-  '2026-09-16', // Independencia
-  '2026-11-02', // Día de Muertos
-  '2026-11-16', // Revolución (lunes)
-  '2026-12-12', // Virgen de Guadalupe (muy concurrido NL)
-  '2026-12-24', // Nochebuena
-  '2026-12-25', // Navidad
-  '2026-12-31', // Nochevieja
-]);
-
 function buildAvailabilityFromICS(icsText){
   const map = new Map();
   const events = icsText.split('BEGIN:VEVENT').slice(1);
