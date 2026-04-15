@@ -235,8 +235,13 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 
 <!-- STEP 1: Personas & Fecha -->
 <div class="step active" id="step1">
-  <div class="step-title">¿Para cuántas personas?</div>
-  <div class="step-sub">Selecciona el número de invitados y elige una fecha disponible en el calendario.</div>
+  <div class="step-title">Cuéntanos sobre tu evento</div>
+  <div class="step-sub">Primero dinos tu nombre y cuántos invitados tendrás.</div>
+
+  <div class="field">
+    <label>Tu nombre</label>
+    <input class="input" type="text" id="nombre-input" placeholder="Ej. María González" oninput="state.nombre=this.value" autocomplete="name"/>
+  </div>
 
   <div class="field">
     <label>Número de personas</label>
@@ -437,6 +442,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 
   <div class="summary-card">
     <div class="sum-title">📋 Detalles del evento</div>
+    <div class="sum-row"><span class="sum-label">Nombre</span><span class="sum-val" id="sum-nombre">—</span></div>
     <div class="sum-row"><span class="sum-label">Fecha</span><span class="sum-val" id="sum-fecha">—</span></div>
     <div class="sum-row"><span class="sum-label">Personas</span><span class="sum-val" id="sum-personas">—</span></div>
     <div class="sum-row"><span class="sum-label">Espacio</span><span class="sum-val" id="sum-espacio">—</span></div>
@@ -493,6 +499,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 <script>
 // ── STATE ──
 const state = {
+  nombre: '',
   guests: 20,
   fecha: '',
   espacio: '',
@@ -525,6 +532,7 @@ const PACKAGES = [
 function goStep(n) {
   // Validations
   if(n === 2) {
+    if(!state.nombre || state.nombre.trim().length < 2) { alert('Por favor escribe tu nombre'); document.getElementById('nombre-input').focus(); return; }
     if(!state.fecha) { alert('Por favor selecciona una fecha'); return; }
   }
   if(n === 3) {
@@ -573,8 +581,9 @@ document.getElementById('fecha-input').min = todayStr;
 // Cómo obtener la URL:
 //   iPhone/Mac: Calendario → "Amalay Eventos" → Compartir → Calendario público → Copiar enlace
 //   La URL empieza con webcal:// — el código la convierte a https:// automáticamente
-const ICS_URL = 'https://calendar.google.com/calendar/ical/d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c507ff2c3bd56534fe642c@group.calendar.google.com/public/basic.ics';
-const PROXY   = 'https://api.allorigins.win/raw?url=';
+// ── PROXY n8n (sin CORS) — no cambies esto ──
+const ICS_URL = 'https://danielramonfaur.app.n8n.cloud/webhook/amalay-ics';
+const PROXY   = ''; // no se usa, n8n resuelve el CORS
 // ══════════════════════════════════════════════════════════
 
 const BLOCK_MINUTES = 180;
@@ -598,32 +607,22 @@ async function initCalendar() {
   // Intentar actualizar con datos en vivo (sin bloquear UI)
   if (!ICS_URL || ICS_URL === 'PEGA_AQUI_TU_URL_WEBCAL') return;
 
-  const fetchUrl = ICS_URL.replace(/^webcal:\/\//i, 'https://');
-  const proxies = [
-    fetchUrl,
-    'https://api.allorigins.win/raw?url=' + encodeURIComponent(fetchUrl),
-    'https://corsproxy.io/?' + encodeURIComponent(fetchUrl),
-  ];
-
-  for(const url of proxies) {
-    try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 5000);
-      const resp = await fetch(url, { cache: 'no-cache', signal: controller.signal });
-      clearTimeout(timeout);
-      if(resp.ok) {
-        const text = await resp.text();
-        if(text.includes('BEGIN:VCALENDAR')) {
-          availabilityByDate = buildAvailabilityFromICS(text);
-          renderAvailabilityCalendar();
-          if(state.fecha) renderTimeOptions();
-          console.log('✓ Calendario actualizado en vivo desde:', url.slice(0,40));
-          return;
-        }
+  try {
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(), 6000);
+    const resp = await fetch(ICS_URL, { cache: 'no-cache', signal: controller.signal });
+    if(resp.ok) {
+      const text = await resp.text();
+      if(text.includes('BEGIN:VCALENDAR')) {
+        availabilityByDate = buildAvailabilityFromICS(text);
+        renderAvailabilityCalendar();
+        if(state.fecha) renderTimeOptions();
+        console.log('✓ Calendario en vivo OK —', availabilityByDate.size, 'días');
+        return;
       }
-    } catch(e) { console.warn('Fetch falló:', url.slice(0,40), e.message); }
-  }
-  console.log('ℹ Usando datos estáticos (fetch en vivo no disponible)');
+    }
+  } catch(e) { console.warn('n8n proxy falló, usando datos estáticos:', e.message); }
+  console.log('ℹ Datos estáticos activos');
 }
 
 initCalendar();
@@ -684,6 +683,27 @@ function parseICSDateTime(raw){
   }
   return { iso:`${y}-${pad2(mo+1)}-${pad2(d)}`, minutes:h*60+mi };
 }
+// ── ASUETOS MEXICANOS 2026 ── (días completamente bloqueados)
+const ASUETOS_2026 = new Set([
+  '2026-01-01', // Año Nuevo
+  '2026-02-02', // Día de la Candelaria (muy concurrido NL)
+  '2026-02-09', // Constitución (lunes)
+  '2026-03-16', // Benito Juárez (lunes)
+  '2026-04-02', // Jueves Santo
+  '2026-04-03', // Viernes Santo
+  '2026-04-04', // Sábado de Gloria
+  '2026-04-05', // Domingo de Pascua
+  '2026-05-01', // Día del Trabajo
+  '2026-05-10', // Día de las Madres
+  '2026-09-16', // Independencia
+  '2026-11-02', // Día de Muertos
+  '2026-11-16', // Revolución (lunes)
+  '2026-12-12', // Virgen de Guadalupe (muy concurrido NL)
+  '2026-12-24', // Nochebuena
+  '2026-12-25', // Navidad
+  '2026-12-31', // Nochevieja
+]);
+
 function buildAvailabilityFromICS(icsText){
   const map = new Map();
   const events = icsText.split('BEGIN:VEVENT').slice(1);
@@ -708,6 +728,7 @@ function slotBlocked(iso, slotLabel){
 }
 function getDateStatus(iso){
   if(isPastDate(iso)) return {status:'past', text:'No disp.'};
+  if(ASUETOS_2026.has(iso)) return {status:'full', text:'Asueto'};
   const allSlots = SLOT_GROUPS.flatMap(g=>g.slots);
   const blockedCount = allSlots.filter(slot => slotBlocked(iso, slot)).length;
   if(blockedCount === allSlots.length) return {status:'full', text:'Lleno'};
@@ -933,6 +954,7 @@ function updateExtrasStyle() {
 function buildSummary() {
   const fechaFormatted = state.fecha ? new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
   const espacioObj = SPACES.find(s=>s.id===state.espacio);
+  document.getElementById('sum-nombre').textContent = state.nombre || '—';
   document.getElementById('sum-fecha').textContent = fechaFormatted;
   document.getElementById('sum-personas').textContent = state.guests + ' personas';
   document.getElementById('sum-espacio').textContent = espacioObj?.name || '—';
@@ -1007,7 +1029,7 @@ function buildGCalLink(fechaText, espacio) {
 }
 
 function buildWhatsAppMsg(fecha, espacio, total) {
-  let msg = `Hola! Quiero reservar un evento privado en AMALAY 🌿\n\n`;
+  let msg = `Hola! Soy ${state.nombre || '(sin nombre)'} y quiero reservar un evento privado en AMALAY 🌿\n\n`;
   msg += `📅 Fecha: ${fecha}\n`;
   msg += `👥 Personas: ${state.guests}\n`;
   msg += `🏡 Espacio: ${espacio}\n`;
