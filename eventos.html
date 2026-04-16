@@ -718,27 +718,41 @@ function buildAvailabilityFromICS(icsText){
   const map = new Map();
   const events = icsText.split('BEGIN:VEVENT').slice(1);
   events.forEach(chunk => {
-    const dtstartLine = chunk.split(/\r?\n/).find(line => line.startsWith('DTSTART'));
+    const lines = chunk.split(/\r?\n/);
+    const dtstartLine = lines.find(line => line.startsWith('DTSTART'));
+    const dtendLine   = lines.find(line => line.startsWith('DTEND'));
     if(!dtstartLine) return;
-    const raw = dtstartLine.split(':').slice(1).join(':');
-    const parsed = parseICSDateTime(raw);
-    if(!parsed) return;
-    const start = parsed.minutes;
-    const end = start + BLOCK_MINUTES;
-    if(!map.has(parsed.iso)) map.set(parsed.iso, []);
-    map.get(parsed.iso).push([start,end]);
+    const parsedStart = parseICSDateTime(dtstartLine.split(':').slice(1).join(':'));
+    if(!parsedStart) return;
+    const start = parsedStart.minutes;
+    let end = start + BLOCK_MINUTES; // fallback
+    if(dtendLine){
+      const parsedEnd = parseICSDateTime(dtendLine.split(':').slice(1).join(':'));
+      if(parsedEnd){
+        // Same calendar day: use actual end. Next day (crosses midnight): block to end of day.
+        end = parsedEnd.iso === parsedStart.iso ? parsedEnd.minutes : 24 * 60;
+      }
+    }
+    if(!map.has(parsedStart.iso)) map.set(parsedStart.iso, []);
+    map.get(parsedStart.iso).push([start, end]);
   });
   for(const [iso,arr] of map) arr.sort((a,b)=>a[0]-b[0]);
   return map;
 }
 function dateRanges(iso){ return availabilityByDate.get(iso) || []; }
 function slotBlocked(iso, slotLabel){
-  const start = slotStartMinutes(slotLabel);
-  return dateRanges(iso).some(([a,b]) => start >= a && start < b);
+  // A slot is blocked if it overlaps with any event: slotStart < eventEnd && slotEnd > eventStart
+  const slotStart = slotStartMinutes(slotLabel);
+  const slotEnd   = slotStart + BLOCK_MINUTES;
+  return dateRanges(iso).some(([a,b]) => slotStart < b && slotEnd > a);
 }
 function getDateStatus(iso){
   if(isPastDate(iso)) return {status:'past', text:'No disp.'};
   if(ASUETOS_2026.has(iso)) return {status:'full', text:'Asueto'};
+  const allSlots = SLOT_GROUPS.flatMap(g => g.slots);
+  const blockedCount = allSlots.filter(s => slotBlocked(iso, s)).length;
+  if(blockedCount === allSlots.length) return {status:'full',    text:'Sin disponibilidad'};
+  if(blockedCount > 0)                 return {status:'partial', text:'Disponibilidad parcial'};
   return {status:'free', text:'Disponible'};
 }
 function setSelectedDate(value, fromCalendar=true){
