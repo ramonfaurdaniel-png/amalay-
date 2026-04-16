@@ -107,6 +107,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 .extra-opt.selected{border-color:var(--green);background:var(--green-pale);}
 .extra-opt input[type=checkbox],
 .extra-opt input[type=radio]{width:16px;height:16px;margin-top:2px;accent-color:var(--green);flex-shrink:0;cursor:pointer;}
+.extra-opt-img{width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;}
 .extra-opt-text{flex:1;}
 .extra-opt-name{font-size:13px;color:var(--text);}
 .extra-opt-desc{font-size:11px;color:var(--muted);margin-top:1px;}
@@ -373,13 +374,13 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
   <div class="extra-section">
     <div class="extra-title">🌿 Entradas para compartir</div>
     <div class="extra-opts" id="entradas-opts">
-      <label class="extra-opt"><input type="checkbox" value="Guacamole $160" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Guacamole con totopos de nopal</div><div class="extra-opt-price">$160</div></div></label>
-      <label class="extra-opt"><input type="checkbox" value="Torre mini toasts $350" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Torre mini toasts</div><div class="extra-opt-price">$350</div></div></label>
-      <label class="extra-opt"><input type="checkbox" value="Canasta pan dulce $170" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Canasta pan dulce (4 piezas)</div><div class="extra-opt-desc">Croissant, concha, cinnamon roll, chocolatín, muffin blueberry</div><div class="extra-opt-price">$170</div></div></label>
-      <label class="extra-opt"><input type="checkbox" value="Crunchy Mix $170" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Crunchy Mix</div><div class="extra-opt-desc">Chips de Jamaica, pepino, churritos, mangogos, flor de jamaica</div><div class="extra-opt-price">$170</div></div></label>
-      <label class="extra-opt"><input type="checkbox" value="Crudités $170" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Crudités</div><div class="extra-opt-desc">Jícama, pepino y zanahoria con salsa RoJamaica</div><div class="extra-opt-price">$170</div></div></label>
-      <label class="extra-opt"><input type="checkbox" value="Hummus $170" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Hummus</div><div class="extra-opt-desc">Betabel, chipotle y natural. Con crudités y pan masa madre</div><div class="extra-opt-price">$170</div></div></label>
-      <label class="extra-opt"><input type="checkbox" value="Papitas $92" onchange="updateExtras()"/><div class="extra-opt-text"><div class="extra-opt-name">Papitas de galeana con aderezo de la casa</div><div class="extra-opt-price">$92</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Guacamole $160" onchange="updateExtras()"/><img class="extra-opt-img" src="images/snacks/snack-guacamole.jpg" alt="Guacamole"/><div class="extra-opt-text"><div class="extra-opt-name">Guacamole con totopos de nopal</div><div class="extra-opt-price">$160</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Torre mini toasts $350" onchange="updateExtras()"/><img class="extra-opt-img" src="images/snacks/snack-torre-toasts.jpg" alt="Torre mini toasts"/><div class="extra-opt-text"><div class="extra-opt-name">Torre mini toasts</div><div class="extra-opt-price">$350</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Canasta pan dulce $170" onchange="updateExtras()"/><img class="extra-opt-img" src="images/snacks/snack-pan-dulce.jpg" alt="Canasta pan dulce"/><div class="extra-opt-text"><div class="extra-opt-name">Canasta pan dulce (4 piezas)</div><div class="extra-opt-desc">Croissant, concha, cinnamon roll, chocolatín, muffin blueberry</div><div class="extra-opt-price">$170</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Crunchy Mix $170" onchange="updateExtras()"/><img class="extra-opt-img" src="images/snacks/snack-crunchy-mix.jpg" alt="Crunchy Mix"/><div class="extra-opt-text"><div class="extra-opt-name">Crunchy Mix</div><div class="extra-opt-desc">Chips de Jamaica, pepino, churritos, mangogos, flor de jamaica</div><div class="extra-opt-price">$170</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Crudités $170" onchange="updateExtras()"/><img class="extra-opt-img" src="images/snacks/snack-crudites.jpg" alt="Crudités"/><div class="extra-opt-text"><div class="extra-opt-name">Crudités</div><div class="extra-opt-desc">Jícama, pepino y zanahoria con salsa RoJamaica</div><div class="extra-opt-price">$170</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Hummus $170" onchange="updateExtras()"/><img class="extra-opt-img" src="images/snacks/snack-hummus.jpg" alt="Hummus"/><div class="extra-opt-text"><div class="extra-opt-name">Hummus</div><div class="extra-opt-desc">Betabel, chipotle y natural. Con crudités y pan masa madre</div><div class="extra-opt-price">$170</div></div></label>
+      <label class="extra-opt"><input type="checkbox" value="Papitas $92" onchange="updateExtras()"/><img class="extra-opt-img" src="images/snacks/snack-papitas.jpg" alt="Papitas"/><div class="extra-opt-text"><div class="extra-opt-name">Papitas de galeana con aderezo de la casa</div><div class="extra-opt-price">$92</div></div></label>
     </div>
   </div>
 
@@ -492,10 +493,6 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
     Enviar comprobante por WhatsApp
   </a>
 
-  <a id="btn-gcal" href="#" target="_blank" class="btn-primary" style="margin-bottom:10px;background:#4285f4;display:flex;align-items:center;justify-content:center;gap:8px;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-    Guardar en mi calendario (recordatorio)
-  </a>
 
   <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.8;background:#f8f5f0;padding:10px;border-radius:8px;">
     📌 Envía tu comprobante y Monica confirmará la fecha.
@@ -527,14 +524,14 @@ const state = {
 const SPACES = [
   { id:'terraza', name:'🌿 Terraza privada con balcón', cap:[10,24], desc:'Segundo piso · Sin renta · Solo consumo + 18% servicio', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
   { id:'jardin', name:'🌳 Jardín interior privado', cap:[25,44], desc:'Rodeado de vegetación · Íntimo y exclusivo · Disponible desde las 2:30pm', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
-  { id:'salon', name:'🏛️ Salón interior', cap:[45,50], desc:'Desde 2:30pm · Comidas, meriendas y cenas', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}}
+  { id:'salon', name:'🏛️ Salón interior', cap:[45,50], desc:'A partir de 2:30pm · Comidas, meriendas y cenas', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}}
 ];
 
 // ── PACKAGES ──
 const PACKAGES = [
   { id:'brunch', name:'Brunch', time:'☀️ 8:00am – 1:30pm', price:'$480 p/p', desc:'Incluye: plato de fruta mixta + plato fuerte a elegir + bebidas refill (café, té, limonada natural, pepino, frutos rojos, mineral o jamaica)', items:['Avo Toast con huevo pochado','Chilaquiles verdes con pollo','Enchiladas suizas','⚡ Postre opcional +$80 p/p: Pay manzana, Brownie, Blueberry Cheesecake o Carrot Cake']},
-  { id:'cena', name:'Merienda / Cena', time:'🌙 Desde 1:30pm', price:'$480 p/p', desc:'Incluye: plato fuerte + postre incluido + bebidas refill (café, té, limonada, pepino, frutos rojos, mineral o jamaica)', items:['½ Ensalada Amalay + ½ Panini + ½ Sopa tomate — $480','4 Enchiladas suizas + postre — $480','3 Taquitos Amalay de RibEye + postre — $500','Pizza + Pasta Mamarosa + postre — $480']},
-  { id:'pizza', name:'Pizza & Pasta', time:'🌙 Desde 1:30pm', price:'$480 p/p', desc:'1 pizza por cada 2 personas (compartir) + pasta a elección + postre + bebidas suaves refill', items:['🍕 Pizza Prosciutto, Margarita o Pepperoni','🍝 Pasta Mamarosa o Bolognesa','🍰 Postre incluido: Pay, Brownie, Cheesecake o Carrot Cake']},
+  { id:'cena', name:'Merienda / Cena', time:'🌙 A partir de 1:30pm', price:'$480 p/p', desc:'Incluye: plato fuerte + postre incluido + bebidas refill (café, té, limonada, pepino, frutos rojos, mineral o jamaica)', items:['½ Ensalada Amalay + ½ Panini + ½ Sopa tomate — $480','4 Enchiladas suizas + postre — $480','3 Taquitos Amalay de RibEye + postre — $500','Pizza + Pasta Mamarosa + postre — $480']},
+  { id:'pizza', name:'Pizza & Pasta', time:'🌙 A partir de 1:30pm', price:'$480 p/p', desc:'1 pizza por cada 2 personas (compartir) + pasta a elección + postre + bebidas suaves refill', items:['🍕 Pizza Prosciutto, Margarita o Pepperoni','🍝 Pasta Mamarosa o Bolognesa','🍰 Postre incluido: Pay, Brownie, Cheesecake o Carrot Cake']},
   { id:'carta', name:'A la Carta', time:'☀️ Brunch o 🌙 Lunch', price:'Mín. $480 p/p', desc:'Elige libremente del menú. Solo para grupos menores a 20 personas. +$80 p/p: refill de limonadas, café y té.', items:['Bebidas especiales y postres aparte','Aplica solo para reservaciones de menos de 20 personas']}
 ];
 
@@ -618,9 +615,9 @@ async function initCalendar() {
   if (!ICS_URL || ICS_URL === 'PEGA_AQUI_TU_URL_WEBCAL') return;
 
   try {
-    const controller = new AbortController();
-    setTimeout(() => controller.abort(), 6000);
-    const resp = await fetch(ICS_URL, { cache: 'no-cache', signal: controller.signal });
+    const fetchPromise = fetch(ICS_URL, { cache: 'no-cache' });
+    const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000));
+    const resp = await Promise.race([fetchPromise, timeoutPromise]);
     if(resp.ok) {
       const text = await resp.text();
       if(text.includes('BEGIN:VCALENDAR')) {
@@ -718,41 +715,27 @@ function buildAvailabilityFromICS(icsText){
   const map = new Map();
   const events = icsText.split('BEGIN:VEVENT').slice(1);
   events.forEach(chunk => {
-    const lines = chunk.split(/\r?\n/);
-    const dtstartLine = lines.find(line => line.startsWith('DTSTART'));
-    const dtendLine   = lines.find(line => line.startsWith('DTEND'));
+    const dtstartLine = chunk.split(/\r?\n/).find(line => line.startsWith('DTSTART'));
     if(!dtstartLine) return;
-    const parsedStart = parseICSDateTime(dtstartLine.split(':').slice(1).join(':'));
-    if(!parsedStart) return;
-    const start = parsedStart.minutes;
-    let end = start + BLOCK_MINUTES; // fallback
-    if(dtendLine){
-      const parsedEnd = parseICSDateTime(dtendLine.split(':').slice(1).join(':'));
-      if(parsedEnd){
-        // Same calendar day: use actual end. Next day (crosses midnight): block to end of day.
-        end = parsedEnd.iso === parsedStart.iso ? parsedEnd.minutes : 24 * 60;
-      }
-    }
-    if(!map.has(parsedStart.iso)) map.set(parsedStart.iso, []);
-    map.get(parsedStart.iso).push([start, end]);
+    const raw = dtstartLine.split(':').slice(1).join(':');
+    const parsed = parseICSDateTime(raw);
+    if(!parsed) return;
+    const start = parsed.minutes;
+    const end = start + BLOCK_MINUTES;
+    if(!map.has(parsed.iso)) map.set(parsed.iso, []);
+    map.get(parsed.iso).push([start,end]);
   });
   for(const [iso,arr] of map) arr.sort((a,b)=>a[0]-b[0]);
   return map;
 }
 function dateRanges(iso){ return availabilityByDate.get(iso) || []; }
 function slotBlocked(iso, slotLabel){
-  // A slot is blocked if it overlaps with any event: slotStart < eventEnd && slotEnd > eventStart
-  const slotStart = slotStartMinutes(slotLabel);
-  const slotEnd   = slotStart + BLOCK_MINUTES;
-  return dateRanges(iso).some(([a,b]) => slotStart < b && slotEnd > a);
+  const start = slotStartMinutes(slotLabel);
+  return dateRanges(iso).some(([a,b]) => start >= a && start < b);
 }
 function getDateStatus(iso){
   if(isPastDate(iso)) return {status:'past', text:'No disp.'};
   if(ASUETOS_2026.has(iso)) return {status:'full', text:'Asueto'};
-  const allSlots = SLOT_GROUPS.flatMap(g => g.slots);
-  const blockedCount = allSlots.filter(s => slotBlocked(iso, s)).length;
-  if(blockedCount === allSlots.length) return {status:'full',    text:'Sin disponibilidad'};
-  if(blockedCount > 0)                 return {status:'partial', text:'Disponibilidad parcial'};
   return {status:'free', text:'Disponible'};
 }
 function setSelectedDate(value, fromCalendar=true){
@@ -1008,10 +991,7 @@ function buildSummary() {
   const msg = buildWhatsAppMsg(fechaFormatted, espacioObj?.name, total);
   document.getElementById('btn-whatsapp').href = 'https://wa.me/528182543303?text='+encodeURIComponent(msg);
 
-  // Google Calendar link
-  const gcal = buildGCalLink(fechaFormatted, espacioObj?.name);
-  const gcalBtn = document.getElementById('btn-gcal');
-  if(gcalBtn) gcalBtn.href = gcal;
+
 }
 
 
@@ -1316,10 +1296,7 @@ function buildSummary() {
   const msg = buildWhatsAppMsg(fechaFormatted, espacioObj?.name, total);
   document.getElementById('btn-whatsapp').href = 'https://wa.me/528182543303?text='+encodeURIComponent(msg);
 
-  // Google Calendar link
-  const gcal = buildGCalLink(fechaFormatted, espacioObj?.name);
-  const gcalBtn = document.getElementById('btn-gcal');
-  if(gcalBtn) gcalBtn.href = gcal;
+
 }
 
 
