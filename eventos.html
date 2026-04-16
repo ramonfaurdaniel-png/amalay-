@@ -455,15 +455,34 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
     <div class="sum-row"><span class="sum-label">Paquete</span><span class="sum-val" id="sum-paquete">—</span></div>
     <div class="sum-row" id="sum-pastel-row"><span class="sum-label">Pastel</span><span class="sum-val" id="sum-pastel">—</span></div>
     <div class="sum-row" id="sum-entradas-row" style="display:none"><span class="sum-label">Entradas</span><span class="sum-val" id="sum-entradas">—</span></div>
+    <div class="sum-row" id="sum-bebidas-row" style="display:none"><span class="sum-label">Bebidas</span><span class="sum-val" id="sum-bebidas">—</span></div>
     <div class="sum-row"><span class="sum-label">Decoración</span><span class="sum-val" id="sum-deco">—</span></div>
   </div>
 
   <div class="summary-card">
     <div class="sum-title">💰 Estimado de costos</div>
     <div class="sum-row"><span class="sum-label">Consumo mínimo</span><span class="sum-val" id="sum-consumo">—</span></div>
+    <div class="sum-row" id="sum-extras-row" style="display:none"><span class="sum-label">Extras (entradas + bebidas)</span><span class="sum-val" id="sum-extras">—</span></div>
     <div class="sum-row"><span class="sum-label">18% servicio</span><span class="sum-val" id="sum-servicio">—</span></div>
     <div class="sum-row sum-total"><span>Total estimado</span><span id="sum-total">—</span></div>
     <div class="sum-note">*Los precios pueden variar. El total final depende del consumo real del evento. El anticipo se descuenta del total.</div>
+  </div>
+
+  <div style="background:#faf7f2;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;">
+    <div style="font-size:11px;font-weight:600;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px;">Políticas del evento 🌸</div>
+    <div style="font-size:11px;color:var(--muted);line-height:1.9;">
+      • Para separar la fecha se requiere anticipo bonificable al final. No reembolsable en caso de cancelación.<br/>
+      • El 50% de la cotización se paga 1 semana antes del evento y el finiquito al finalizar.<br/>
+      • Confirmar cantidad de invitados con mínimo 3 días de anticipación.<br/>
+      • Si faltan invitados el día del evento, los platillos se entregan al final (no se descuentan).<br/>
+      • Consumo mínimo $400 p/p. Precios pueden variar por inflación.<br/>
+      • Decoración externa: enviar fotos y medidas para autorización. Pueden pasar a montar 30 min antes.<br/>
+      • Retirar todos los artículos al finalizar el evento.<br/>
+      • El establecimiento no se hace responsable de artículos olvidados o extraviados.<br/>
+      • Daños a instalaciones corren por cuenta del contratante.<br/>
+      • Amalay no cobra renta por el espacio, solo consumo + 18% de servicio.<br/>
+      • Se añade 18% por concepto de servicio al total.
+    </div>
   </div>
 
   <div class="anticipo-box">
@@ -474,6 +493,10 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
       <div class="antic-clabe">014580655083036033</div>
       Envía tu comprobante por WhatsApp para bloquear la fecha
     </div>
+  </div>
+
+  <div style="font-size:12px;color:var(--gold);text-align:center;margin-bottom:12px;padding:10px 14px;background:#faf7f2;border-radius:10px;border:1px solid var(--border);">
+    🍷 Contamos con carta de vinos y cocktails disponible para tu evento.
   </div>
 
   <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:12px;line-height:1.8;">
@@ -1607,6 +1630,197 @@ async function _submitReservation(payload, statusEl) {
     statusEl.textContent = '⚠️ No se pudo registrar automáticamente — usa WhatsApp para confirmar';
   }
 }
+
+// ── BEBIDAS + ENTRADAS CON CANTIDAD ──────────────────────────────────────────
+
+const BEBIDAS_OPTIONS = [
+  { id:'mimosa',    name:'Mimosas',                 desc:'Precio exclusivo eventos',                                        price:100 },
+  { id:'mezcal',    name:'Sexy Mezcalina Jamaica',  desc:'Mezcal espadín, triple sec, jamaica, naranja y limón',           price:240 },
+  { id:'margarita', name:'My Crush Margarita',      desc:'Tequila, limón, triple sec y esencia de rosas',                 price:240 },
+  { id:'aperol',    name:'Sexy Aperol Spritz',      desc:'Aperol, prosecco, agua mineral y arándanos con romero',          price:240 }
+];
+
+// Quantities stored separately to avoid breaking existing state.entradas string array
+state.entradasQty = {};
+state.bebidasQty  = {};
+
+document.addEventListener('DOMContentLoaded', function() {
+  // ── 1. Convert entradas checkboxes → number inputs ────────
+  const entradasOpts = document.getElementById('entradas-opts');
+  if (entradasOpts) {
+    entradasOpts.querySelectorAll('label.extra-opt').forEach(function(label) {
+      const cb = label.querySelector('input[type="checkbox"]');
+      if (!cb) return;
+      const m = (cb.value || '').match(/^(.+?)\s+\$(\d+)/);
+      if (!m) return;
+      const name = m[1], price = parseInt(m[2]);
+      const inp = document.createElement('input');
+      inp.type = 'number'; inp.min = '0'; inp.max = '10'; inp.value = '0';
+      inp.setAttribute('data-name', name);
+      inp.setAttribute('data-price', price);
+      inp.style.cssText = 'width:48px;height:32px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:14px;font-weight:600;background:#fff;color:var(--text);flex-shrink:0;margin-right:4px;';
+      inp.addEventListener('input', function() {
+        state.entradasQty[name] = parseInt(this.value) || 0;
+        label.classList.toggle('selected', (parseInt(this.value) || 0) > 0);
+        updateExtras();
+      });
+      cb.replaceWith(inp);
+      const priceEl = label.querySelector('.extra-opt-price');
+      if (priceEl) priceEl.textContent = '$' + price + ' c/u';
+    });
+  }
+
+  // ── 2. Inject bebidas section after entradas ──────────────
+  const entradasSection = entradasOpts && entradasOpts.closest('.extra-section');
+  if (entradasSection) {
+    const bebidasHtml = '<div class="extra-section" id="bebidas-section">' +
+      '<div class="extra-title">🍹 Bebidas para tu evento</div>' +
+      '<div class="extra-opts" id="bebidas-opts">' +
+      BEBIDAS_OPTIONS.map(function(b) {
+        return '<div class="extra-opt" style="display:flex;align-items:center;gap:10px;padding:10px 12px;">' +
+          '<input type="number" min="0" max="20" value="0"' +
+          ' data-bid="' + b.id + '" data-price="' + b.price + '"' +
+          ' style="width:48px;height:32px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:14px;font-weight:600;background:#fff;color:var(--text);flex-shrink:0;"' +
+          ' oninput="updateBebidas(this)"/>' +
+          '<div style="flex:1;min-width:0;">' +
+          '<div class="extra-opt-name">' + b.name + '</div>' +
+          '<div class="extra-opt-desc">' + b.desc + '</div>' +
+          '<div class="extra-opt-price">$' + b.price + ' c/u</div>' +
+          '</div></div>';
+      }).join('') +
+      '</div></div>';
+    entradasSection.insertAdjacentHTML('afterend', bebidasHtml);
+  }
+});
+
+function updateBebidas(inp) {
+  const bid   = inp.getAttribute('data-bid');
+  const price = parseInt(inp.getAttribute('data-price'));
+  state.bebidasQty[bid] = parseInt(inp.value) || 0;
+  inp.closest('.extra-opt').classList.toggle('selected', state.bebidasQty[bid] > 0);
+}
+
+// Override updateExtras to work with qty number inputs
+updateExtras = function() {
+  state.entradas = [];
+  document.querySelectorAll('#entradas-opts input[type="number"]').forEach(function(inp) {
+    const qty = parseInt(inp.value) || 0;
+    const name = inp.getAttribute('data-name');
+    const price = parseInt(inp.getAttribute('data-price'));
+    state.entradasQty[name] = qty;
+    if (qty > 0) state.entradas.push(name + ' \xd7' + qty + ' ($' + (price * qty).toLocaleString() + ')');
+  });
+};
+
+// Override buildSummary to include entradas+bebidas costs and new summary rows
+buildSummary = function() {
+  const fechaFormatted = state.fecha
+    ? new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'})
+    : '—';
+  const espacioObj = SPACES.find(function(s){ return s.id === state.espacio; });
+  document.getElementById('sum-nombre').textContent   = state.nombre || '—';
+  document.getElementById('sum-fecha').textContent    = fechaFormatted;
+  document.getElementById('sum-personas').textContent = state.guests + ' personas';
+  document.getElementById('sum-espacio').textContent  = espacioObj ? espacioObj.name : '—';
+  document.getElementById('sum-horario').textContent  = state.horario || '—';
+  document.getElementById('sum-paquete').textContent  = (state.paqueteNombre || '') + ' · $480 p/p';
+
+  let pastelText = 'Sin pastel';
+  if (state.pastel === 'amalay') pastelText = 'Pastel AMALAY' + (state.pastelFlavor ? ' · ' + state.pastelFlavor : '') + ' · $800';
+  if (state.pastel === 'externo') pastelText = 'Pastel externo · Descorche $350';
+  document.getElementById('sum-pastel').textContent = pastelText;
+
+  // Entradas
+  if (state.entradas.length > 0) {
+    document.getElementById('sum-entradas-row').style.display = 'flex';
+    document.getElementById('sum-entradas').textContent = state.entradas.join(', ');
+  } else {
+    document.getElementById('sum-entradas-row').style.display = 'none';
+  }
+
+  // Bebidas
+  const bebidasLines = [];
+  BEBIDAS_OPTIONS.forEach(function(b) {
+    const qty = state.bebidasQty[b.id] || 0;
+    if (qty > 0) bebidasLines.push(b.name + ' \xd7' + qty + ' ($' + (b.price * qty).toLocaleString() + ')');
+  });
+  if (bebidasLines.length > 0) {
+    document.getElementById('sum-bebidas-row').style.display = 'flex';
+    document.getElementById('sum-bebidas').textContent = bebidasLines.join(', ');
+  } else {
+    document.getElementById('sum-bebidas-row').style.display = 'none';
+  }
+
+  document.getElementById('sum-deco').textContent = state.deco;
+
+  // Costs — base + extras + 18% servicio
+  const entradasTotal = Object.keys(state.entradasQty).reduce(function(acc, name) {
+    const inp = document.querySelector('#entradas-opts input[data-name="' + name + '"]');
+    const price = inp ? parseInt(inp.getAttribute('data-price')) : 0;
+    return acc + (state.entradasQty[name] || 0) * price;
+  }, 0);
+  const bebidasTotal = BEBIDAS_OPTIONS.reduce(function(acc, b) {
+    return acc + (state.bebidasQty[b.id] || 0) * b.price;
+  }, 0);
+  const extrasTotal = entradasTotal + bebidasTotal;
+
+  const base     = state.guests * 480;
+  const servicio = Math.round((base + extrasTotal) * 0.18);
+  const total    = base + extrasTotal + servicio;
+
+  document.getElementById('sum-consumo').textContent  = '$' + base.toLocaleString() + ' (' + state.guests + ' \xd7 $480)';
+  if (extrasTotal > 0) {
+    document.getElementById('sum-extras-row').style.display = 'flex';
+    document.getElementById('sum-extras').textContent = '$' + extrasTotal.toLocaleString();
+  } else {
+    document.getElementById('sum-extras-row').style.display = 'none';
+  }
+  document.getElementById('sum-servicio').textContent = '$' + servicio.toLocaleString();
+  document.getElementById('sum-total').textContent    = '$' + total.toLocaleString() + ' MXN';
+
+  const msg = buildWhatsAppMsg(fechaFormatted, espacioObj ? espacioObj.name : '', total);
+  document.getElementById('btn-whatsapp').href = 'https://wa.me/528182543303?text=' + encodeURIComponent(msg);
+
+  // Status indicator
+  let statusEl = document.getElementById('reservation-status');
+  if (!statusEl) {
+    statusEl = document.createElement('div');
+    statusEl.id = 'reservation-status';
+    statusEl.style.cssText = 'text-align:center;font-size:12px;padding:10px 14px;border-radius:8px;margin-bottom:12px;font-weight:500;';
+    const waBtn = document.getElementById('btn-whatsapp');
+    waBtn.parentNode.insertBefore(statusEl, waBtn);
+  }
+
+  const pad = function(n){ return String(n).padStart(2,'0'); };
+  const rawSlot = state.horario.includes(' · ')
+    ? state.horario.split(' · ').slice(1).join(' · ')
+    : state.horario;
+  const startMin = slotStartMinutes(rawSlot);
+  const endMin   = startMin + BLOCK_MINUTES;
+  const horario_inicio = pad(Math.floor(startMin/60)) + ':' + pad(startMin%60);
+  const horario_fin    = pad(Math.floor(endMin/60))   + ':' + pad(endMin%60);
+
+  const bebidasStr = bebidasLines.join(', ');
+  const payload = {
+    nombre:      state.nombre,
+    fecha:       state.fecha,
+    espacio:     espacioObj ? espacioObj.name : state.espacio,
+    espacio_id:  state.espacio,
+    horario:     state.horario,
+    horario_inicio,
+    horario_fin,
+    guests:      state.guests,
+    paquete:     state.paqueteNombre,
+    pastel:      pastelText,
+    entradas:    state.entradas.join(', '),
+    bebidas:     bebidasStr,
+    deco:        state.deco,
+    total:       total,
+    telefono:    state.telefono || ''
+  };
+
+  _submitReservation(payload, statusEl);
+};
 </script>
 <div id="amalay-toast"></div>
 </body>
