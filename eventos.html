@@ -108,6 +108,10 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 .extra-opt input[type=checkbox],
 .extra-opt input[type=radio]{width:16px;height:16px;margin-top:2px;accent-color:var(--green);flex-shrink:0;cursor:pointer;}
 .extra-opt-img{width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0;}
+/* ── TOAST ── */
+#amalay-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#3d4a2f;color:#fff;font-family:'Jost',sans-serif;font-size:13px;padding:12px 22px;border-radius:50px;box-shadow:0 4px 20px rgba(0,0,0,.25);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:9999;white-space:nowrap;max-width:90vw;text-align:center;}
+#amalay-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
 .extra-opt-text{flex:1;}
 .extra-opt-name{font-size:13px;color:var(--text);}
 .extra-opt-desc{font-size:11px;color:var(--muted);margin-top:1px;}
@@ -535,20 +539,31 @@ const PACKAGES = [
   { id:'carta', name:'A la Carta', time:'☀️ Brunch o 🌙 Lunch', price:'Mín. $480 p/p', desc:'Elige libremente del menú. Solo para grupos menores a 20 personas. +$80 p/p: refill de limonadas, café y té.', items:['Bebidas especiales y postres aparte','Aplica solo para reservaciones de menos de 20 personas']}
 ];
 
+
+// ── TOAST ──
+let _toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('amalay-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
 // ── NAVIGATION ──
 function goStep(n) {
   // Validations
   if(n === 2) {
-    if(!state.nombre || state.nombre.trim().length < 2) { alert('Por favor escribe tu nombre'); document.getElementById('nombre-input').focus(); return; }
-    if(!state.fecha) { alert('Por favor selecciona una fecha'); return; }
+    if(!state.nombre || state.nombre.trim().length < 2) { showToast('Por favor escribe tu nombre'); document.getElementById('nombre-input').focus(); return; }
+    if(!state.fecha) { showToast('Por favor selecciona una fecha'); return; }
+    if(!state.horario) { showToast('Por favor selecciona un horario'); document.querySelector('.time-card')?.scrollIntoView({behavior:'smooth',block:'center'}); return; }
   }
   if(n === 3) {
-    if(!state.espacio) { alert('Por favor selecciona un espacio'); return; }
-    if(!state.horario) { alert('Por favor selecciona un horario'); return; }
+    if(!state.espacio) { showToast('Por favor selecciona un espacio'); return; }
   }
   if(n === 4) {
-    if(!state.paquete) { alert('Por favor selecciona un paquete'); return; }
-    if(state.paquete === 'carta' && state.guests >= 20) { alert('A la Carta solo aplica para grupos menores a 20 personas'); return; }
+    if(!state.paquete) { showToast('Por favor selecciona un paquete'); return; }
+    if(state.paquete === 'carta' && state.guests >= 20) { showToast('A la Carta solo aplica para grupos menores a 20 personas'); return; }
   }
   if(n === 5) buildSummary();
 
@@ -750,13 +765,13 @@ function setSelectedDate(value, fromCalendar=true){
   }
   if(isPastDate(value)){
     statusEl.textContent='Esa fecha ya no está disponible.';
-    if(fromCalendar) alert('Esa fecha ya no está disponible.');
+    if(fromCalendar) showToast('Esa fecha ya no está disponible.');
     return;
   }
   const ds = getDateStatus(value);
   if(ds.status==='full'){
     statusEl.textContent='Esa fecha ya no tiene horarios libres.';
-    if(fromCalendar) alert('Esa fecha ya no tiene horarios libres.');
+    if(fromCalendar) showToast('Esa fecha ya no tiene horarios libres.');
     return;
   }
   state.fecha=value; state.horario='';
@@ -889,7 +904,7 @@ function renderPackages() {
       warnHtml + checkHtml;
 
     div.addEventListener('click', function() {
-      if (disabled) { alert('A la Carta solo aplica para grupos menores a 20 personas.'); return; }
+      if (disabled) { showToast('A la Carta solo aplica para grupos menores a 20 personas.'); return; }
       selectPkg(p.id, p.name);
     });
 
@@ -1055,13 +1070,13 @@ function setSelectedDate(value, fromCalendar=true){
   }
   if(isPastDate(value)){
     statusEl.textContent='Esa fecha ya no está disponible.';
-    if(fromCalendar) alert('Esa fecha ya no está disponible.');
+    if(fromCalendar) showToast('Esa fecha ya no está disponible.');
     return;
   }
   const ds = getDateStatus(value);
   if(ds.status==='full'){
     statusEl.textContent='Esa fecha ya no tiene horarios libres.';
-    if(fromCalendar) alert('Esa fecha ya no tiene horarios libres.');
+    if(fromCalendar) showToast('Esa fecha ya no tiene horarios libres.');
     return;
   }
   state.fecha=value; state.horario='';
@@ -1194,7 +1209,7 @@ function renderPackages() {
       warnHtml + checkHtml;
 
     div.addEventListener('click', function() {
-      if (disabled) { alert('A la Carta solo aplica para grupos menores a 20 personas.'); return; }
+      if (disabled) { showToast('A la Carta solo aplica para grupos menores a 20 personas.'); return; }
       selectPkg(p.id, p.name);
     });
 
@@ -1348,5 +1363,6 @@ function buildWhatsAppMsg(fecha, espacio, total) {
   return msg;
 }
 </script>
+<div id="amalay-toast"></div>
 </body>
 </html>
