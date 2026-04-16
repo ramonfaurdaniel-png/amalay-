@@ -1534,13 +1534,13 @@ async function _submitReservation(payload, statusEl) {
   // 1 ── POST Supabase amalay_reservaciones ──────────────────
   if (SUPABASE_ANON_KEY) {
     try {
-      const r = await fetch(`${SUPABASE_URL}/rest/v1/amalay_reservaciones`, {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/amalay_reservaciones`, {
         method: 'POST',
         headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
           'Content-Type': 'application/json',
-          Prefer: 'return=representation'
+          'Prefer': 'return=representation'
         },
         body: JSON.stringify({
           nombre:          payload.nombre,
@@ -1554,10 +1554,21 @@ async function _submitReservation(payload, statusEl) {
           status:          'pending'
         })
       });
-      if (r.ok) {
-        const rows = await r.json();
-        payload.supabase_id = rows[0]?.id;
+      const data = await res.json();
+      console.log('Supabase response status:', res.status);
+      console.log('Supabase response data:', JSON.stringify(data));
+      if (res.ok && data[0]?.id) {
+        payload.supabase_id = data[0].id;
         sbOk = true;
+      } else {
+        // Fallback: GET para obtener el id recién insertado
+        const g = await fetch(
+          `${SUPABASE_URL}/rest/v1/amalay_reservaciones?nombre=eq.${encodeURIComponent(payload.nombre)}&fecha=eq.${payload.fecha}&order=created_at.desc&limit=1`,
+          { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY } }
+        );
+        const gData = await g.json();
+        console.log('Supabase GET fallback:', JSON.stringify(gData));
+        if (gData[0]?.id) { payload.supabase_id = gData[0].id; sbOk = true; }
       }
     } catch(e) { console.warn('[Supabase] POST reservacion:', e.message); }
   }
