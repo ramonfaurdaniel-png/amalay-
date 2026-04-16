@@ -257,10 +257,10 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 
   <div class="field av-wrap">
     <label>Elige tu fecha y horario</label>
-    <div class="warn">📌 Aquí mostramos disponibilidad real por horario. Cada evento bloquea solo <strong>3 horas</strong>. Si un día todavía tiene horas libres, sigue apareciendo disponible.</div>
+    
     <div class="av-legend">
       <span><i class="dot dot-free"></i>Disponible</span>
-      <span><i class="dot dot-partial"></i>Parcial</span>
+      
       <span><i class="dot dot-full"></i>Lleno</span>
       <span><i class="dot dot-past"></i>No disp.</span>
     </div>
@@ -471,24 +471,29 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
     </div>
   </div>
 
-  <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;line-height:1.8;">
+  <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:12px;line-height:1.8;">
     El 50% del total se liquida 3 días antes del evento.<br/>
-    Anticipo no reembolsable en caso de cancelación.
+    Anticipo no reembolsable en caso de cancelación.<br/>
+    <strong style="color:var(--green)">Precios con IVA incluido.</strong>
+  </div>
+  <div style="background:#f8f5f0;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:16px;">
+    <div style="font-size:11px;font-weight:600;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">Métodos de pago aceptados</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;color:var(--text)">
+      <div>🏦 Transferencia SPEI</div>
+      <div>💳 Clip (link de pago)</div>
+      <div>💵 Efectivo</div>
+      <div>📲 Mercado Pago</div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center">Precios con IVA incluido · Link de pago por WhatsApp</div>
   </div>
 
   <a id="btn-whatsapp" href="#" target="_blank" class="btn-primary btn-whats" style="margin-bottom:10px;">
     <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-    1. Enviar comprobante por WhatsApp
-  </a>
-
-  <a id="btn-gcal" href="#" target="_blank" class="btn-primary" style="margin-bottom:10px;background:#4285f4;display:flex;align-items:center;justify-content:center;gap:8px;">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
-    2. Agregar al Google Calendar de Amalay
+    Enviar comprobante por WhatsApp
   </a>
 
   <div style="font-size:11px;color:var(--muted);text-align:center;margin-bottom:14px;line-height:1.8;background:#f8f5f0;padding:10px;border-radius:8px;">
-    📌 Primero envía tu comprobante por WhatsApp.<br/>
-    Luego Monica confirmará y agregará la fecha al calendario.
+    📌 Envía tu comprobante y Monica confirmará la fecha.
   </div>
 
   <button class="btn-back" onclick="goStep(4)">← Modificar</button>
@@ -515,7 +520,7 @@ const state = {
 
 // ── SPACES ──
 const SPACES = [
-  { id:'terraza', name:'🌿 Terraza privada con balcón', cap:[10,24], desc:'Segundo piso · Sin renta · Solo consumo + 18% servicio · Disponible todo el día desde las 8am', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
+  { id:'terraza', name:'🌿 Terraza privada con balcón', cap:[10,24], desc:'Segundo piso · Sin renta · Solo consumo + 18% servicio', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
   { id:'jardin', name:'🌳 Jardín interior privado', cap:[25,44], desc:'Rodeado de vegetación · Íntimo y exclusivo · Disponible desde las 2:30pm', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}},
   { id:'salon', name:'🏛️ Salón interior', cap:[15,50], desc:'Desde 2:30pm · Comidas, meriendas y cenas', slots:{brunch:['8:00 – 11:00am','8:30 – 11:30am','9:00am – 12:00pm','9:30am – 12:30pm','10:00am – 1:00pm','10:30am – 1:30pm'],comida:['1:30 – 4:30pm','2:00 – 5:00pm','2:30 – 5:30pm','3:00 – 6:00pm','3:30 – 6:30pm','4:00 – 7:00pm'],cena:['7:30 – 10:30pm','8:00 – 11:00pm']}}
 ];
@@ -729,12 +734,316 @@ function slotBlocked(iso, slotLabel){
 function getDateStatus(iso){
   if(isPastDate(iso)) return {status:'past', text:'No disp.'};
   if(ASUETOS_2026.has(iso)) return {status:'full', text:'Asueto'};
-  const allSlots = SLOT_GROUPS.flatMap(g=>g.slots);
-  const blockedCount = allSlots.filter(slot => slotBlocked(iso, slot)).length;
-  if(blockedCount === allSlots.length) return {status:'full', text:'Lleno'};
-  if(blockedCount > 0) return {status:'partial', text:`${allSlots.length - blockedCount} hrs libres`};
   return {status:'free', text:'Disponible'};
 }
+function setSelectedDate(value, fromCalendar=true){
+  const statusEl = document.getElementById('fecha-status');
+  if(!value){
+    state.fecha=''; state.horario='';
+    document.getElementById('fecha-input').value='';
+    statusEl.textContent='';
+    renderAvailabilityCalendar();
+    renderTimeOptions();
+    return;
+  }
+  if(isPastDate(value)){
+    statusEl.textContent='Esa fecha ya no está disponible.';
+    if(fromCalendar) alert('Esa fecha ya no está disponible.');
+    return;
+  }
+  const ds = getDateStatus(value);
+  if(ds.status==='full'){
+    statusEl.textContent='Esa fecha ya no tiene horarios libres.';
+    if(fromCalendar) alert('Esa fecha ya no tiene horarios libres.');
+    return;
+  }
+  state.fecha=value; state.horario='';
+  document.getElementById('fecha-input').value=value;
+  const nice = new Date(value+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+  statusEl.textContent=`Fecha seleccionada: ${nice}.`;
+  renderAvailabilityCalendar();
+  renderTimeOptions();
+}
+function changeCalendarMonth(delta){
+  calendarCursor = new Date(calendarCursor.getFullYear(), calendarCursor.getMonth()+delta, 1);
+  renderAvailabilityCalendar();
+}
+function renderAvailabilityCalendar(){
+  document.getElementById('avail-month-label').textContent = monthLabel(calendarCursor);
+  const grid = document.getElementById('availability-grid');
+  const y = calendarCursor.getFullYear(), m = calendarCursor.getMonth();
+  const first = new Date(y,m,1); const last = new Date(y,m+1,0);
+  const startPad = first.getDay(); const total = last.getDate();
+  let html='';
+  for(let i=0;i<startPad;i++) html += '<div class="av-day empty"></div>';
+  for(let d=1; d<=total; d++){
+    const date = new Date(y,m,d); const iso = isoDate(date); const ds = getDateStatus(iso);
+    const selected = state.fecha===iso ? 'selected' : '';
+    const disabled = (ds.status==='past' || ds.status==='full') ? 'aria-disabled="true"' : '';
+    const isToday = iso === todayStr ? 'today-marker' : '';
+    html += `<button type="button" class="av-day ${ds.status} ${selected} ${isToday}" ${disabled} onclick="selectCalendarDay('${iso}')" title="${ds.text}"><div class="av-num">${d}</div></button>`;
+  }
+  grid.innerHTML = html;
+}
+function selectCalendarDay(iso){
+  const ds = getDateStatus(iso);
+  if(ds.status==='past' || ds.status==='full') return;
+  setSelectedDate(iso, true);
+}
+function renderTimeOptions(){
+  const wrap = document.getElementById('time-groups');
+  const pillWrap = document.getElementById('selected-date-pill-wrap');
+  const sub = document.getElementById('times-sub');
+  if(!state.fecha){
+    pillWrap.innerHTML='';
+    sub.textContent='Selecciona una fecha para ver las horas disponibles.';
+    wrap.innerHTML='<div class="time-sub" style="margin:0">Selecciona un día para mostrar las horas.</div>';
+    return;
+  }
+  const niceShort = new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX', { weekday:'short', day:'numeric', month:'short' });
+  pillWrap.innerHTML=`<div class="sel-pill">📅 ${niceShort}</div>`;
+  sub.textContent='Selecciona una hora disponible. Los horarios ocupados aparecen deshabilitados.';
+  let html='';
+  SLOT_GROUPS.forEach(group => {
+    html += `<div class="time-group"><div class="time-group-title">${group.label}</div><div class="time-grid">`;
+    group.slots.forEach(slot => {
+      const blocked = slotBlocked(state.fecha, slot);
+      const selected = state.horario === `${group.label} · ${slot}`;
+      // Usar comillas simples dentro del onclick para no romper el atributo HTML
+      const onclick = blocked ? '' : `selectTime('${group.label}', '${slot}')`;
+      html += `<button type="button" class="time-btn ${selected?'sel':''} ${blocked?'disabled':''}" ${blocked?'disabled':''} ${onclick ? `onclick="${onclick}"` : ''}>${slot}</button>`;
+    });
+    html += `</div></div>`;
+  });
+  wrap.innerHTML = html;
+}
+function selectTime(groupLabel, slot){
+  state.horario = `${groupLabel} · ${slot}`;
+  renderTimeOptions();
+}
+
+function renderSpaces() {
+  const g = state.guests;
+  document.getElementById('step2-sub').textContent = `Espacios disponibles para ${g} personas y horario seleccionado.`;
+  const dateTxt = state.fecha ? new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX', {weekday:'long', day:'numeric', month:'long'}) : '';
+  document.getElementById('space-selected-bar').innerHTML = `<strong>${dateTxt}</strong>${state.horario ? ` · ${state.horario}` : ''}`;
+  const html = SPACES.map(sp => {
+    const fits = g >= sp.cap[0] && g <= sp.cap[1];
+    const tooFew = g < sp.cap[0];
+    const tooMany = g > sp.cap[1];
+    const disabled = !fits;
+    const capText = `${sp.cap[0]}–${sp.cap[1]} personas`;
+    let warn = '';
+    if(tooFew) warn = `<div class="cap-warn">Tu grupo de ${g} personas está por debajo del mínimo de ${sp.cap[0]}.</div>`;
+    if(tooMany) warn = `<div class="cap-warn">Tu grupo de ${g} personas excede el máximo de ${sp.cap[1]}.</div>`;
+    return `<div>
+      <div class="space-card ${disabled?'disabled':''}" id="sc-${sp.id}" onclick="selectSpace('${sp.id}')">
+        <div class="sc-check">✓</div>
+        <div class="sc-header">
+          <div class="sc-name">${sp.name}</div>
+          <div class="sc-cap">${capText}</div>
+        </div>
+        <div class="sc-desc">${sp.desc}</div>
+      </div>
+      ${warn}
+    </div>`;
+  }).join('');
+  document.getElementById('spaces-grid').innerHTML = html;
+  document.getElementById('btn-step2').disabled = !state.espacio;
+}
+
+function selectSpace(id) {
+  state.espacio = id;
+  document.querySelectorAll('.space-card').forEach(c => c.classList.remove('selected'));
+  document.getElementById('sc-'+id)?.classList.add('selected');
+  document.getElementById('btn-step2').disabled = false;
+}
+
+// ── PACKAGES ──
+function renderPackages() {
+  const grid = document.getElementById('pkg-grid');
+  grid.innerHTML = '';
+  document.getElementById('btn-step3').disabled = !state.paquete;
+
+  PACKAGES.forEach(function(p) {
+    const disabled = p.id === 'carta' && state.guests >= 20;
+
+    const div = document.createElement('div');
+    div.className = 'pkg-card';
+    div.id = 'pc-' + p.id;
+    if (state.paquete === p.id) div.classList.add('selected');
+    if (disabled) { div.style.opacity = '0.5'; div.style.cursor = 'not-allowed'; }
+
+    const itemsHtml = p.items.map(function(i) { return '<div class="pkg-item">' + i + '</div>'; }).join('');
+    const warnHtml = disabled ? '<div style="font-size:11px;color:#c0392b;margin-top:6px;">Solo para menos de 20 personas</div>' : '';
+    const checkHtml = (state.paquete === p.id) ? '<div class="pkg-chk" style="margin-top:10px;padding:5px 12px;background:#3d5a2e;color:#fff;border-radius:20px;font-size:11px;font-weight:500;display:inline-block;">✓ Seleccionado</div>' : '';
+
+    const timeBadge = p.time ? '<div style="font-size:10px;letter-spacing:.06em;color:#4a6e38;background:#e8f0e2;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:8px;">' + p.time + '</div>' : '';
+    div.innerHTML =
+      '<div class="pkg-header"><div class="pkg-name">' + p.name + '</div><div class="pkg-price">' + p.price + '</div></div>' +
+      timeBadge +
+      '<div class="pkg-desc">' + p.desc + '</div>' +
+      '<div class="pkg-items">' + itemsHtml + '</div>' +
+      warnHtml + checkHtml;
+
+    div.addEventListener('click', function() {
+      if (disabled) { alert('A la Carta solo aplica para grupos menores a 20 personas.'); return; }
+      selectPkg(p.id, p.name);
+    });
+
+    grid.appendChild(div);
+  });
+}
+
+function selectPkg(id, nombre) {
+  state.paquete = id;
+  state.paqueteNombre = nombre;
+  // Visually update all cards
+  document.querySelectorAll('.pkg-card').forEach(function(c) {
+    c.classList.remove('selected');
+    var chk = c.querySelector('.pkg-chk');
+    if (chk) chk.remove();
+  });
+  var card = document.getElementById('pc-' + id);
+  if (card) {
+    card.classList.add('selected');
+    var badge = document.createElement('div');
+    badge.className = 'pkg-chk';
+    badge.textContent = '✓ Seleccionado';
+    badge.style.cssText = 'margin-top:10px;padding:5px 12px;background:#3d5a2e;color:#fff;border-radius:20px;font-size:11px;font-weight:500;display:inline-block;';
+    card.appendChild(badge);
+  }
+  document.getElementById('btn-step3').disabled = false;
+}
+
+// ── EXTRAS ──
+function updatePastel(radio) {
+  state.pastel = radio.value;
+  state.pastelFlavor = '';
+  document.getElementById('pastel-flavor-wrap').style.display = radio.value==='amalay' ? 'block' : 'none';
+  document.querySelectorAll('.flavor-btn').forEach(b=>b.classList.remove('sel'));
+  updateExtrasStyle();
+}
+
+function selectFlavor(btn, flavor) {
+  document.querySelectorAll('#pastel-flavor-wrap .slot-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  state.pastelFlavor = flavor;
+}
+
+function updateExtras() {
+  state.entradas = [];
+  document.querySelectorAll('#entradas-opts input[type=checkbox]:checked').forEach(cb => {
+    state.entradas.push(cb.value);
+  });
+}
+
+function updateDeco(radio) {
+  state.deco = radio.value;
+  updateExtrasStyle();
+}
+
+function updateExtrasStyle() {
+  document.querySelectorAll('.extra-opt').forEach(opt => {
+    const inp = opt.querySelector('input');
+    if(!inp) return;
+    opt.classList.toggle('selected', inp.checked);
+  });
+}
+
+// ── SUMMARY ──
+function buildSummary() {
+  const fechaFormatted = state.fecha ? new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : '—';
+  const espacioObj = SPACES.find(s=>s.id===state.espacio);
+  document.getElementById('sum-nombre').textContent = state.nombre || '—';
+  document.getElementById('sum-fecha').textContent = fechaFormatted;
+  document.getElementById('sum-personas').textContent = state.guests + ' personas';
+  document.getElementById('sum-espacio').textContent = espacioObj?.name || '—';
+  document.getElementById('sum-horario').textContent = state.horario || '—';
+  document.getElementById('sum-paquete').textContent = `${state.paqueteNombre} · $480 p/p`;
+
+  // Pastel
+  let pastelText = 'Sin pastel';
+  if(state.pastel === 'amalay') pastelText = `Pastel AMALAY${state.pastelFlavor ? ' · '+state.pastelFlavor : ''} · $800`;
+  if(state.pastel === 'externo') pastelText = 'Pastel externo · Descorche $350';
+  document.getElementById('sum-pastel').textContent = pastelText;
+
+  // Entradas
+  if(state.entradas.length > 0) {
+    document.getElementById('sum-entradas-row').style.display = 'flex';
+    document.getElementById('sum-entradas').textContent = state.entradas.join(', ');
+  } else {
+    document.getElementById('sum-entradas-row').style.display = 'none';
+  }
+  document.getElementById('sum-deco').textContent = state.deco;
+
+  // Costs
+  const base = state.guests * 480;
+  const servicio = Math.round(base * 0.18);
+  const total = base + servicio;
+  document.getElementById('sum-consumo').textContent = `$${base.toLocaleString()} (${state.guests} × $480)`;
+  document.getElementById('sum-servicio').textContent = `$${servicio.toLocaleString()}`;
+  document.getElementById('sum-total').textContent = `$${total.toLocaleString()} MXN`;
+
+  // WhatsApp
+  const msg = buildWhatsAppMsg(fechaFormatted, espacioObj?.name, total);
+  document.getElementById('btn-whatsapp').href = 'https://wa.me/528182543303?text='+encodeURIComponent(msg);
+
+  // Google Calendar link
+  const gcal = buildGCalLink(fechaFormatted, espacioObj?.name);
+  const gcalBtn = document.getElementById('btn-gcal');
+  if(gcalBtn) gcalBtn.href = gcal;
+}
+
+
+function buildGCalLink(fechaText, espacio) {
+  // Build Google Calendar "add event" link
+  const d = new Date(state.fecha + 'T12:00:00');
+  const pad = n => String(n).padStart(2,'0');
+  const ymd = d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate());
+  
+  // Parse start/end from horario e.g. "Brunch · 8:00 – 11:00am"
+  let startH = '12', endH = '14';
+  const horario = state.horario;
+  const timeMatch = horario.match(/(\d+):?(\d*)\s*(am|pm)?.*?–.*?(\d+):?(\d*)\s*(am|pm)?/i);
+  if(timeMatch) {
+    let sh = parseInt(timeMatch[1]), sm = parseInt(timeMatch[2]||0);
+    let eh = parseInt(timeMatch[4]), em = parseInt(timeMatch[5]||0);
+    const endPeriod = (timeMatch[6]||'').toLowerCase();
+    const startPeriod = (timeMatch[3]||endPeriod).toLowerCase();
+    if(startPeriod === 'pm' && sh < 12) sh += 12;
+    if(endPeriod === 'pm' && eh < 12) eh += 12;
+    if(startPeriod === 'am' && sh === 12) sh = 0;
+    startH = pad(sh) + pad(sm) + '00';
+    endH = pad(eh) + pad(em) + '00';
+  }
+
+  const title = encodeURIComponent(`Evento AMALAY · ${espacio} · ${state.guests} personas`);
+  const details = encodeURIComponent(`Paquete: ${state.paqueteNombre}\nPersonas: ${state.guests}\nDecoración: ${state.deco}\nContacto: 81 8254 3303`);
+  const location = encodeURIComponent('AMALAY Coffee & Market, Calzada San Pedro 102, Plaza Duendes, San Pedro Garza García');
+  
+  const start = `${ymd}T${startH}`;
+  const end = `${ymd}T${endH}`;
+  
+  const guest = encodeURIComponent('monigp75@gmail.com');
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}&add=${guest}&crm=AVAILABLE`;
+}
+
+function buildWhatsAppMsg(fecha, espacio, total) {
+  let msg = `Hola! Soy ${state.nombre || '(sin nombre)'} y quiero reservar un evento privado en AMALAY 🌿\n\n`;
+  msg += `📅 Fecha: ${fecha}\n`;
+  msg += `👥 Personas: ${state.guests}\n`;
+  msg += `🏡 Espacio: ${espacio}\n`;
+  msg += `🕐 Horario: ${state.horario}\n`;
+  msg += `🍽️ Paquete: ${state.paqueteNombre} ($480 p/p)\n`;
+  if(state.pastel !== 'no') msg += `🎂 Pastel: ${state.pastel==='amalay'?`AMALAY · ${state.pastelFlavor} · $800`:'Externo · Descorche $350'}\n`;
+  if(state.entradas.length > 0) msg += `🌿 Entradas: ${state.entradas.join(', ')}\n`;
+  msg += `💐 Decoración: ${state.deco}\n`;
+  msg += `\n💰 Total estimado: $${total.toLocaleString()} MXN\n`;
+  msg += `\nAdjunto mi comprobante de anticipo ($1,000 MXN) para confirmar la fecha. ¡Gracias!`;
+  return msg;
+}
+
 function setSelectedDate(value, fromCalendar=true){
   const statusEl = document.getElementById('fecha-status');
   if(!value){
