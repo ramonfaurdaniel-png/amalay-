@@ -582,7 +582,10 @@ function goStep(n) {
   state.currentStep = n;
   window.scrollTo({top:0,behavior:'smooth'});
 
-  if(n===2) renderSpaces();
+  if(n===2) {
+    renderSpaces(); // render inmediato con datos ICS
+    fetchReservedSlots(state.fecha).then(() => renderSpaces()); // re-render con datos Supabase
+  }
   if(n===3) renderPackages();
 }
 
@@ -607,6 +610,11 @@ document.getElementById('fecha-input').min = todayStr;
 const ICS_URL = 'https://danielramonfaur.app.n8n.cloud/webhook/amalay-ics'; // v2
 const PROXY   = ''; // no se usa, n8n resuelve el CORS
 // ══════════════════════════════════════════════════════════
+// ── INTEGRACIÓN MAKE.COM + SUPABASE ─────────────────────
+const MAKE_WEBHOOK_URL  = '';  // TODO: pega aquí tu webhook URL de Make.com
+const SUPABASE_URL      = 'https://qjiomlvudfmzuvqvhwpk.supabase.co';
+const SUPABASE_ANON_KEY = '';  // TODO: pega aquí tu anon key de Supabase
+// ════════════════════════════════════════════════════════
 
 const BLOCK_MINUTES = 180;
 const SLOT_GROUPS = [
@@ -616,6 +624,37 @@ const SLOT_GROUPS = [
 ];
 let calendarCursor = new Date(today.getFullYear(), today.getMonth(), 1);
 let availabilityByDate = new Map(); // Se llena al cargar el ICS en vivo
+let reservedSlots = []; // Reservaciones confirmadas/pendientes desde Supabase
+
+// ── Supabase: disponibilidad real ─────────────────────────
+async function fetchReservedSlots(fecha) {
+  if (!SUPABASE_ANON_KEY || !fecha) return;
+  try {
+    const r = await fetch(
+      `${SUPABASE_URL}/rest/v1/amalay_reservaciones?fecha=eq.${fecha}&status=neq.cancelled&select=espacio,horario_inicio,horario_fin`,
+      { headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + SUPABASE_ANON_KEY } }
+    );
+    if (r.ok) reservedSlots = await r.json();
+    else reservedSlots = [];
+  } catch(e) { console.warn('[Supabase] fetchReservedSlots:', e.message); }
+}
+
+// Retorna true si el espacio ya tiene una reserva que se traslapa con el horario actual
+function isSpaceBooked(espacioId) {
+  if (!reservedSlots.length || !state.horario) return false;
+  const rawSlot = state.horario.includes(' · ')
+    ? state.horario.split(' · ').slice(1).join(' · ')
+    : state.horario;
+  const slotStart = slotStartMinutes(rawSlot);
+  const slotEnd   = slotStart + BLOCK_MINUTES;
+  return reservedSlots.some(row => {
+    if (row.espacio !== espacioId) return false;
+    const [sh, sm] = (row.horario_inicio || '00:00').split(':').map(Number);
+    const [eh, em] = (row.horario_fin   || '00:00').split(':').map(Number);
+    const rStart = sh * 60 + sm, rEnd = eh * 60 + em;
+    return slotStart < rEnd && slotEnd > rStart; // overlap
+  });
+}
 
 // ICS embebido como fallback (se actualiza con fetch en vivo)
 const ICS_STATIC = "BEGIN:VCALENDAR\nPRODID:-//Google Inc//Google Calendar 70.9054//EN\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:Amalay Eventos \nX-WR-TIMEZONE:America/Monterrey\nBEGIN:VTIMEZONE\nTZID:America/Mexico_City\nX-LIC-LOCATION:America/Mexico_City\nBEGIN:STANDARD\nTZOFFSETFROM:-0600\nTZOFFSETTO:-0600\nTZNAME:CST\nDTSTART:19700101T000000\nEND:STANDARD\nEND:VTIMEZONE\nBEGIN:VEVENT\nDTSTART:20260516T200000Z\nDTEND:20260516T210000Z\nDTSTAMP:20260414T184653Z\nUID:EB45D786-C7BF-4E97-8F9D-77F9ADB02DA8\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260416T193000Z\nDTEND:20260416T203000Z\nDTSTAMP:20260414T184653Z\nUID:F94194A2-44DC-48C6-819F-CA5EFB17465D\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260418T013000Z\nDTEND:20260418T023000Z\nDTSTAMP:20260414T184653Z\nUID:AD2ED0EF-99AC-49A8-81AA-7A4C3D6C8C55\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260412T190000Z\nDTEND:20260412T200000Z\nDTSTAMP:20260414T184653Z\nUID:835274A5-5B67-4D93-84EB-91F58187D137\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260321T203000Z\nDTEND:20260321T213000Z\nDTSTAMP:20260414T184653Z\nUID:8AD3C0B0-BBB3-4460-A4CA-6687607FE996\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART;TZID=America/Mexico_City:20261029T080000\nDTEND;TZID=America/Mexico_City:20261029T090000\nDTSTAMP:20260414T184653Z\nUID:58E0682F-0641-47EB-8241-81EA90FB33E6\nRECURRENCE-ID;TZID=America/Mexico_City:20261029T080000\nCLASS:PUBLIC\nCREATED:20260414T145325Z\nLAST-MODIFIED:20260414T150428Z\nSEQUENCE:1\nSTATUS:CONFIRMED\nSUMMARY:Bertha zambranos BDay\nTRANSP:OPAQUE\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART;TZID=America/Mexico_City:20271029T080000\nDTEND;TZID=America/Mexico_City:20271029T090000\nDTSTAMP:20260414T184653Z\nUID:58E0682F-0641-47EB-8241-81EA90FB33E6\nRECURRENCE-ID;TZID=America/Mexico_City:20271029T080000\nCLASS:PUBLIC\nCREATED:20260414T145325Z\nLAST-MODIFIED:20260414T150428Z\nSEQUENCE:1\nSTATUS:CONFIRMED\nSUMMARY:Bertha zambranos BDay\nTRANSP:OPAQUE\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260426T000000Z\nDTEND:20260426T010000Z\nDTSTAMP:20260414T184653Z\nUID:7A3A9D2E-2559-479F-8592-C677A858622F\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260319T150000Z\nDTEND:20260319T160000Z\nDTSTAMP:20260414T184653Z\nUID:A87127DC-D6B0-4777-9F11-1A583D547F3D\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260418T151500Z\nDTEND:20260418T161500Z\nDTSTAMP:20260414T184653Z\nUID:C9C73FA6-FE35-41BE-A1F6-DFBC84D3B19C\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260419T013000Z\nDTEND:20260419T023000Z\nDTSTAMP:20260414T184653Z\nUID:51E4CDEC-6A9E-408F-B1D1-5D816E8DAEE2\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260315T200000Z\nDTEND:20260315T210000Z\nDTSTAMP:20260414T184653Z\nUID:DF87402A-357D-453C-B33B-C57DF2FC6DE7\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260412T000000Z\nDTEND:20260412T010000Z\nDTSTAMP:20260414T184653Z\nUID:33DB8408-7C6F-45A1-8308-6E6EF0450E61\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260524T013000Z\nDTEND:20260524T023000Z\nDTSTAMP:20260414T184653Z\nUID:36507CDC-0AB2-4364-A104-23AE41C21839\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260509T220000Z\nDTEND:20260509T230000Z\nDTSTAMP:20260414T184653Z\nUID:5C73D7FC-80FD-4D68-87DE-E2514F6CB8C9\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260314T163000Z\nDTEND:20260314T173000Z\nDTSTAMP:20260414T184653Z\nUID:16D406BE-F36E-46EB-86E3-3AED053BB9C1\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260411T160000Z\nDTEND:20260411T170000Z\nDTSTAMP:20260414T184653Z\nUID:A1E56662-BB8D-4475-B04B-AC78B3ABB110\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART;TZID=America/Mexico_City:20261213T090000\nDTEND;TZID=America/Mexico_City:20261213T100000\nDTSTAMP:20260414T184653Z\nUID:5E9054C6-4197-402E-9B96-C8E985C636D0\nRECURRENCE-ID;TZID=America/Mexico_City:20261213T090000\nCLASS:PUBLIC\nCREATED:20260414T145326Z\nLAST-MODIFIED:20260414T150428Z\nSEQUENCE:0\nSTATUS:CONFIRMED\nSUMMARY:Happy b day Mariana Camargo\nTRANSP:OPAQUE\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART;TZID=America/Mexico_City:20271213T090000\nDTEND;TZID=America/Mexico_City:20271213T100000\nDTSTAMP:20260414T184653Z\nUID:5E9054C6-4197-402E-9B96-C8E985C636D0\nRECURRENCE-ID;TZID=America/Mexico_City:20271213T090000\nCLASS:PUBLIC\nCREATED:20260414T145326Z\nLAST-MODIFIED:20260414T150428Z\nSEQUENCE:0\nSTATUS:CONFIRMED\nSUMMARY:Happy b day Mariana Camargo\nTRANSP:OPAQUE\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260426T190000Z\nDTEND:20260426T200000Z\nDTSTAMP:20260414T184653Z\nUID:3BF08F92-9A79-419A-B2D5-6CDEA8B6923A\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260423T170000Z\nDTEND:20260423T180000Z\nDTSTAMP:20260414T184653Z\nUID:CB4BA858-8743-4C9A-B8A7-5A56362DDE0E\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260327T150000Z\nDTEND:20260327T160000Z\nDTSTAMP:20260414T184653Z\nUID:6776E4C3-00AC-4C47-96D3-F4706B6BFA17\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260418T193000Z\nDTEND:20260418T203000Z\nDTSTAMP:20260414T184653Z\nUID:78B3862D-C416-4357-9574-CF56FC5CDF5F\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260412T013000Z\nDTEND:20260412T023000Z\nDTSTAMP:20260414T184653Z\nUID:8B7B0388-8EA7-4342-9FFC-9289E9B4143B\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260425T220000Z\nDTEND:20260425T230000Z\nDTSTAMP:20260414T184653Z\nUID:3023B79C-9A44-4467-8C4B-BFBCFB01F981\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260523T220000Z\nDTEND:20260523T230000Z\nDTSTAMP:20260414T184653Z\nUID:A2787783-4BD8-4FF5-90DD-4E7B0D9BAED0\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260419T201500Z\nDTEND:20260419T211500Z\nDTSTAMP:20260414T184653Z\nUID:7F3EB065-DCFE-4117-BBF0-BBABB9E764B1\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260321T170000Z\nDTEND:20260321T180000Z\nDTSTAMP:20260414T184653Z\nUID:2658CEFE-F291-44FE-8933-DCA698658050\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260619T230000Z\nDTEND:20260620T000000Z\nDTSTAMP:20260414T184653Z\nUID:9592E66C-C271-4413-A18B-E7781D40C918\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260411T193000Z\nDTEND:20260411T203000Z\nDTSTAMP:20260414T184653Z\nUID:26364541-06E0-47D6-961F-FD59FB707AB2\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260413T153000Z\nDTEND:20260413T163000Z\nDTSTAMP:20260414T184653Z\nUID:E76F9600-9287-4876-8404-919A855FA252\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260425T204500Z\nDTEND:20260425T214500Z\nDTSTAMP:20260414T184653Z\nUID:01DC2B3A-96F7-4495-BC77-4AA86FC5186D\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260417T153000Z\nDTEND:20260417T163000Z\nDTSTAMP:20260414T184653Z\nUID:BB4B2CB5-7853-44CE-9A48-2599DF6CB20F\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260308T011000Z\nDTEND:20260308T021000Z\nDTSTAMP:20260414T184653Z\nUID:9D44DD6A-11A1-49B6-8492-1DFFF73211EB\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260418T233000Z\nDTEND:20260419T013000Z\nDTSTAMP:20260414T184653Z\nUID:CC2D2A6E-BBB4-4C2E-B850-5086CD2A2D52\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260410T160000Z\nDTEND:20260410T170000Z\nDTSTAMP:20260414T184653Z\nUID:CF909969-D060-4D24-BBB6-3AC695F28C48\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nBEGIN:VEVENT\nDTSTART:20260425T173000Z\nDTEND:20260425T183000Z\nDTSTAMP:20260414T184653Z\nUID:FFFE3A36-647E-485C-A690-D284B47403BE\nATTENDEE;X-NUM-GUESTS=0:mailto:d8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c5\n 07ff2c3bd56534fe642c@group.calendar.google.com\nSUMMARY:Busy\nEND:VEVENT\nEND:VCALENDAR\n";
@@ -1361,6 +1400,201 @@ function buildWhatsAppMsg(fecha, espacio, total) {
   msg += `\n💰 Total estimado: $${total.toLocaleString()} MXN\n`;
   msg += `\nAdjunto mi comprobante de anticipo ($1,000 MXN) para confirmar la fecha. ¡Gracias!`;
   return msg;
+}
+
+// ╔══════════════════════════════════════════════════════════╗
+// ║  INTEGRACIÓN MAKE.COM + SUPABASE                        ║
+// ║  Patch final — sobreescribe renderSpaces y buildSummary ║
+// ╚══════════════════════════════════════════════════════════╝
+
+// ── renderSpaces con bloqueo real de Supabase ─────────────
+renderSpaces = function() {
+  const g = state.guests;
+  document.getElementById('step2-sub').textContent =
+    `Espacios disponibles para ${g} personas y horario seleccionado.`;
+  const dateTxt = state.fecha
+    ? new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})
+    : '';
+  document.getElementById('space-selected-bar').innerHTML =
+    `<strong>${dateTxt}</strong>${state.horario ? ` · ${state.horario}` : ''}`;
+  const html = SPACES.map(sp => {
+    const fits    = g >= sp.cap[0] && g <= sp.cap[1];
+    const tooFew  = g < sp.cap[0];
+    const tooMany = g > sp.cap[1];
+    const booked  = isSpaceBooked(sp.id);
+    const disabled = !fits || booked;
+    const capText  = `${sp.cap[0]}–${sp.cap[1]} personas`;
+    let warn = '';
+    if(tooFew)  warn = `<div class="cap-warn">Tu grupo de ${g} personas está por debajo del mínimo de ${sp.cap[0]}.</div>`;
+    if(tooMany) warn = `<div class="cap-warn">Tu grupo de ${g} personas excede el máximo de ${sp.cap[1]}.</div>`;
+    if(booked)  warn = `<div class="cap-warn" style="color:#b45309">Este espacio ya está reservado para el horario seleccionado.</div>`;
+    return `<div>
+      <div class="space-card ${disabled?'disabled':''}" id="sc-${sp.id}" onclick="selectSpace('${sp.id}')">
+        <div class="sc-check">✓</div>
+        <div class="sc-header">
+          <div class="sc-name">${sp.name}</div>
+          <div class="sc-cap">${capText}</div>
+        </div>
+        <div class="sc-desc">${sp.desc}</div>
+        ${booked ? '<div style="font-size:10px;color:#b45309;margin-top:4px;font-weight:600;">🔒 Ocupado este horario</div>' : ''}
+      </div>
+      ${warn}
+    </div>`;
+  }).join('');
+  document.getElementById('spaces-grid').innerHTML = html;
+  if (state.espacio && isSpaceBooked(state.espacio)) state.espacio = '';
+  document.getElementById('btn-step2').disabled = !state.espacio;
+};
+
+// ── buildSummary con webhook Make.com + POST Supabase ─────
+buildSummary = function() {
+  const fechaFormatted = state.fecha
+    ? new Date(state.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'})
+    : '—';
+  const espacioObj = SPACES.find(s => s.id === state.espacio);
+  document.getElementById('sum-nombre').textContent   = state.nombre || '—';
+  document.getElementById('sum-fecha').textContent    = fechaFormatted;
+  document.getElementById('sum-personas').textContent = state.guests + ' personas';
+  document.getElementById('sum-espacio').textContent  = espacioObj?.name || '—';
+  document.getElementById('sum-horario').textContent  = state.horario || '—';
+  document.getElementById('sum-paquete').textContent  = `${state.paqueteNombre} · $480 p/p`;
+
+  let pastelText = 'Sin pastel';
+  if(state.pastel === 'amalay') pastelText = `Pastel AMALAY${state.pastelFlavor ? ' · '+state.pastelFlavor : ''} · $800`;
+  if(state.pastel === 'externo') pastelText = 'Pastel externo · Descorche $350';
+  document.getElementById('sum-pastel').textContent = pastelText;
+
+  if(state.entradas.length > 0){
+    document.getElementById('sum-entradas-row').style.display = 'flex';
+    document.getElementById('sum-entradas').textContent = state.entradas.join(', ');
+  } else {
+    document.getElementById('sum-entradas-row').style.display = 'none';
+  }
+  document.getElementById('sum-deco').textContent = state.deco;
+
+  const base     = state.guests * 480;
+  const servicio = Math.round(base * 0.18);
+  const total    = base + servicio;
+  document.getElementById('sum-consumo').textContent  = `$${base.toLocaleString()} (${state.guests} × $480)`;
+  document.getElementById('sum-servicio').textContent = `$${servicio.toLocaleString()}`;
+  document.getElementById('sum-total').textContent    = `$${total.toLocaleString()} MXN`;
+
+  const msg = buildWhatsAppMsg(fechaFormatted, espacioObj?.name, total);
+  document.getElementById('btn-whatsapp').href = 'https://wa.me/528182543303?text='+encodeURIComponent(msg);
+
+  // ── Indicador de estado ───────────────────────────────────
+  let statusEl = document.getElementById('reservation-status');
+  if (!statusEl) {
+    statusEl = document.createElement('div');
+    statusEl.id = 'reservation-status';
+    statusEl.style.cssText = 'text-align:center;font-size:12px;padding:10px 14px;border-radius:8px;margin-bottom:12px;font-weight:500;';
+    const waBtn = document.getElementById('btn-whatsapp');
+    waBtn.parentNode.insertBefore(statusEl, waBtn);
+  }
+
+  // ── Computar horario_inicio / horario_fin ─────────────────
+  const pad = n => String(n).padStart(2,'0');
+  const rawSlot = state.horario.includes(' · ')
+    ? state.horario.split(' · ').slice(1).join(' · ')
+    : state.horario;
+  const startMin = slotStartMinutes(rawSlot);
+  const endMin   = startMin + BLOCK_MINUTES;
+  const horario_inicio = pad(Math.floor(startMin/60))+':'+pad(startMin%60);
+  const horario_fin    = pad(Math.floor(endMin/60))+':'+pad(endMin%60);
+
+  // ── Payload completo para Make.com ───────────────────────
+  const payload = {
+    nombre:   state.nombre,
+    fecha:    state.fecha,
+    espacio:  espacioObj?.name || state.espacio,
+    espacio_id: state.espacio,
+    horario:  state.horario,
+    horario_inicio,
+    horario_fin,
+    guests:   state.guests,
+    paquete:  state.paqueteNombre,
+    pastel:   pastelText,
+    entradas: state.entradas.join(', '),
+    deco:     state.deco,
+    total:    total,
+    telefono: state.telefono || ''
+  };
+
+  // Disparar async — no bloquea la UI
+  _submitReservation(payload, statusEl);
+};
+
+async function _submitReservation(payload, statusEl) {
+  statusEl.style.background = '#fefce8';
+  statusEl.style.color = '#92400e';
+  statusEl.textContent = '⏳ Registrando tu solicitud…';
+
+  let sbOk = false, webhookOk = false;
+
+  // 1 ── POST Supabase amalay_reservaciones ──────────────────
+  if (SUPABASE_ANON_KEY) {
+    try {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/amalay_reservaciones`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: 'Bearer ' + SUPABASE_ANON_KEY,
+          'Content-Type': 'application/json',
+          Prefer: 'return=representation'
+        },
+        body: JSON.stringify({
+          nombre:          payload.nombre,
+          fecha:           payload.fecha,
+          espacio:         payload.espacio_id,
+          horario_inicio:  payload.horario_inicio,
+          horario_fin:     payload.horario_fin,
+          guests:          payload.guests,
+          paquete:         payload.paquete,
+          total:           payload.total,
+          status:          'pending'
+        })
+      });
+      if (r.ok) {
+        const rows = await r.json();
+        payload.supabase_id = rows[0]?.id;
+        sbOk = true;
+      }
+    } catch(e) { console.warn('[Supabase] POST reservacion:', e.message); }
+  }
+
+  // 2 ── POST Make.com webhook ───────────────────────────────
+  if (MAKE_WEBHOOK_URL) {
+    try {
+      const r = await fetch(MAKE_WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      webhookOk = r.ok;
+    } catch(e) { console.warn('[Make] webhook:', e.message); }
+  }
+
+  // 3 ── Feedback visual ─────────────────────────────────────
+  if (sbOk || webhookOk) {
+    statusEl.style.background = '#f0fdf4';
+    statusEl.style.color = '#166534';
+    statusEl.textContent = '✓ Solicitud registrada — Monica te contactará para confirmar la fecha';
+    // Actualizar slot en memoria para evitar doble reserva en misma sesión
+    reservedSlots.push({
+      espacio: payload.espacio_id,
+      horario_inicio: payload.horario_inicio,
+      horario_fin: payload.horario_fin
+    });
+  } else if (!MAKE_WEBHOOK_URL && !SUPABASE_ANON_KEY) {
+    // Modo sin credenciales — solo WhatsApp
+    statusEl.style.background = '#f8f5f0';
+    statusEl.style.color = '#6b5c3e';
+    statusEl.textContent = '👆 Envía tu comprobante por WhatsApp para confirmar la fecha';
+  } else {
+    statusEl.style.background = '#fff7ed';
+    statusEl.style.color = '#9a3412';
+    statusEl.textContent = '⚠️ No se pudo registrar automáticamente — usa WhatsApp para confirmar';
+  }
 }
 </script>
 <div id="amalay-toast"></div>
