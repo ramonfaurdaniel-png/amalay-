@@ -1634,10 +1634,10 @@ async function _submitReservation(payload, statusEl) {
 // ── BEBIDAS + ENTRADAS CON CANTIDAD ──────────────────────────────────────────
 
 const BEBIDAS_OPTIONS = [
-  { id:'mimosa',    name:'Mimosas',                 desc:'Precio exclusivo eventos',                                        price:100 },
-  { id:'mezcal',    name:'Sexy Mezcalina Jamaica',  desc:'Mezcal espadín, triple sec, jamaica, naranja y limón',           price:240 },
-  { id:'margarita', name:'My Crush Margarita',      desc:'Tequila, limón, triple sec y esencia de rosas',                 price:240 },
-  { id:'aperol',    name:'Sexy Aperol Spritz',      desc:'Aperol, prosecco, agua mineral y arándanos con romero',          price:240 }
+  { id:'mimosa',    name:'Mimosas',                 desc:'Precio exclusivo eventos',                                        price:100, img:'images/bebidas/mimosas.jpg' },
+  { id:'mezcal',    name:'Sexy Mezcalina Jamaica',  desc:'Mezcal espadín, triple sec, jamaica, naranja y limón',           price:240, img:'images/bebidas/mezcalina.jpg' },
+  { id:'margarita', name:'My Crush Margarita',      desc:'Tequila, limón, triple sec y esencia de rosas',                 price:240, img:'images/bebidas/margarita.jpg' },
+  { id:'aperol',    name:'Sexy Aperol Spritz',      desc:'Aperol, prosecco, agua mineral y arándanos con romero',          price:240, img:'images/bebidas/aperol.jpg' }
 ];
 
 // Quantities stored separately to avoid breaking existing state.entradas string array
@@ -1678,15 +1678,18 @@ document.addEventListener('DOMContentLoaded', function() {
       '<div class="extra-opts" id="bebidas-opts">' +
       BEBIDAS_OPTIONS.map(function(b) {
         return '<div class="extra-opt" style="display:flex;align-items:center;gap:10px;padding:10px 12px;">' +
-          '<input type="number" min="0" max="20" value="0"' +
-          ' data-bid="' + b.id + '" data-price="' + b.price + '"' +
-          ' style="width:48px;height:32px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:14px;font-weight:600;background:#fff;color:var(--text);flex-shrink:0;"' +
-          ' oninput="updateBebidas(this)"/>' +
+          '<img src="' + b.img + '" alt="' + b.name + '"' +
+          ' style="width:60px;height:60px;object-fit:cover;border-radius:8px;flex-shrink:0;" loading="lazy"/>' +
           '<div style="flex:1;min-width:0;">' +
           '<div class="extra-opt-name">' + b.name + '</div>' +
           '<div class="extra-opt-desc">' + b.desc + '</div>' +
           '<div class="extra-opt-price">$' + b.price + ' c/u</div>' +
-          '</div></div>';
+          '</div>' +
+          '<input type="number" min="0" max="20" value="0"' +
+          ' data-bid="' + b.id + '" data-price="' + b.price + '"' +
+          ' style="width:48px;height:32px;border:1px solid var(--border);border-radius:8px;text-align:center;font-size:14px;font-weight:600;background:#fff;color:var(--text);flex-shrink:0;"' +
+          ' oninput="updateBebidas(this)"/>' +
+          '</div>';
       }).join('') +
       '</div></div>';
     entradasSection.insertAdjacentHTML('afterend', bebidasHtml);
