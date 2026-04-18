@@ -15,25 +15,25 @@ html{scroll-behavior:smooth}
   --green-pale:#e8f0e2;--gold:#b8935a;--text:#2a2a1e;--muted:#777;
   --border:#e0d8cc;--danger:#c0392b;
 }
-body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color:var(--text);min-height:100vh;}
+body{font-family:'Jost',sans-serif;font-weight:300;background:linear-gradient(160deg,#f7f2e9 0%,#f0ebe0 60%,#ede7da 100%);color:var(--text);min-height:100vh;}
 
 /* HEADER */
-.header{background:var(--white);padding:20px;text-align:center;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;}
-.header-logo{width:60px;height:60px;border-radius:50%;background:#7a9e7e;margin:0 auto 8px;overflow:hidden;}
+.header{background:#3d4a2f;padding:22px 20px 18px;text-align:center;border-bottom:none;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.18);}
+.header-logo{width:64px;height:64px;border-radius:50%;background:#7a9e7e;margin:0 auto 10px;overflow:hidden;border:2px solid rgba(255,255,255,.25);}
 .header-logo img{width:100%;height:100%;object-fit:cover;}
-.header h1{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;color:var(--green);}
-.header p{font-size:11px;color:var(--muted);letter-spacing:.08em;}
+.header h1{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;color:#f5f0e8;}
+.header p{font-size:11px;color:#a8bb98;letter-spacing:.10em;}
 
 /* PROGRESS */
-.progress-wrap{background:var(--white);padding:16px 20px;border-bottom:1px solid var(--border);}
+.progress-wrap{background:var(--white);padding:18px 20px;border-bottom:1px solid var(--border);}
 .progress-steps{display:flex;align-items:center;justify-content:center;gap:0;max-width:480px;margin:0 auto;}
-.ps{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1;position:relative;}
-.ps-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;color:var(--muted);transition:all .3s;z-index:1;}
-.ps.active .ps-dot{background:var(--green);border-color:var(--green);color:#fff;}
+.ps{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;position:relative;}
+.ps-dot{width:36px;height:36px;border-radius:50%;border:2px solid var(--border);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;color:var(--muted);transition:all .4s cubic-bezier(.34,1.56,.64,1);z-index:1;}
+.ps.active .ps-dot{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 0 0 4px rgba(61,90,46,.15);}
 .ps.done .ps-dot{background:var(--green-pale);border-color:var(--green);color:var(--green);}
 .ps-label{font-size:9px;color:var(--muted);letter-spacing:.05em;text-align:center;white-space:nowrap;}
-.ps.active .ps-label{color:var(--green);font-weight:500;}
-.ps-line{height:2px;background:var(--border);flex:1;margin-top:-14px;}
+.ps.active .ps-label{color:var(--green);font-weight:600;}
+.ps-line{height:2px;background:var(--border);flex:1;margin-top:-18px;}
 .ps-line.done{background:var(--green);}
 
 /* MAIN */
@@ -42,14 +42,16 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 /* STEP CARD */
 .step{display:none;}
 .step.active{display:block;}
-.step-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;color:var(--green);margin-bottom:6px;}
-.step-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.7;max-width:760px;}
+.step-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:500;color:var(--green);margin-bottom:8px;}
+.step-title::after{content:'';display:block;width:44px;height:2px;background:var(--gold);margin-top:8px;border-radius:2px;}
+.step-sub{font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.7;max-width:760px;}
+@media(min-width:640px){.step-title{font-size:40px;}}
 
 /* INPUT */
-.field{margin-bottom:16px;}
-.field label{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
-.input{width:100%;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:12px 16px;font-family:'Jost',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border .2s;}
-.input:focus{border-color:var(--green);}
+.field{margin-bottom:18px;}
+.field label{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--green);font-weight:600;margin-bottom:8px;}
+.input{width:100%;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 18px;font-family:'Jost',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border-color .2s,box-shadow .2s;}
+.input:focus{border-color:var(--green);border-width:2px;box-shadow:0 0 0 3px rgba(61,90,46,.08);}
 .input-guests{font-size:22px;font-weight:400;text-align:center;font-family:'Cormorant Garamond',serif;}
 
 /* GUEST COUNTER */
@@ -65,8 +67,8 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 .cal-note{font-size:11px;color:var(--muted);text-align:center;padding:10px;border-top:1px solid var(--border);background:#fffdf9;}
 
 /* SPACE CARDS */
-.space-grid{display:flex;flex-direction:column;gap:10px;}
-.space-card{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;position:relative;}
+.space-grid{display:flex;flex-direction:column;gap:12px;}
+.space-card{background:var(--white);border:2px solid var(--border);border-radius:16px;padding:18px;cursor:pointer;transition:all .2s;position:relative;box-shadow:0 2px 12px rgba(0,0,0,.06);}
 .space-card:hover{border-color:var(--green-light);transform:translateY(-1px);}
 .space-card.selected{border-color:var(--green);background:var(--green-pale);}
 .space-card.disabled{opacity:.4;cursor:not-allowed;pointer-events:none;}
@@ -86,8 +88,8 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 .slot-note{font-size:10px;color:#bbb;margin-top:4px;}
 
 /* PACKAGE CARDS */
-.pkg-grid{display:flex;flex-direction:column;gap:10px;}
-.pkg-card{background:var(--white);border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all .2s;}
+.pkg-grid{display:flex;flex-direction:column;gap:12px;}
+.pkg-card{background:var(--white);border:2px solid var(--border);border-radius:16px;padding:18px;cursor:pointer;transition:all .2s;box-shadow:0 2px 12px rgba(0,0,0,.06);}
 .pkg-card:hover{border-color:var(--green-light);}
 .pkg-card.selected{border-color:var(--green);background:var(--green-pale);}
 .pkg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
@@ -135,7 +137,8 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
 .antic-clabe{font-size:16px;font-weight:500;color:var(--text);letter-spacing:.04em;margin:4px 0;}
 
 /* BUTTONS */
-.btn-primary{display:block;width:100%;background:var(--green);color:#fff;border:none;border-radius:12px;padding:15px;font-family:'Jost',sans-serif;font-size:14px;font-weight:500;letter-spacing:.04em;cursor:pointer;transition:background .2s;text-align:center;text-decoration:none;}
+.btn-primary{display:block;width:100%;background:var(--green);color:#fff;border:none;border-radius:14px;padding:17px 20px;font-family:'Jost',sans-serif;font-size:14px;font-weight:500;letter-spacing:.10em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;text-align:center;text-decoration:none;box-shadow:0 4px 14px rgba(61,90,46,.22);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(61,90,46,.30);}
 .btn-primary:hover{background:var(--green-light);}
 .btn-primary:disabled{background:#bbb;cursor:not-allowed;}
 .btn-whats{background:#25D366;display:flex;align-items:center;justify-content:center;gap:8px;}
@@ -291,6 +294,11 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
     <div class="av-note" id="fecha-status"></div>
   </div>
 
+
+  <div class="field">
+    <label>Notas o comentarios</label>
+    <textarea class="input" id="notas-input" rows="3" placeholder="¿Algo especial que debamos saber? Alergias, peticiones, temática del evento..." oninput="state.notas=this.value" style="resize:vertical;min-height:80px;"></textarea>
+  </div>
 
   <button class="btn-primary" onclick="goStep(2)">Siguiente →</button>
 </div>
@@ -457,6 +465,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:var(--cream);color
     <div class="sum-row" id="sum-entradas-row" style="display:none"><span class="sum-label">Entradas</span><span class="sum-val" id="sum-entradas">—</span></div>
     <div class="sum-row" id="sum-bebidas-row" style="display:none"><span class="sum-label">Bebidas</span><span class="sum-val" id="sum-bebidas">—</span></div>
     <div class="sum-row"><span class="sum-label">Decoración</span><span class="sum-val" id="sum-deco">—</span></div>
+    <div class="sum-row" id="sum-notas-row" style="display:none"><span class="sum-label">Notas</span><span class="sum-val" id="sum-notas">—</span></div>
   </div>
 
   <div class="summary-card">
@@ -544,6 +553,7 @@ const state = {
   pastelFlavor: '',
   entradas: [],
   deco: 'Básica (incluida)',
+  notas: '',
   currentStep: 1
 };
 
@@ -1055,6 +1065,9 @@ function buildSummary() {
     document.getElementById('sum-entradas-row').style.display = 'none';
   }
   document.getElementById('sum-deco').textContent = state.deco;
+  const notasEl = document.getElementById('sum-notas');
+  const notasRow = document.getElementById('sum-notas-row');
+  if(notasEl && notasRow) { notasEl.textContent = state.notas || '—'; notasRow.style.display = state.notas ? 'flex' : 'none'; }
 
   // Costs
   const base = state.guests * 480;
@@ -1360,6 +1373,9 @@ function buildSummary() {
     document.getElementById('sum-entradas-row').style.display = 'none';
   }
   document.getElementById('sum-deco').textContent = state.deco;
+  const notasEl = document.getElementById('sum-notas');
+  const notasRow = document.getElementById('sum-notas-row');
+  if(notasEl && notasRow) { notasEl.textContent = state.notas || '—'; notasRow.style.display = state.notas ? 'flex' : 'none'; }
 
   // Costs
   const base = state.guests * 480;
@@ -1494,6 +1510,9 @@ buildSummary = function() {
     document.getElementById('sum-entradas-row').style.display = 'none';
   }
   document.getElementById('sum-deco').textContent = state.deco;
+  const notasEl = document.getElementById('sum-notas');
+  const notasRow = document.getElementById('sum-notas-row');
+  if(notasEl && notasRow) { notasEl.textContent = state.notas || '—'; notasRow.style.display = state.notas ? 'flex' : 'none'; }
 
   const base     = state.guests * 480;
   const servicio = Math.round(base * 0.18);
@@ -1540,7 +1559,8 @@ buildSummary = function() {
     entradas: state.entradas.join(', '),
     deco:     state.deco,
     total:    total,
-    telefono: state.telefono || ''
+    telefono: state.telefono || '',
+    notas:    state.notas || ''
   };
 
   // Disparar async — no bloquea la UI
@@ -1755,6 +1775,9 @@ buildSummary = function() {
   }
 
   document.getElementById('sum-deco').textContent = state.deco;
+  const notasEl = document.getElementById('sum-notas');
+  const notasRow = document.getElementById('sum-notas-row');
+  if(notasEl && notasRow) { notasEl.textContent = state.notas || '—'; notasRow.style.display = state.notas ? 'flex' : 'none'; }
 
   // Costs — base + extras + 18% servicio
   const entradasTotal = Object.keys(state.entradasQty).reduce(function(acc, name) {
@@ -1819,7 +1842,8 @@ buildSummary = function() {
     bebidas:     bebidasStr,
     deco:        state.deco,
     total:       total,
-    telefono:    state.telefono || ''
+    telefono:    state.telefono || '',
+    notas:       state.notas || ''
   };
 
   _submitReservation(payload, statusEl);
