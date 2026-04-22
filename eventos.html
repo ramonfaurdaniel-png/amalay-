@@ -99,6 +99,12 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:linear-gradient(16
 .pkg-items{margin-top:8px;display:flex;flex-direction:column;gap:2px;}
 .pkg-item{font-size:11px;color:#555;}
 .pkg-item::before{content:'· ';color:var(--gold);}
+.pkg-platillos{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+.pkg-platillo{margin:0;display:flex;flex-direction:column;gap:6px;}
+.pkg-platillo-thumb{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px;display:block;}
+.pkg-platillo-num{font-size:9px;font-weight:600;letter-spacing:.08em;color:var(--green);text-transform:uppercase;}
+.pkg-platillo-cap{font-size:10px;color:#555;line-height:1.4;}
+.pkg-iva-note{font-size:11px;color:var(--muted);text-align:center;margin-top:4px;margin-bottom:12px;}
 
 /* EXTRAS */
 .extra-section{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px;}
@@ -320,6 +326,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:linear-gradient(16
 <div class="step" id="step3">
   <div class="step-title">Elige tu paquete</div>
   <div class="step-sub">Todos los paquetes son $480 por persona. Se permiten hasta 2 opciones de plato fuerte por evento.</div>
+  <div class="pkg-iva-note">Precios incluyen IVA · Se agrega 18% de servicio al total</div>
 
   <div class="pkg-grid" id="pkg-grid"></div>
 
@@ -450,6 +457,7 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:linear-gradient(16
 
 <!-- STEP 5: Confirmar -->
 <div class="step" id="step5">
+<div id="step5-content">
   <div class="step-title">Resumen de tu evento</div>
   <div class="step-sub">Revisa los detalles y paga el anticipo para confirmar tu fecha.</div>
 
@@ -535,7 +543,43 @@ body{font-family:'Jost',sans-serif;font-weight:300;background:linear-gradient(16
   </div>
 
   <button class="btn-back" onclick="goStep(4)">← Modificar</button>
-</div>
+</div><!-- /step5-content -->
+
+<!-- SUCCESS CARD -->
+<div id="success-card" style="display:none;padding:8px 0 20px;">
+  <div style="text-align:center;margin-bottom:20px;">
+    <div style="font-family:'Playfair Display',Georgia,serif;font-size:26px;color:var(--green);font-weight:700;line-height:1.3;margin-bottom:6px;">¡Reservación recibida! 🌸</div>
+    <div style="font-size:13px;color:var(--muted);">Mónica te contactará para confirmar tu fecha.</div>
+  </div>
+
+  <div style="background:#f0f7ec;border:2px solid var(--green-light);border-radius:16px;padding:20px;margin-bottom:16px;text-align:center;">
+    <div style="font-size:10px;font-weight:600;letter-spacing:.12em;color:var(--green);text-transform:uppercase;margin-bottom:10px;">Tu código de reservación</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
+      <span id="display-codigo" style="font-family:'Courier New',monospace;font-size:30px;font-weight:700;color:var(--green);letter-spacing:.08em;user-select:all;cursor:text;">—</span>
+      <button onclick="copyToClipboard(document.getElementById('display-codigo').textContent,this)" style="background:var(--green);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;">Copiar</button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px;">Estado: <strong style="color:#92400e;">⏳ Pendiente de anticipo</strong></div>
+  </div>
+
+  <div style="background:#faf8f2;border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px;">
+    <div style="font-size:12px;color:var(--text);line-height:1.9;margin-bottom:14px;">
+      Para confirmar tu reservación, realiza el anticipo de <strong>$1,000</strong> y envíanos el comprobante por WhatsApp mencionando tu código <strong id="inline-codigo" style="font-family:'Courier New',monospace;">—</strong>.
+    </div>
+    <div style="font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--green);text-transform:uppercase;margin-bottom:10px;">Transferencia SPEI</div>
+    <div style="font-size:13px;color:var(--text);font-weight:600;margin-bottom:6px;">Amalay Foods · Santander</div>
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span style="font-family:'Courier New',monospace;font-size:16px;font-weight:600;letter-spacing:.04em;user-select:all;color:var(--text);">014580655083036033</span>
+      <button onclick="copyToClipboard('014580655083036033',this)" style="background:transparent;color:var(--green);border:1.5px solid var(--green);border-radius:7px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;font-family:'Jost',sans-serif;white-space:nowrap;">Copiar CLABE</button>
+    </div>
+  </div>
+
+  <a id="success-whatsapp" href="https://wa.me/528182543303" target="_blank" class="btn-primary btn-whats" style="margin-bottom:12px;">
+    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Enviar comprobante por WhatsApp
+  </a>
+
+  <button onclick="resetWizard()" style="width:100%;padding:14px;background:transparent;color:var(--green);border:2px solid var(--green);border-radius:12px;font-family:'Jost',sans-serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:.02em;">+ Hacer otra reservación</button>
+</div><!-- /success-card -->
 
 </div><!-- /main -->
 
@@ -554,8 +598,41 @@ const state = {
   entradas: [],
   deco: 'Básica (incluida)',
   notas: '',
+  codigoReserva: '',
   currentStep: 1
 };
+
+function copyToClipboard(text, btn) {
+  const orig = btn.textContent;
+  navigator.clipboard.writeText(text).then(function() {
+    btn.textContent = '✓ Copiado';
+    setTimeout(function() { btn.textContent = orig; }, 2000);
+  }).catch(function() {
+    // Fallback para iOS/Safari
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.cssText = 'position:fixed;opacity:0;';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓ Copiado';
+    setTimeout(function() { btn.textContent = orig; }, 2000);
+  });
+}
+
+function resetWizard() {
+  // Reset state
+  state.nombre = ''; state.guests = 20; state.fecha = ''; state.espacio = '';
+  state.horario = ''; state.paquete = ''; state.paqueteNombre = '';
+  state.pastel = 'no'; state.pastelFlavor = ''; state.entradas = [];
+  state.deco = 'Básica (incluida)'; state.notas = ''; state.codigoReserva = '';
+  state.bebidasQty = {}; state.entradasQty = {};
+  reservedSlots = []; gcalBusyIntervals = [];
+  // Ocultar success card, mostrar contenido
+  var sc  = document.getElementById('success-card');
+  var sc5 = document.getElementById('step5-content');
+  if (sc)  sc.style.display  = 'none';
+  if (sc5) sc5.style.display = '';
+  goStep(1);
+}
 
 // ── SPACES ──
 const SPACES = [
@@ -566,7 +643,7 @@ const SPACES = [
 
 // ── PACKAGES ──
 const PACKAGES = [
-  { id:'brunch', name:'Brunch', time:'☀️ 8:00am – 1:30pm', price:'$480 p/p', desc:'Incluye: plato de fruta mixta + plato fuerte a elegir + bebidas refill (café, té, limonada natural, pepino, frutos rojos, mineral o jamaica)', items:['Avo Toast con huevo pochado','Chilaquiles verdes con pollo','Enchiladas suizas','⚡ Postre opcional +$80 p/p: Pay manzana, Brownie, Blueberry Cheesecake o Carrot Cake']},
+  { id:'brunch', name:'Brunch', time:'☀️ 8:00am – 1:30pm', price:'$480 p/p', desc:'Incluye: plato de fruta mixta + plato fuerte a elegir + bebidas refill (café, té, limonada natural, pepino, frutos rojos, mineral o jamaica)', items:['Avo Toast con huevo pochado','Chilaquiles verdes con pollo','Enchiladas suizas','⚡ Postre opcional +$80 p/p: Pay manzana, Brownie, Blueberry Cheesecake o Carrot Cake'], platillos:[{src:'eventos-imgs/avo-toast.jpeg',cap:'Avo Toast'},{src:'eventos-imgs/chilaquiles-verdes.jpeg',cap:'Chilaquiles Verdes'},{src:'eventos-imgs/enchiladas-suizas.jpeg',cap:'Enchiladas Suizas'}]},
   { id:'cena', name:'Merienda / Cena', time:'🌙 A partir de 1:30pm', price:'$480 p/p', desc:'Incluye: plato fuerte + postre incluido + bebidas refill (café, té, limonada, pepino, frutos rojos, mineral o jamaica)', items:['½ Ensalada Amalay + ½ Panini + ½ Sopa tomate — $480','4 Enchiladas suizas + postre — $480','3 Taquitos Amalay de RibEye + postre — $500','Pizza + Pasta Mamarosa + postre — $480']},
   { id:'pizza', name:'Pizza & Pasta', time:'🌙 A partir de 1:30pm', price:'$480 p/p', desc:'1 pizza por cada 2 personas (compartir) + pasta a elección + postre + bebidas suaves refill', items:['🍕 Pizza Prosciutto, Margarita o Pepperoni','🍝 Pasta Mamarosa o Bolognesa','🍰 Postre incluido: Pay, Brownie, Cheesecake o Carrot Cake']},
   { id:'carta', name:'A la Carta', time:'☀️ Brunch o 🌙 Lunch', price:'Mín. $480 p/p', desc:'Elige libremente del menú. Solo para grupos menores a 20 personas. +$80 p/p: refill de limonadas, café y té.', items:['Bebidas especiales y postres aparte','Aplica solo para reservaciones de menos de 20 personas']}
@@ -647,6 +724,9 @@ const PROXY   = ''; // no se usa, n8n resuelve el CORS
 const MAKE_WEBHOOK_URL  = 'https://hook.us2.make.com/3rzd2dcghv4t7hlr4we8robtvhpq4sui';
 const SUPABASE_URL      = 'https://qjiomlvudfmzuvqvhwpk.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_8_nNPHJT1RsfZhpXB6ARGA_6aOwZasM';
+// ── GOOGLE CALENDAR ──────────────────────────────────────
+const GOOGLE_CALENDAR_ID  = 'd8f4e21d4b96a25f852c80903a40a9c56c72d0b1a3c507ff2c3bd56534fe642c@group.calendar.google.com';
+const GOOGLE_CALENDAR_API_KEY = 'AIzaSyD8aZ4_Z-g4AW_O_jZCYiR7hJ4Mgdl-7e0';
 // ════════════════════════════════════════════════════════
 
 const BLOCK_MINUTES = 180;
@@ -657,7 +737,9 @@ const SLOT_GROUPS = [
 ];
 let calendarCursor = new Date(today.getFullYear(), today.getMonth(), 1);
 let availabilityByDate = new Map(); // Se llena al cargar el ICS en vivo
-let reservedSlots = []; // Reservaciones confirmadas/pendientes desde Supabase
+let reservedSlots = [];      // Reservaciones confirmadas/pendientes desde Supabase
+let gcalBusyIntervals = []; // Intervalos ocupados desde Google Calendar (minutos locales)
+const _gcalCache = new Map(); // Cache 60s por fecha
 
 // ── Supabase: disponibilidad real ─────────────────────────
 async function fetchReservedSlots(fecha) {
@@ -670,22 +752,114 @@ async function fetchReservedSlots(fecha) {
     if (r.ok) reservedSlots = await r.json();
     else reservedSlots = [];
   } catch(e) { console.warn('[Supabase] fetchReservedSlots:', e.message); }
+
+  // También obtener ocupados de Google Calendar (fail-open)
+  await fetchGCalBusyIntervals(fecha);
 }
 
-// Retorna true si el espacio ya tiene una reserva que se traslapa con el horario actual
+// ── Google Calendar: intervalos ocupados del día ───────────
+// America/Monterrey = UTC-6 (CST, sin horario de verano)
+// Los eventos de GCal vienen en UTC; los convertimos a minutos locales.
+async function fetchGCalBusyIntervals(fecha) {
+  if (!GOOGLE_CALENDAR_ID || !GOOGLE_CALENDAR_API_KEY || !fecha) return;
+
+  const cacheKey = 'gcal|' + fecha;
+  const cached = _gcalCache.get(cacheKey);
+  if (cached && (Date.now() - cached.ts < 60000)) {
+    gcalBusyIntervals = cached.intervals;
+    console.log('[GCal] Cache hit para', fecha, '—', gcalBusyIntervals.length, 'intervalos');
+    return;
+  }
+
+  try {
+    // Día completo en CST (UTC-6): midnight = 06:00Z, next midnight = 06:00Z+1día
+    const timeMin    = fecha + 'T06:00:00Z';
+    const timeMaxMs  = new Date(timeMin).getTime() + 86400000;
+    const timeMax    = new Date(timeMaxMs).toISOString();
+
+    const url = 'https://www.googleapis.com/calendar/v3/calendars/'
+      + encodeURIComponent(GOOGLE_CALENDAR_ID)
+      + '/events?key=' + GOOGLE_CALENDAR_API_KEY
+      + '&timeMin=' + encodeURIComponent(timeMin)
+      + '&timeMax=' + encodeURIComponent(timeMax)
+      + '&singleEvents=true&orderBy=startTime';
+
+    const r = await fetch(url);
+    if (!r.ok) {
+      console.warn('[GCal] HTTP ' + r.status + ' — disponibilidad asumida libre');
+      return;
+    }
+    const data = await r.json();
+
+    // Parser de espacio desde el título del evento.
+    // Formato esperado: "Nombre — 14 pax — Terraza"
+    // Si no hay espacio reconocido → 'todos' (fallback conservador).
+    function parseEspacioFromTitle(title) {
+      if (!title) return 'todos';
+      // Normalizar: minúsculas + quitar acentos
+      const t = title.toLowerCase()
+        .replace(/á/g,'a').replace(/é/g,'e').replace(/í/g,'i')
+        .replace(/ó/g,'o').replace(/ú/g,'u').replace(/ü/g,'u');
+      if (/\bterraza\b/.test(t)) return 'terraza';
+      if (/\bjardin\b/.test(t))  return 'jardin';
+      if (/\bsalon\b/.test(t))   return 'salon';
+      return 'todos'; // evento sin espacio → bloquea todos (ej. "AMALAY cerrado")
+    }
+
+    const intervals = [];
+    (data.items || []).forEach(function(ev) {
+      const espacio = parseEspacioFromTitle(ev.summary || '');
+
+      if (ev.start && ev.start.date && !ev.start.dateTime) {
+        // Evento de día completo — bloquea espacio(s) todo el día
+        intervals.push({ startMin: 0, endMin: 1440, espacio: espacio });
+        return;
+      }
+      const startISO = ev.start && ev.start.dateTime;
+      const endISO   = ev.end   && ev.end.dateTime;
+      if (!startISO || !endISO) return;
+
+      const s = new Date(startISO);
+      const e = new Date(endISO);
+      // UTC minutes → CST minutes (UTC-6 = -360 min)
+      const startMin = ((s.getUTCHours() * 60 + s.getUTCMinutes()) - 360 + 1440) % 1440;
+      const endMin   = ((e.getUTCHours() * 60 + e.getUTCMinutes()) - 360 + 1440) % 1440;
+      intervals.push({ startMin: startMin, endMin: endMin || 1440, espacio: espacio });
+    });
+
+    gcalBusyIntervals = intervals;
+    _gcalCache.set(cacheKey, { ts: Date.now(), intervals: intervals });
+    console.log('[GCal] ' + intervals.length + ' intervalos ocupados para ' + fecha);
+  } catch(e) {
+    console.warn('[GCal] fetchBusyIntervals error:', e.message, '— disponibilidad asumida libre');
+    // fail-open: no modificar gcalBusyIntervals, dejar como estaba
+  }
+}
+
+// Retorna true si el espacio está ocupado según Supabase O Google Calendar
 function isSpaceBooked(espacioId) {
-  if (!reservedSlots.length || !state.horario) return false;
+  if (!state.horario) return false;
   const rawSlot = state.horario.includes(' · ')
     ? state.horario.split(' · ').slice(1).join(' · ')
     : state.horario;
   const slotStart = slotStartMinutes(rawSlot);
   const slotEnd   = slotStart + BLOCK_MINUTES;
-  return reservedSlots.some(row => {
+
+  // 1) Supabase: reservas confirmed/pending para este espacio
+  const sbBooked = reservedSlots.some(function(row) {
     if (row.espacio !== espacioId) return false;
-    const [sh, sm] = (row.horario_inicio || '00:00').split(':').map(Number);
-    const [eh, em] = (row.horario_fin   || '00:00').split(':').map(Number);
-    const rStart = sh * 60 + sm, rEnd = eh * 60 + em;
-    return slotStart < rEnd && slotEnd > rStart; // overlap
+    const parts = (row.horario_inicio || '00:00').split(':').map(Number);
+    const parts2 = (row.horario_fin   || '00:00').split(':').map(Number);
+    const rStart = parts[0] * 60 + parts[1];
+    const rEnd   = parts2[0] * 60 + parts2[1];
+    return slotStart < rEnd && slotEnd > rStart;
+  });
+  if (sbBooked) return true;
+
+  // 2) Google Calendar: bloquea solo si el evento es de este espacio, o de 'todos'
+  return gcalBusyIntervals.some(function(iv) {
+    if (iv.espacio !== espacioId && iv.espacio !== 'todos') return false;
+    return slotStart < iv.endMin && slotEnd > iv.startMin;
   });
 }
 
@@ -847,6 +1021,7 @@ function setSelectedDate(value, fromCalendar=true){
     return;
   }
   state.fecha=value; state.horario='';
+  reservedSlots = []; gcalBusyIntervals = []; // reset al cambiar fecha
   document.getElementById('fecha-input').value=value;
   const nice = new Date(value+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   statusEl.textContent=`Fecha seleccionada: ${nice}.`;
@@ -968,10 +1143,12 @@ function renderPackages() {
     const checkHtml = (state.paquete === p.id) ? '<div class="pkg-chk" style="margin-top:10px;padding:5px 12px;background:#3d5a2e;color:#fff;border-radius:20px;font-size:11px;font-weight:500;display:inline-block;">✓ Seleccionado</div>' : '';
 
     const timeBadge = p.time ? '<div style="font-size:10px;letter-spacing:.06em;color:#4a6e38;background:#e8f0e2;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:8px;">' + p.time + '</div>' : '';
+    const platillosHtml = (p.platillos && p.platillos.length) ? '<div class="pkg-platillos">' + p.platillos.map(function(pl, idx) { return '<figure class="pkg-platillo"><img class="pkg-platillo-thumb" src="' + pl.src + '" alt="' + pl.cap + '" loading="lazy"><figcaption class="pkg-platillo-cap">' + pl.cap + '</figcaption></figure>'; }).join('') + '</div>' : '';
     div.innerHTML =
       '<div class="pkg-header"><div class="pkg-name">' + p.name + '</div><div class="pkg-price">' + p.price + '</div></div>' +
       timeBadge +
       '<div class="pkg-desc">' + p.desc + '</div>' +
+      platillosHtml +
       '<div class="pkg-items">' + itemsHtml + '</div>' +
       warnHtml + checkHtml;
 
@@ -1120,6 +1297,7 @@ function buildGCalLink(fechaText, espacio) {
 
 function buildWhatsAppMsg(fecha, espacio, total) {
   let msg = `Hola! Soy ${state.nombre || '(sin nombre)'} y quiero reservar un evento privado en AMALAY 🌿\n\n`;
+  if (state.codigoReserva) msg += `🔖 Código: ${state.codigoReserva}\n`;
   msg += `📅 Fecha: ${fecha}\n`;
   msg += `👥 Personas: ${state.guests}\n`;
   msg += `🏡 Espacio: ${espacio}\n`;
@@ -1155,6 +1333,7 @@ function setSelectedDate(value, fromCalendar=true){
     return;
   }
   state.fecha=value; state.horario='';
+  reservedSlots = []; gcalBusyIntervals = []; // reset al cambiar fecha
   document.getElementById('fecha-input').value=value;
   const nice = new Date(value+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   statusEl.textContent=`Fecha seleccionada: ${nice}.`;
@@ -1276,10 +1455,12 @@ function renderPackages() {
     const checkHtml = (state.paquete === p.id) ? '<div class="pkg-chk" style="margin-top:10px;padding:5px 12px;background:#3d5a2e;color:#fff;border-radius:20px;font-size:11px;font-weight:500;display:inline-block;">✓ Seleccionado</div>' : '';
 
     const timeBadge = p.time ? '<div style="font-size:10px;letter-spacing:.06em;color:#4a6e38;background:#e8f0e2;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:8px;">' + p.time + '</div>' : '';
+    const platillosHtml = (p.platillos && p.platillos.length) ? '<div class="pkg-platillos">' + p.platillos.map(function(pl, idx) { return '<figure class="pkg-platillo"><img class="pkg-platillo-thumb" src="' + pl.src + '" alt="' + pl.cap + '" loading="lazy"><figcaption class="pkg-platillo-cap">' + pl.cap + '</figcaption></figure>'; }).join('') + '</div>' : '';
     div.innerHTML =
       '<div class="pkg-header"><div class="pkg-name">' + p.name + '</div><div class="pkg-price">' + p.price + '</div></div>' +
       timeBadge +
       '<div class="pkg-desc">' + p.desc + '</div>' +
+      platillosHtml +
       '<div class="pkg-items">' + itemsHtml + '</div>' +
       warnHtml + checkHtml;
 
@@ -1428,6 +1609,7 @@ function buildGCalLink(fechaText, espacio) {
 
 function buildWhatsAppMsg(fecha, espacio, total) {
   let msg = `Hola! Soy ${state.nombre || '(sin nombre)'} y quiero reservar un evento privado en AMALAY 🌿\n\n`;
+  if (state.codigoReserva) msg += `🔖 Código: ${state.codigoReserva}\n`;
   msg += `📅 Fecha: ${fecha}\n`;
   msg += `👥 Personas: ${state.guests}\n`;
   msg += `🏡 Espacio: ${espacio}\n`;
@@ -1586,32 +1768,39 @@ async function _submitReservation(payload, statusEl) {
           'Prefer': 'return=representation'
         },
         body: JSON.stringify({
-          nombre:          payload.nombre,
-          fecha:           payload.fecha,
-          espacio:         payload.espacio_id,
-          horario_inicio:  payload.horario_inicio,
-          horario_fin:     payload.horario_fin,
-          guests:          payload.guests,
-          paquete:         payload.paquete,
-          total:           payload.total,
-          status:          'pending'
+          nombre:         payload.nombre,
+          fecha:          payload.fecha,
+          espacio:        payload.espacio_id,
+          horario_inicio: payload.horario_inicio,
+          horario_fin:    payload.horario_fin,
+          guests:         payload.guests,
+          paquete:        payload.paquete,
+          total:          payload.total,
+          notas:          payload.notas || '',
+          status:         'pending'
+          // codigo_reserva lo genera el trigger gen_codigo_reserva en Supabase
         })
       });
       const data = await res.json();
       console.log('Supabase response status:', res.status);
       console.log('Supabase response data:', JSON.stringify(data));
       if (res.ok && data[0]?.id) {
-        payload.supabase_id = data[0].id;
+        payload.supabase_id      = data[0].id;
+        payload.codigo_reserva   = data[0].codigo_reserva || null;
         sbOk = true;
       } else {
-        // Fallback: GET para obtener el id recién insertado
+        // Fallback: GET para obtener el row recién insertado (con codigo_reserva)
         const g = await fetch(
           `${SUPABASE_URL}/rest/v1/amalay_reservaciones?nombre=eq.${encodeURIComponent(payload.nombre)}&fecha=eq.${payload.fecha}&order=created_at.desc&limit=1`,
           { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY } }
         );
         const gData = await g.json();
         console.log('Supabase GET fallback:', JSON.stringify(gData));
-        if (gData[0]?.id) { payload.supabase_id = gData[0].id; sbOk = true; }
+        if (gData[0]?.id) {
+          payload.supabase_id    = gData[0].id;
+          payload.codigo_reserva = gData[0].codigo_reserva || null;
+          sbOk = true;
+        }
       }
     } catch(e) { console.warn('[Supabase] POST reservacion:', e.message); }
   }
@@ -1629,26 +1818,64 @@ async function _submitReservation(payload, statusEl) {
   }
 
   // 3 ── Feedback visual ─────────────────────────────────────
-  if (sbOk || webhookOk) {
-    statusEl.style.background = '#f0fdf4';
-    statusEl.style.color = '#166534';
-    statusEl.textContent = '✓ Solicitud registrada — Monica te contactará para confirmar la fecha';
-    // Actualizar slot en memoria para evitar doble reserva en misma sesión
+  if (sbOk) {
+    // Actualizar slot en memoria para evitar doble reserva en la misma sesión
     reservedSlots.push({
-      espacio: payload.espacio_id,
+      espacio:        payload.espacio_id,
       horario_inicio: payload.horario_inicio,
-      horario_fin: payload.horario_fin
+      horario_fin:    payload.horario_fin
     });
+    // Mostrar success card con el código devuelto por Supabase
+    const codigo = payload.codigo_reserva || '—';
+    state.codigoReserva = codigo;
+    const dc = document.getElementById('display-codigo');
+    const ic = document.getElementById('inline-codigo');
+    if (dc) dc.textContent = codigo;
+    if (ic) ic.textContent = codigo;
+    // Actualizar link de WhatsApp usando buildWhatsAppMsg (ya incluye el código)
+    const espacioObj2 = SPACES.find(function(s){ return s.id === payload.espacio_id; });
+    const fechaFmt2   = payload.fecha ? new Date(payload.fecha+'T12:00:00').toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long',year:'numeric'}) : payload.fecha;
+    const waHref = 'https://wa.me/528182543303?text=' + encodeURIComponent(
+      buildWhatsAppMsg(fechaFmt2, espacioObj2 ? espacioObj2.name : payload.espacio_id, payload.total)
+    );
+    const swBtn = document.getElementById('success-whatsapp');
+    if (swBtn) swBtn.href = waHref;
+    // Ocultar contenido normal, mostrar card
+    statusEl.style.display = 'none';
+    const sc5 = document.getElementById('step5-content');
+    const sc  = document.getElementById('success-card');
+    if (sc5) sc5.style.display = 'none';
+    if (sc)  sc.style.display  = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  } else if (webhookOk) {
+    // Make.com OK pero Supabase falló — éxito parcial sin código
+    statusEl.style.display = '';
+    statusEl.style.background = '#fefce8';
+    statusEl.style.color = '#92400e';
+    statusEl.textContent = '✓ Solicitud enviada. Mónica te contactará — menciona tu nombre y fecha por WhatsApp.';
+
   } else if (!MAKE_WEBHOOK_URL && !SUPABASE_ANON_KEY) {
-    // Modo sin credenciales — solo WhatsApp
+    statusEl.style.display = '';
     statusEl.style.background = '#f8f5f0';
     statusEl.style.color = '#6b5c3e';
     statusEl.textContent = '👆 Envía tu comprobante por WhatsApp para confirmar la fecha';
+
   } else {
+    // Error — mostrar con botón de reintentar
+    statusEl.style.display = '';
     statusEl.style.background = '#fff7ed';
     statusEl.style.color = '#9a3412';
-    statusEl.textContent = '⚠️ No se pudo registrar automáticamente — usa WhatsApp para confirmar';
+    statusEl.innerHTML = '⚠️ No se pudo registrar. <button onclick="_retrySubmit(this)" style="margin-left:8px;background:#9a3412;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:\'Jost\',sans-serif;">Reintentar</button>';
+    statusEl._payload = payload; // guardar payload para retry
   }
+}
+
+function _retrySubmit(btn) {
+  const statusEl = btn.parentElement;
+  const payload  = statusEl._payload;
+  if (!payload) return;
+  _submitReservation(payload, statusEl);
 }
 
 // ── BEBIDAS + ENTRADAS CON CANTIDAD ──────────────────────────────────────────
@@ -1827,23 +2054,29 @@ buildSummary = function() {
   const horario_fin    = pad(Math.floor(endMin/60))   + ':' + pad(endMin%60);
 
   const bebidasStr = bebidasLines.join(', ');
+  // Resetear success card si el usuario vuelve al step 5 después de un envío
+  const _sc = document.getElementById('success-card');
+  const _sc5 = document.getElementById('step5-content');
+  if (_sc)  _sc.style.display  = 'none';
+  if (_sc5) _sc5.style.display = '';
   const payload = {
-    nombre:      state.nombre,
-    fecha:       state.fecha,
-    espacio:     espacioObj ? espacioObj.name : state.espacio,
-    espacio_id:  state.espacio,
-    horario:     state.horario,
+    nombre:          state.nombre,
+    fecha:           state.fecha,
+    espacio:         espacioObj ? espacioObj.name : state.espacio,
+    espacio_id:      state.espacio,
+    horario:         state.horario,
     horario_inicio,
     horario_fin,
-    guests:      state.guests,
-    paquete:     state.paqueteNombre,
-    pastel:      pastelText,
-    entradas:    state.entradas.join(', '),
-    bebidas:     bebidasStr,
-    deco:        state.deco,
-    total:       total,
-    telefono:    state.telefono || '',
-    notas:       state.notas || ''
+    guests:          state.guests,
+    paquete:         state.paqueteNombre,
+    pastel:          pastelText,
+    entradas:        state.entradas.join(', '),
+    bebidas:         bebidasStr,
+    deco:            state.deco,
+    total:           total,
+    telefono:        state.telefono || '',
+    notas:           state.notas || ''
+    // codigo_reserva lo genera el trigger BEFORE INSERT de Supabase
   };
 
   _submitReservation(payload, statusEl);
