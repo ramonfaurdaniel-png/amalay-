@@ -740,6 +740,7 @@ let availabilityByDate = new Map(); // Se llena al cargar el ICS en vivo
 let reservedSlots = [];      // Reservaciones confirmadas/pendientes desde Supabase
 let gcalBusyIntervals = []; // Intervalos ocupados desde Google Calendar (minutos locales)
 const _gcalCache = new Map(); // Cache 60s por fecha
+let _fetchedForDate = null;  // Fecha para la que ya cargamos Supabase+GCal
 
 // ── Supabase: disponibilidad real ─────────────────────────
 async function fetchReservedSlots(fecha) {
@@ -755,6 +756,7 @@ async function fetchReservedSlots(fecha) {
 
   // También obtener ocupados de Google Calendar (fail-open)
   await fetchGCalBusyIntervals(fecha);
+  _fetchedForDate = fecha; // datos listos para esta fecha
 }
 
 // ── Google Calendar: intervalos ocupados del día ───────────
@@ -990,9 +992,43 @@ function buildAvailabilityFromICS(icsText){
   return map;
 }
 function dateRanges(iso){ return availabilityByDate.get(iso) || []; }
-function slotBlocked(iso, slotLabel){
-  const start = slotStartMinutes(slotLabel);
-  return dateRanges(iso).some(([a,b]) => start >= a && start < b);
+function slotBlocked(iso, slotLabel) {
+  const slotStart = slotStartMinutes(slotLabel);
+  const slotEnd   = slotStart + BLOCK_MINUTES;
+
+  // Fallback al ICS si Supabase+GCal aún no cargaron para esta fecha
+  if (_fetchedForDate !== iso) {
+    return dateRanges(iso).some(function(r) { return slotStart >= r[0] && slotStart < r[1]; });
+  }
+
+  // Lógica principal: contar espacios ocupados en este slot
+  const allSpaceIds = SPACES.map(function(s) { return s.id; }); // ['terraza','jardin','salon']
+  const occupiedSpaces = new Set();
+
+  // 1) Supabase: reservas pending/confirmed
+  reservedSlots.forEach(function(row) {
+    const p1 = (row.horario_inicio || '00:00').split(':').map(Number);
+    const p2 = (row.horario_fin   || '00:00').split(':').map(Number);
+    const rStart = p1[0] * 60 + p1[1];
+    const rEnd   = p2[0] * 60 + p2[1];
+    if (slotStart < rEnd && slotEnd > rStart) {
+      occupiedSpaces.add(row.espacio);
+    }
+  });
+
+  // 2) Google Calendar: intervalos por espacio
+  gcalBusyIntervals.forEach(function(iv) {
+    if (slotStart < iv.endMin && slotEnd > iv.startMin) {
+      if (iv.espacio === 'todos') {
+        allSpaceIds.forEach(function(id) { occupiedSpaces.add(id); });
+      } else {
+        occupiedSpaces.add(iv.espacio);
+      }
+    }
+  });
+
+  // Bloquear horario solo si TODOS los espacios están ocupados
+  return allSpaceIds.every(function(id) { return occupiedSpaces.has(id); });
 }
 function getDateStatus(iso){
   if(isPastDate(iso)) return {status:'past', text:'No disp.'};
@@ -1021,7 +1057,7 @@ function setSelectedDate(value, fromCalendar=true){
     return;
   }
   state.fecha=value; state.horario='';
-  reservedSlots = []; gcalBusyIntervals = []; // reset al cambiar fecha
+  reservedSlots = []; gcalBusyIntervals = []; _fetchedForDate = null; // reset al cambiar fecha
   document.getElementById('fecha-input').value=value;
   const nice = new Date(value+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   statusEl.textContent=`Fecha seleccionada: ${nice}.`;
@@ -1333,7 +1369,7 @@ function setSelectedDate(value, fromCalendar=true){
     return;
   }
   state.fecha=value; state.horario='';
-  reservedSlots = []; gcalBusyIntervals = []; // reset al cambiar fecha
+  reservedSlots = []; gcalBusyIntervals = []; _fetchedForDate = null; // reset al cambiar fecha
   document.getElementById('fecha-input').value=value;
   const nice = new Date(value+'T12:00:00').toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
   statusEl.textContent=`Fecha seleccionada: ${nice}.`;
